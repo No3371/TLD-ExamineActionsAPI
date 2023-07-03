@@ -1,5 +1,6 @@
 using ExamineActionsAPI;
 using Il2Cpp;
+using MelonLoader;
 using UnityEngine;
 
 namespace ExamineActionsAPIDemo
@@ -21,6 +22,7 @@ namespace ExamineActionsAPIDemo
         bool IExamineAction.IsActionAvailable(GearItem item)
         {
             return item.name == "GEAR_Acorn";
+            
         }
 
         bool IExamineAction.CanPerform(ExamineActionState state) => true;

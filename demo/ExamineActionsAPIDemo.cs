@@ -16,6 +16,11 @@ namespace ExamineActionsAPIDemo
 			ExamineActionsAPI.ExamineActionsAPI.Register(new TestActionBruteForceSharpening());
 			ExamineActionsAPI.ExamineActionsAPI.Register(new TestActionSliceMeat());
 			ExamineActionsAPI.ExamineActionsAPI.Register(new TestActionAcornPreparing());
+			if (GearItem.LoadGearItemPrefab("GEAR_StickPile010") != null)
+			{
+				this.LoggerInstance.Msg("Found Item Pile mod...");
+				ExamineActionsAPI.ExamineActionsAPI.Register(new TestActionPiling());
+			}
 		}
 
 	}

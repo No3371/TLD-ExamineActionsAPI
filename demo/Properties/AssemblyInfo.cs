@@ -18,3 +18,4 @@ using BuildInfo = ExamineActionsAPIDemo.BuildInfo;
 [assembly: AssemblyFileVersion(BuildInfo.Version)]
 [assembly: MelonInfo(typeof(ExamineActionsAPIDemo.ExamineActionsAPIDemo), BuildInfo.Name, BuildInfo.Version, BuildInfo.Author, BuildInfo.DownloadLink)]
 [assembly: MelonGame("Hinterland", "TheLongDark")]
+[assembly: MelonPriorityAttribute(2000)]

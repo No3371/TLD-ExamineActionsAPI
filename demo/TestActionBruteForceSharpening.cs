@@ -72,7 +72,7 @@ namespace ExamineActionsAPIDemo
 
         void IExamineAction.OnSuccess(ExamineActionState state)
         {
-            float normalizedNewCondition = state.Subject.GetNormalizedCondition() + 0.05f * (state.SubActionId + 1);
+            float normalizedNewCondition = state.Subject.GetNormalizedCondition() + 0.005f * (state.SubActionId + 1);
             if (normalizedNewCondition > 0.75f) normalizedNewCondition = 0.75f;
             state.Subject.SetNormalizedHP(normalizedNewCondition);
         }
@@ -84,7 +84,7 @@ namespace ExamineActionsAPIDemo
 
         InfoItemConfig? IExamineActionCustomInfo.GetInfo2(ExamineActionState state) 
         {
-            return new InfoItemConfig(new LocalizedString() { m_LocalizationID = "Improvement" } , $"{0.05f * (state.SubActionId + 1):0.00}%");
+            return new InfoItemConfig(new LocalizedString() { m_LocalizationID = "Improvement" } , $"{0.5f * (state.SubActionId + 1):0.00}%");
         }
     }
 }
