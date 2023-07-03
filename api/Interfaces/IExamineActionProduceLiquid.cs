@@ -4,7 +4,7 @@ using Il2CppTLD.Gear;
 namespace ExamineActionsAPI
 {
 	/// <summary>
-	/// Not implemented. Not working. Not 
+	/// Not implemented. Not working.
 	/// </summary>
     public interface IExamineActionProduceLiquid
 	{
