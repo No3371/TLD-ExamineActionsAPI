@@ -26,6 +26,10 @@ Action documentation is WIP. At the moment please refer to the example files und
     - Name of the gear ("GEAR_???")
     - How many units to consume
     - The chance the maaterial is consumed, ranging from 0 to 100
+- Edge case: Subject and Materials are same type of gears
+    - The subject item/stack is always ignored/excluded in the material check and consumation.
+    - This means if the subject is stackable and it always stack, the edge case will never works because you never have 2 stack of that type of items.
+    - Example: An action available to Stick and has Stick in the material list will never works because you can't have 2 stacks of stick.
 
 ### IExamineActionProduceItems
 
@@ -57,12 +61,12 @@ Action documentation is WIP. At the moment please refer to the example files und
 There are 4 actions availabe in the demo mod:
 
 - Paper From Books: you can tear books into paper stacks.
-    - Avaialbe on any researchable items.
+    - Available on any researchable items.
 - Brute Force Sharpening: you can spend hours to mildly sharpen tools.
-    - Avaialbe on any shaprenable.
+    - Available on any sharpenable items.
 - Slice Meat: You can cut a small piece from meats.
-    - Avaialbe on any meat or fish.
-- Perpare Acorns: You can perpare up to 3 acorns or 1 large portion, at once.
-    - Avaialbe on acorns.
+    - Available on any meat or fish.
+- Prepare Acorns: You can prepare up to 3 acorns or 1 large portion, at once.
+    - Available on acorns.
 - (ItemPile compat) Easily pile sticks/coals/charcoals/cattails/stones without crafting.
     - Only availabe when stickpile item is found registered.
