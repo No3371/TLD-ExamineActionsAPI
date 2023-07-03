@@ -1,11 +1,12 @@
 using Il2Cpp;
+using Il2CppTLD.Gear;
 using MelonLoader;
 using UnityEngine;
 
 namespace ExamineActionsAPI
 {
 
-    class DebugAction_Tool : IExamineAction, IExamineActionRequireTool, IExamineActionCustomInfo
+    class DebugAction_Tool : IExamineAction, IExamineActionRequireTool, IExamineActionCustomInfo, IExamineActionProducePowder
     {
         public DebugAction_Tool()
         {
@@ -121,6 +122,11 @@ namespace ExamineActionsAPI
         public bool ConsumeOnSuccess(ExamineActionState state)
         {
             return true;
+        }
+
+        void IExamineActionProducePowder.GetProductPowder(ExamineActionState state, List<(PowderType, float, byte)> powders)
+        {
+            powders.Add((PowerTypesLocator.GunPowderType, 0.33f, 100));
         }
     }
 }

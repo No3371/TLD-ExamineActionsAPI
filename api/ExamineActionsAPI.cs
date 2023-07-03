@@ -25,8 +25,8 @@ namespace ExamineActionsAPI
 				Register(new DebugAction_Cancel());
 				Register(new DebugAction_Materials());
 				Register(new DebugAction_Salt());
-				Register(new DebugAction_Tool());
 				Register(new DebugAction_Simple());
+				Register(new DebugAction_Tool());
 			}
 
 			// uConsole.RegisterCommand("eaapi_tool", new Action(() => {

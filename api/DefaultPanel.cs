@@ -305,14 +305,25 @@ namespace ExamineActionsAPI
             (string gear_name, int units, byte chance)[] mats = null;
             if (state.Action is IExamineActionProduceItems eap)
                 mats = eap.GetProducts(state);
-            List<(GearLiquidTypeEnum type, float units, byte chance)> liquids = new();
+            List<(GearLiquidTypeEnum type, float units, byte chance)> liquids = null;
             if (state.Action is IExamineActionProduceLiquid eapl)
+            {
+                liquids = new();
                 eapl.GetProductLiquid(state, liquids);
-
-            if (mats == null && liquids.Count == 0) return;
+            }
+            List<(PowderType type, float units, byte chance)> powders = null;
+            if (state.Action is IExamineActionProducePowder eapp)
+            {
+                powders = new();
+                eapp.GetProductPowder(state, powders);
+            }
 
             int matCount = mats?.Length ?? 0;
-            int total = matCount + liquids.Count;
+            int liqCount = liquids?.Count ?? 0;
+            int powCount = powders?.Count ?? 0;
+            int total = matCount + liqCount + powCount;
+            if (total == 0) return;
+
             for (int configured = 0; configured < 5; configured++)
             {
                 if (configured >= total)
@@ -327,7 +338,20 @@ namespace ExamineActionsAPI
                 this.Products[configured].transform.localPosition = localPosition;
                 this.Products[configured].transform.localScale = total >= 4 ? new Vector3(0.8f, 0.8f, 1) : new Vector3(1f, 1f, 1);
 
-                if (configured >= matCount) // Liquid
+                if (configured >= matCount + liqCount) // Powder
+                {
+                    var conf = powders[configured - matCount];
+                    
+                    if (conf.chance < 100)
+                    {
+                        this.productChances[configured].text = $"{conf.chance}%";
+                        this.productChances[configured].gameObject.SetActive(true);
+                    }
+                    else this.productChances[configured].gameObject.SetActive(false);
+
+                    this.Products[configured].ShowPowder(conf.type, conf.units);
+                }
+                else if (configured >= matCount) // Liquid
                 {
                     var conf = liquids[configured - matCount];
                     
@@ -440,10 +464,6 @@ namespace ExamineActionsAPI
             else requiresToolLabel.gameObject.SetActive(false);
         }
 
-        private void SetupLuiquidMaterials(Il2CppSystem.Collections.Generic.List<(LiquidType, float)> liquids, ExamineActionState state)
-        {
-        }
-
         void UpdateStopLabel (ExamineActionState state)
         {
             var cancellable = state.Action is IExamineActionCancellable;
@@ -500,6 +520,10 @@ namespace ExamineActionsAPI
                 consumeLabel.text = "Consume on: Cancellation";
             else if (consumeI)
                 consumeLabel.text = "Consume on: Interruption";
+
+            int consuming = state.Action.OverrideConsumingUnits(state);
+            if (consuming > 1)
+                consumeLabel.text += $" (x{consuming})";
         }
 
         void SetInfoBlock1Row ()
