@@ -268,6 +268,10 @@ namespace ExamineActionsAPI
 		{
 			State.StartedRealtime = null;
 			State.StartedGameTime = null;
+
+			// because we are blocking UpdateLabels
+			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
+			pie.m_Stack_Label.text = "x" + (State.Subject.m_StackableItem?.m_Units ?? 1);
 		}
 
 		internal void OnActionSucceed ()
