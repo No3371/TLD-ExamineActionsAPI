@@ -17,7 +17,7 @@ namespace ExamineActionsAPI
 				return;
 			}
 	
-			MelonLogger.Msg($"+=======+++PRE RefreshMainWindow");
+			ExamineActionsAPI.VeryVerboseLog($"+=======+++PRE RefreshMainWindow");
 
 
 			foreach (var a in ExamineActionsAPI.Instance.RegisteredActions)
@@ -41,11 +41,11 @@ namespace ExamineActionsAPI
 				mi.m_ButtonSpriteRef.normalSprite = a.MenuItemSpriteName;
 				mi.gameObject.SetActive(true);
 			}
-			MelonLogger.Msg($"-PRE RefreshMainWindow");
+			ExamineActionsAPI.VeryVerboseLog($"-PRE RefreshMainWindow");
         }
         private static void Postfix(Panel_Inventory_Examine __instance)
         {
-			MelonLogger.Msg($"+=======++POST RefreshMainWindow");
+			ExamineActionsAPI.VeryVerboseLog($"+=======++POST RefreshMainWindow");
 			if (PatchOnExamine.LastTriedToExamine == null) return;
 			for (int i = 0; i < ExamineActionsAPI.Instance.AvailableCustomActions.Count; i++)
 			{
@@ -53,11 +53,11 @@ namespace ExamineActionsAPI
 
                 if (ExamineActionsAPI.Instance.LastTriedToPerformedCache == ExamineActionsAPI.Instance.AvailableCustomActions[i])
 				{
-					MelonLogger.Msg($"Selecting selected");
+					ExamineActionsAPI.VeryVerboseLog($"Selecting selected");
                     __instance.SelectButton(i + ExamineActionsAPI.Instance.OfficialActionMenuItems.Count);
 				}
 			}
-			MelonLogger.Msg($"-POST RefreshMainWindow");
+			ExamineActionsAPI.VeryVerboseLog($"-POST RefreshMainWindow");
         }
     }
 }

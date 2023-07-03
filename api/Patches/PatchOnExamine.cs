@@ -10,12 +10,12 @@ namespace ExamineActionsAPI
     //     private static void Prefix(Utils __instance, GameObject go, bool active)
     //     {
     //         if (ExamineActionsAPI.Instance.State.Action == null || go.activeInHierarchy == active ) return;
-    //         MelonLogger.Msg($"+PRE SetActive {go.name}: {active}");
+    //         ExamineActionsAPI.VeryVerboseLog($"+PRE SetActive {go.name}: {active}");
     //     }
     //     // private static void Postfix(Utils __instance, GameObject go, bool active)
     //     // {
     //     //     if (ExamineActionsAPI.Instance.State.Action == null || go.activeInHierarchy != active ) return;
-    //     //     MelonLogger.Msg($"+POST SetActive {go?.name}: {active}");
+    //     //     ExamineActionsAPI.VeryVerboseLog($"+POST SetActive {go?.name}: {active}");
     //     // }
     // }
     [HarmonyPatch(typeof(Panel_Inventory), nameof(Panel_Inventory.OnExamine))]
@@ -31,13 +31,13 @@ namespace ExamineActionsAPI
             get => lastTriedToExamine; set
             {
                 lastTriedToExamine = value;
-                MelonLogger.Msg($"LastTriedToExamine: {value?.name}");
+                ExamineActionsAPI.VeryVerboseLog($"LastTriedToExamine: {value?.name}");
             }
         }
         private static void Prefix(Panel_Inventory __instance)
         {
             LastTriedToExamine = __instance.GetCurrentlySelectedGearItem();
-            MelonLogger.Msg($"++++++++OnExamine {LastTriedToExamine?.name}");
+            ExamineActionsAPI.VeryVerboseLog($"++++++++OnExamine {LastTriedToExamine?.name}");
             ExamineActionsAPI.Instance.LastTriedToPerformedCache = null;
         }
     }

@@ -21,14 +21,14 @@ namespace ExamineActionsAPI
 			if (!enable)
 			{
 				PatchOnExamine.LastTriedToExamine = null;
-				MelonLogger.Msg($"---------- PRE Enable");
+				ExamineActionsAPI.VeryVerboseLog($"---------- PRE Enable");
 			}
 			return true;
 		}
 
         private static void Postfix(Panel_Inventory_Examine __instance, bool enable)
         {
-			MelonLogger.Msg($"POST Enable: {enable}");
+			ExamineActionsAPI.VeryVerboseLog($"POST Enable: {enable}");
 			if (!enable) return;
 			// if (agent == null)
 			// {
@@ -43,7 +43,7 @@ namespace ExamineActionsAPI
 			// 		__instance.m_ButtonsMenuItems.Add(_mi);
 			// 		__instance.m_Buttons.Add(_mi.GetComponent<UIButton>());
 			// 		menuItems.Add(_mi);
-			// 		MelonLogger.Msg($"Instantiated menu item: {_mi.name}");
+			// 		ExamineActionsAPI.VeryVerboseLog($"Instantiated menu item: {_mi.name}");
 			// 		_mi.m_ButtonSpriteRef.onClick.Clear();
 			// 		_mi.gameObject.SetActive(false);
 			// 		_mi.gameObject.name = $"CustomAction{capturedId}";
@@ -69,7 +69,7 @@ namespace ExamineActionsAPI
 			// 	if (y <= offset) offset = y + __instance.m_ButtonSpacing;
 			// 	autoSelect = i;
 			// }
-			// // MelonLogger.Msg($"MenuItem offset: {offset}");
+			// // ExamineActionsAPI.VeryVerboseLog($"MenuItem offset: {offset}");
 
 			// int configured = 0;
 			// foreach (var a in activeActions)

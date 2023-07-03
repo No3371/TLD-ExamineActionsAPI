@@ -12,8 +12,8 @@ namespace ExamineActionsAPIDemo
         public override void OnInitializeMelon()
 		{
 			Instance = this;
-			ExamineActionsAPI.ExamineActionsAPI.Register(new TestActionPaperFromBook());
-			ExamineActionsAPI.ExamineActionsAPI.Register(new TestActionDumbSharpening());
+			ExamineActionsAPI.ExamineActionsAPI.Register(new TestActionPaperFromBooks());
+			ExamineActionsAPI.ExamineActionsAPI.Register(new TestActionBruteForceSharpening());
 			ExamineActionsAPI.ExamineActionsAPI.Register(new TestActionSliceMeat());
 			ExamineActionsAPI.ExamineActionsAPI.Register(new TestActionAcornPreparing());
 		}

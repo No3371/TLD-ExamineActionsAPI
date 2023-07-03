@@ -1,5 +1,7 @@
 namespace ExamineActionsAPI
 {
+	// Note: While it's safe to set the materials the same type of gear as the subject being examined
+	// It won't be condisered a material candidate (only other stacks are)
     public interface IExamineActionRequireMaterials
 	{
 		/// <summary>

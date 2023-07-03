@@ -37,6 +37,7 @@ namespace ExamineActionsAPI
 		/// Will the gear be consumed on success?
 		/// </summary>
 		bool ConsumeOnSuccess (ExamineActionState state);
+		int OverrideConsumingUnits (ExamineActionState state) => 1;
 		int GetSubActionCounts (ExamineActionState state) => 1;
 	}
 }

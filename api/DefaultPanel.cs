@@ -170,17 +170,46 @@ namespace ExamineActionsAPI
             PIE.m_ActionToolSelect.SetActive(false);
             bg2.gameObject.SetActive(false);
             int subs = state.Action.GetSubActionCounts(state);
-            MelonLogger.Msg($"Sub {state.SubActionId + 1} / {subs}");
+            ExamineActionsAPI.VeryVerboseLog($"Sub {state.SubActionId + 1} / {subs}");
             buttonSubLeft.gameObject.SetActive(state.SubActionId > 0);
             buttonSubRight.gameObject.SetActive(state.SubActionId < subs - 1);
             bool extendInfoBlock = false;
-            bool showingChance = false;
             UpdateConsumeLabel(state);
             UpdateStopLabel(state);
             MaybeSetupMaterials(state);
             MaybeSetupProducts(state);
             MaybeSetupTools(state);
+            UpdateInfoBlock(state);
 
+            bool displayingMats = state.Action is IExamineActionRequireMaterials rMats && rMats.GetMaterials(state) != null;
+            bool displayingProducts = state.Action is IExamineActionProduceItems pItms && pItms.GetProducts(state) != null;
+            int mid = infoBlockExtended ? -58 : -30;
+            int upperY = infoBlockExtended ? -30 : 0;
+            int lowerY = infoBlockExtended ? -134 : -112;
+            if (displayingMats && displayingProducts)
+            {
+                materialsClone.transform.localPosition = new Vector3(materialsClone.transform.localPosition.x, upperY, materialsClone.transform.localPosition.z);
+                yieldsClone.transform.localPosition = new Vector3(yieldsClone.transform.localPosition.x, lowerY, yieldsClone.transform.localPosition.z);
+            }
+            else if (displayingMats)
+            {
+                materialsClone.transform.localPosition = new Vector3(materialsClone.transform.localPosition.x, mid, materialsClone.transform.localPosition.z);
+            }
+            else if (displayingProducts)
+            {
+                yieldsClone.transform.localPosition = new Vector3(yieldsClone.transform.localPosition.x, mid, yieldsClone.transform.localPosition.z);
+            }
+
+
+
+            buttonLabel.text = state.Action.ActionButtonLocalizedString.Text();
+        }
+
+        private void UpdateInfoBlock(ExamineActionState state)
+        {
+            infoDuration.label2.text = Utils.GetExpandedDurationString(state.ActiveActionDurationMinutes.Value);
+
+            bool showingChance = false;
             if (state.Action is IExamineActionFailable eaf)
             {
                 infoChance.label2.text = string.Format("{0:0.0}%", state.ActiveSuccessChance);
@@ -197,8 +226,8 @@ namespace ExamineActionsAPI
             {
                 var conf1 = eaci.GetInfo1(state);
                 var conf2 = eaci.GetInfo2(state);
-                extendInfoBlock = (showingChance && conf1 != null) || (showingChance && conf2 != null) || (conf1 != null && conf2 != null);
-                if (extendInfoBlock) SetInfoBlock2Rows();
+                if ((showingChance && conf1 != null) || (showingChance && conf2 != null) || (conf1 != null && conf2 != null))
+                    SetInfoBlock2Rows();
                 else SetInfoBlock1Row();
 
                 if (showingChance)
@@ -212,7 +241,7 @@ namespace ExamineActionsAPI
                     info2.go.transform.localPosition = info1Pos;
                 }
 
-                SetupInfos(eaci, state, conf1, conf2);
+                SetupCustomInfos(eaci, state, conf1, conf2);
             }
             else
             {
@@ -220,27 +249,6 @@ namespace ExamineActionsAPI
                 info2.go.SetActive(false);
                 SetInfoBlock1Row();
             }
-
-            bool displayingMats = state.Action is IExamineActionRequireMaterials rMats && rMats.GetMaterials(state) != null;
-            bool displayingProducts = state.Action is IExamineActionProduceItems pItms && pItms.GetProducts(state) != null;
-            if (displayingMats && displayingProducts)
-            {
-                materialsClone.transform.localPosition = new Vector3(materialsClone.transform.localPosition.x, -30, materialsClone.transform.localPosition.z);
-                yieldsClone.transform.localPosition = new Vector3(yieldsClone.transform.localPosition.x, -134, yieldsClone.transform.localPosition.z);
-            }
-            else if (displayingMats)
-            {
-                materialsClone.transform.localPosition = new Vector3(materialsClone.transform.localPosition.x, infoBlockExtended ? -98 : -30, materialsClone.transform.localPosition.z);
-            }
-            else if (displayingProducts)
-            {
-                yieldsClone.transform.localPosition = new Vector3(yieldsClone.transform.localPosition.x, infoBlockExtended ? -98 : -30, yieldsClone.transform.localPosition.z);
-            }
-
-
-            infoDuration.label2.text = Utils.GetExpandedDurationString(state.ActiveActionDurationMinutes.Value);
-
-            buttonLabel.text = state.Action.ActionButtonLocalizedString.Text();
         }
 
         private void MaybeSetupMaterials(ExamineActionState state)
@@ -261,6 +269,7 @@ namespace ExamineActionsAPI
                         this.Materials[i].transform.localScale = mats.Length >= 4 ? new Vector3(0.8f, 0.8f, 1) : new Vector3(1f, 1f, 1);
                         int stackNum = mats[i].Item2;
                         int checkingStackNum = mats[i].Item2;
+                        if (state.Subject.name == mats[i].Item1) checkingStackNum += state.Subject.m_StackableItem?.m_Units?? 1;
                         for (int j = 0; j < i; j++)
                             if (mats[i].Item1 == mats[j].Item1) checkingStackNum += mats[j].Item2;
                         var invItem = GameManager.GetInventoryComponent().GearInInventory(mats[i].Item1, checkingStackNum);
@@ -368,7 +377,7 @@ namespace ExamineActionsAPI
 		{
 			repairPanelClone.SetActive(toggle);
 		}
-		public void SetupInfos (IExamineActionCustomInfo act, ExamineActionState state, InfoItemConfig? conf1, InfoItemConfig? conf2)
+		public void SetupCustomInfos (IExamineActionCustomInfo act, ExamineActionState state, InfoItemConfig? conf1, InfoItemConfig? conf2)
 		{
 			if (conf1 != null && conf2 != null)
 			{
@@ -518,7 +527,10 @@ namespace ExamineActionsAPI
 
         public void OnActionInterrupted(ExamineActionState state) {}
 
-        public void OnSelectingToolChanged(ExamineActionState state) {}
+        public void OnSelectingToolChanged(ExamineActionState state)
+        {
+            UpdateInfoBlock(state);
+        }
 
         public class InfoBlock
 		{

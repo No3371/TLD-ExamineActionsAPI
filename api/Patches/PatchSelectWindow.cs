@@ -12,7 +12,7 @@ namespace ExamineActionsAPI
     {
         private static void Postfix(Panel_Inventory_Examine __instance, GameObject window)
         {
-            MelonLogger.Msg($"++++++++POST SelectWindow {window?.name}");
+            ExamineActionsAPI.VeryVerboseLog($"++++++++POST SelectWindow {window?.name}");
             if (ExamineActionsAPI.Instance.State.Action == null) return;
 			if (window == __instance.m_ActionToolSelect) 
             {
@@ -20,7 +20,7 @@ namespace ExamineActionsAPI
                 if (__instance.m_GearItem.m_Repairable) __instance.m_RepairPanel.SetActive(false);
                 if (__instance.m_GearItem.m_Cleanable) __instance.m_CleanPanel.SetActive(false);
                 if (__instance.m_GearItem.m_Sharpenable) __instance.m_SharpenPanel.SetActive(false);
-			    MelonLogger.Msg($"-POST SelectWindow");
+			    ExamineActionsAPI.VeryVerboseLog($"-POST SelectWindow");
             }
         }
     }

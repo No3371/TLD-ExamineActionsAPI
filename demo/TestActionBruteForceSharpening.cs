@@ -3,9 +3,9 @@ using Il2Cpp;
 
 namespace ExamineActionsAPIDemo
 {
-    class TestActionDumbSharpening : IExamineAction, IExamineActionInterruptable, IExamineActionCancellable, IExamineActionCustomInfo
+    class TestActionBruteForceSharpening : IExamineAction, IExamineActionInterruptable, IExamineActionCancellable, IExamineActionCustomInfo
     {
-        string IExamineAction.Id => nameof(TestActionDumbSharpening);
+        string IExamineAction.Id => nameof(TestActionBruteForceSharpening);
 
         string IExamineAction.MenuItemLocalizationKey => "Dumb Sharpen";
 

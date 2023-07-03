@@ -12,7 +12,7 @@ namespace ExamineActionsAPI
         {
 			ExamineActionsAPI.Instance.DeselectActiveCustomAction();
 
-			MelonLogger.Msg($"POST SelectButton {__instance.m_SelectedButtonIndex} ({index}?)");
+			ExamineActionsAPI.VeryVerboseLog($"POST SelectButton {__instance.m_SelectedButtonIndex} ({index}?)");
 			// var customActIndex = index - Panel_Inventory_Examine_Enable.activeState.ActiveOfficialActions;
 			if (index >= ExamineActionsAPI.Instance.OfficialActionMenuItems.Count)
 			{
@@ -44,7 +44,7 @@ namespace ExamineActionsAPI
 	// 	{
 	// 		if (PatchUseInventoryItem.LastUsedAndNotSelectedAction != null)
 	// 		{
-	// 			MelonLogger.Msg($"Cancelling CheckSelectedButton ({ __instance.m_SelectedButtonIndex }) ");
+	// 			ExamineActionsAPI.VeryVerboseLog($"Cancelling CheckSelectedButton ({ __instance.m_SelectedButtonIndex }) ");
 	// 			return false;
 	// 		}
 	// 		return true;

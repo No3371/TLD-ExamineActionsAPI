@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace ExamineActionsAPIDemo
 {
-    class TestActionPaperFromBook : IExamineAction, IExamineActionProduceItems, IExamineActionRequireTool
+    class TestActionPaperFromBooks : IExamineAction, IExamineActionProduceItems, IExamineActionRequireTool
     {
-        public TestActionPaperFromBook()
+        public TestActionPaperFromBooks()
         {
         }
 
@@ -15,7 +15,7 @@ namespace ExamineActionsAPIDemo
 
         public LocalizedString ActionButtonLocalizedString { get; }
 
-        string IExamineAction.Id => nameof(TestActionPaperFromBook);
+        string IExamineAction.Id => nameof(TestActionPaperFromBooks);
 
         string IExamineAction.MenuItemLocalizationKey => "Tear";
 

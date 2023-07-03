@@ -191,21 +191,22 @@ namespace ExamineActionsAPI
 
 			// if (State.Action is not IExamineActionCancellable)
 			// 	InterfaceManager.GetPanel<Panel_HUD>().m_ClickHoldCancelButton.transform.parent.parent.gameObject.SetActive(false); // Force my way to hide that damn button
-			State.ActiveResult = true;
+			State.ActiveResult = ActionResult.Success;
 			State.StartedRealtime = Time.realtimeSinceStartup;
 			State.StartedGameTime = new (GameManager.m_TimeOfDay.GetDayNumber(), GameManager.m_TimeOfDay.GetHour(), GameManager.m_TimeOfDay.GetMinutes());
 			if (State.Action is IExamineActionFailable)
-				State.ActiveResult = UnityEngine.Random.Range(0f, 100f) <= State.ActiveSuccessChance;
+				State.ActiveResult = (UnityEngine.Random.Range(0f, 100f) <= State.ActiveSuccessChance) ? ActionResult.Success : ActionResult.Failure;
             Panel_GenericProgressBar gpb = pie.m_GenericProgressBar.GetPanel();
             gpb.Launch(
                 State.Action.ActionButtonLocalizedString.Text(),
                 State.Action.CalculateProgressSeconds(State),
                 State.ActiveActionDurationMinutes.Value,
-                State.ActiveResult.Value? 1 : UnityEngine.Random.Range(0.2f, 0.8f),
+                State.ActiveResult.Value == ActionResult.Success? 1 : UnityEngine.Random.Range(0.2f, 0.8f),
 				true,
 				new System.Action<bool, bool, float>(ActionCallback)
 			);
 
+			this.LoggerInstance.Msg($"Performing custom action {State.Action.Id}... ({State.StartedGameTime})");
 			State.Panel.OnPerformingAction(State);
 			State.Action.OnPerform(State);
 			VeryVerboseLog($"->>>>>>>>>>>>>>PerformAction ({ GameManager.m_TimeOfDay.GetMinutes() }m");
@@ -229,6 +230,8 @@ namespace ExamineActionsAPI
 		internal void OnActionFinished ()
 		{
 			VeryVerboseLog($"+>>>>>>>>>>>>>>OnActionFinished ({ GameManager.m_TimeOfDay.GetMinutes() }m");
+            TLDDateTimeEAPI now = new(GameManager.m_TimeOfDay.GetDayNumber(), GameManager.m_TimeOfDay.GetHour(), GameManager.m_TimeOfDay.GetMinutes());
+            this.LoggerInstance.Msg($"Finished custom action ({now})");
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 			
 			// InterfaceManager.GetPanel<Panel_HUD>().m_ClickHoldCancelButton.transform.parent.parent.gameObject.SetActive(true); // Force my way to hide that damn button
@@ -256,7 +259,7 @@ namespace ExamineActionsAPI
 			
 
 			pie.m_Slider_ActionProgress.gameObject.SetActive(false);
-			pie.RestoreTimeOfDay();
+			// pie.RestoreTimeOfDay();
 			State.ActionInProgress = false;
 			// VeryVerboseLog($"-OnActionFinished");
 		}
@@ -282,7 +285,7 @@ namespace ExamineActionsAPI
 			if (State.Action.ConsumeOnSuccess(State))
 			{
 				consumed = true;
-				destroyed = ConsumeSubject();
+				destroyed = ConsumeSubject(State.Action.OverrideConsumingUnits(State));
 			}
 			State.Action.OnSuccess(State);
 			State.Panel.OnActionSucceed(State);
@@ -312,7 +315,7 @@ namespace ExamineActionsAPI
 			if (eaf.ConsumeOnFailure(State))
 			{
 				consumed = true;
-				destroyed = ConsumeSubject();
+				destroyed = ConsumeSubject(State.Action.OverrideConsumingUnits(State));
 			}
             eaf.OnActionFailed(State);
 			State.Panel.OnActionFailed(State);
@@ -334,6 +337,7 @@ namespace ExamineActionsAPI
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 
 			OnActionFinished();
+			State.ActiveResult = ActionResult.Interruption;
 			if (State.Action is IExamineActionRequireMaterials arm) ConsumeMaterials(arm, ActionResult.Interruption);
 	
 			GameAudioManager.PlayGUIError();
@@ -344,7 +348,7 @@ namespace ExamineActionsAPI
 			if (interruptable.ConsumeOnInterruption(State))
 			{
 				consumed = true;
-				destroyed = ConsumeSubject();
+				destroyed = ConsumeSubject(State.Action.OverrideConsumingUnits(State));
 			}
 			interruptable.OnInterrupted(State);
 			State.Panel.OnActionInterrupted(State);
@@ -367,6 +371,7 @@ namespace ExamineActionsAPI
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 
 			OnActionFinished();
+			State.ActiveResult = ActionResult.Cancellation;
 
 			GameAudioManager.PlayGUIError();
 
@@ -376,7 +381,7 @@ namespace ExamineActionsAPI
 			if (cancellable.ConsumeOnCancel(State))
 			{
 				consumed = true;
-				destroyed = ConsumeSubject();
+				destroyed = ConsumeSubject(State.Action.OverrideConsumingUnits(State));
 			}
             cancellable.OnActionCanceled(State);
 			State.Panel.OnActionCancelled(State);
@@ -396,15 +401,15 @@ namespace ExamineActionsAPI
 		/// 
 		/// </summary>
 		/// <returns>destroyed</returns>
-		internal bool ConsumeSubject ()
+		internal bool ConsumeSubject (int units)
 		{
 			// VeryVerboseLog($"+ConsumeSubject");
 			Inventory inv = GameManager.GetInventoryComponent();
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 			if (State.Subject.m_StackableItem)
 			{
-				State.Subject.m_StackableItem.m_Units--;
-				if (State.Subject.m_StackableItem.m_Units == 0)
+				State.Subject.m_StackableItem.m_Units -= units;
+				if (State.Subject.m_StackableItem.m_Units <= 0)
 				{
 					pie.MaybeReturnAmmoOrFuelToInventory(State.Subject);
 					inv.DestroyGear(State.Subject);
@@ -462,6 +467,7 @@ namespace ExamineActionsAPI
 						MelonLogger.Error($"Failed to consume all materilas, remaining: {units}...");
 						break;
 					}
+					if (it == State.Subject) continue;
 					var stackable = it.m_StackableItem;
 					if (stackable)
 					{
@@ -483,6 +489,7 @@ namespace ExamineActionsAPI
 				}
 			}
 		}
+
 		internal void YieldProducts (IExamineActionProduceItems act)
 		{
 			// VeryVerboseLog($"+YieldProducts");

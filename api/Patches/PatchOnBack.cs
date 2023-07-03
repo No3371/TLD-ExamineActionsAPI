@@ -11,13 +11,13 @@ namespace ExamineActionsAPI
     {
         private static bool Prefix(Panel_Inventory_Examine __instance)
         {
-            MelonLogger.Msg($"OnBack");
+            ExamineActionsAPI.VeryVerboseLog($"OnBack");
             ExamineActionState state = ExamineActionsAPI.Instance.State;
             // if (state.Action != null
             //  && state.Action is not IExamineActionCancellable
             //  && state.ActionInProgress)
             // {
-			// 	MelonLogger.Msg($"Cancelling cancel");
+			// 	ExamineActionsAPI.VeryVerboseLog($"Cancelling cancel");
             //     return false;
             // }
 
@@ -25,7 +25,7 @@ namespace ExamineActionsAPI
              && __instance.m_ActionToolSelect.activeInHierarchy)
 			{
 				__instance.SelectWindow(__instance.m_MainWindow);
-				MelonLogger.Msg($"OnBack_Redirect {__instance.m_SelectedButtonIndex}");
+				ExamineActionsAPI.VeryVerboseLog($"OnBack_Redirect {__instance.m_SelectedButtonIndex}");
 				return false;
 			}
 			return true;

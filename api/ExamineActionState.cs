@@ -19,7 +19,7 @@ namespace ExamineActionsAPI
 				var cache = subject;
                 subject = value;
 				ResetActionMeta();
-				if (cache != value) MelonLogger.Msg($"Subject changed: {value?.name}");
+				if (cache != value) ExamineActionsAPI.VeryVerboseLog($"Subject changed: {value?.name}");
             }
         }
         public IExamineAction? Action
@@ -61,7 +61,7 @@ namespace ExamineActionsAPI
         }
         internal int? ActiveActionDurationMinutes { get; set; }
 		internal float? ActiveSuccessChance { get; set; }
-		internal bool? ActiveResult { get; set; }
+		internal ActionResult? ActiveResult { get; set; }
 		internal bool? ActiveActionRequirementsMet { get; set; }
 		internal bool? AllMaterialsReady { get; set; }
 		internal bool InterruptionFlag { get; set; }
@@ -139,14 +139,24 @@ namespace ExamineActionsAPI
 			if (mats == null) return true;
 			for (int i = 0; i < mats.Length; i++)
 			{
-				int totalOfTheGearType = mats[i].Item2;
+				int totalOfTheGearTypeToCheck = mats[i].Item2;
 				for (int j = 0; j < mats.Length; j++)
-					if (i != j && mats[i].Item1 == mats[j].Item1) totalOfTheGearType += mats[j].Item2;
+					if (i != j && mats[i].Item1 == mats[j].Item1) totalOfTheGearTypeToCheck += mats[j].Item2;
 				
-				ExamineActionsAPI.VeryVerboseLog($"Checking for mat: {mats[i].Item1} x{totalOfTheGearType} (x{mats[i].Item2})");
-				var invItem = GameManager.GetInventoryComponent().GearInInventory(mats[i].Item1, totalOfTheGearType);
-				if (invItem != null) continue; // Trying to get more units than owned would actually properly returns a null
-				hasAll = false;
+				ExamineActionsAPI.VeryVerboseLog($"Checking for mat: {mats[i].Item1} x{totalOfTheGearTypeToCheck} (x{mats[i].Item2})");
+				Il2CppSystem.Collections.Generic.List<GearItem> gears = new (1);
+				GameManager.GetInventoryComponent().GearInInventory(mats[i].Item1, gears);
+				for (int g = 0; g < gears.Count; g++)
+				{
+                    GearItem gearItem = gears[g];
+                    if (gearItem == Subject) continue;
+
+					totalOfTheGearTypeToCheck -= gearItem.m_StackableItem?.m_Units ?? 1;
+					if (totalOfTheGearTypeToCheck <= 0) break;
+				}
+				// var invItem = GameManager.GetInventoryComponent().GearInInventory(mats[i].Item1, totalOfTheGearTypeToCheck);
+				// if (invItem != null) continue; // Trying to get more units than owned would actually properly returns a null
+				hasAll = totalOfTheGearTypeToCheck <= 0;
 				break;
 			}
 
