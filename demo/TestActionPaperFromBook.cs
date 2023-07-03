@@ -42,7 +42,7 @@ namespace ExamineActionsAPIDemo
 
         float IExamineAction.CalculateProgressSeconds(ExamineActionState state)
         {
-            return state.SelectedTool == null ? 10 : 3;
+            return state.SelectedTool == null ? 4 : 2;
         }
         void IExamineAction.OnSuccess(ExamineActionState state) {}
 
