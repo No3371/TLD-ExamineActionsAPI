@@ -11,14 +11,19 @@ namespace ExamineActionsAPI
 		/// <summary>
 		/// Action not finished, for example: light goes out during during the process.
 		/// </summary>
-		/// <param name="state"></param>
 		void OnInterrupted (ExamineActionState state);
+		/// <summary>
+		/// Will the subject be consumed on interruption
+		/// </summary>
 		bool ConsumeOnInterruption (ExamineActionState state) => false;
 		ActionsToBlock? LightRequirementType { get; }
 		bool InterruptOnStarving { get; }
 		bool InterruptOnExhausted { get; }
 		bool InterruptOnFreezing { get; }
 		bool InterruptOnDehydrated { get; }
+		/// <summary>
+		/// Will (non-risk) afflictions interrupt the action. (Non-Risk means not something like Infection Risk)
+		/// </summary>
 		bool InterruptOnNonRiskAffliction { get; }
 		float MinimumCondition { get; }
 		/// <summary>

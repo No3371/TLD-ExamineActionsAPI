@@ -9,14 +9,14 @@ namespace ExamineActionsAPI
     public interface IExamineActionRequireTool
 	{
 		/// <summary>
-		/// Find appropriate gears as tools (usually from inventroy) and add then to the list.
+		/// <para>Find appropriate gears as tools (usually from inventroy) and add them to the list.</para>
+		/// <para>You can add null (bare hands) as an option too.</para>
 		/// </summary>
 		void GetToolOptions(ExamineActionState state, Il2CppSystem.Collections.Generic.List<GameObject> tools);
 		/// <summary>
 		/// Scale the degration on use to the used tool
 		/// </summary>
 		/// <param name="state"></param>
-		/// <returns></returns>
 		float CalculateDegradingScale(ExamineActionState state) => 1;
 	}
 }

@@ -17,6 +17,7 @@ Action documentation is WIP. At the moment please refer to the example files und
 ### IExamineAction
 
 - The core interface, classes implementing this are qualified as custom actions
+- Without implementing other interfaces, the action will always success and be finished
 
 ### IExamineActionRequireMaterials
 
@@ -34,6 +35,23 @@ Action documentation is WIP. At the moment please refer to the example files und
     - How many units to produce
     - The chance the product is yieled, ranging from 0 to 100.
 
+### IExamineActionFailable
+
+- Make the action possible to fail by chance
+
+### IExamineActionInterruptable
+
+- Make the action possible to be interrupted due to light/conditions/afflictions...
+
+### IExamineActionRequireTool
+
+- Make the action requires tool to be performed.
+- You can also adjust how much condition to be reduced on the tool.
+
+### IExamineActionCustomInfo
+
+- Display up to 2 information like how the duration/chance is shown.
+
 ## Demo
 
 There are 4 actions availabe in the demo mod:
@@ -46,3 +64,5 @@ There are 4 actions availabe in the demo mod:
     - Avaialbe on any meat or fish.
 - Perpare Acorns: You can perpare up to 3 acorns or 1 large portion, at once.
     - Avaialbe on acorns.
+- (ItemPile compat) Easily pile sticks/coals/charcoals/cattails/stones without crafting.
+    - Only availabe when stickpile item is found registered.
