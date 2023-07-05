@@ -6,9 +6,9 @@ using Il2CppTLD.Gear;
 
 namespace ExamineActionsAPIDemo
 {
-    internal class ExamineActionsAPIDemo : MelonMod
+    internal class ThingsToDo : MelonMod
     {
-		internal static ExamineActionsAPIDemo Instance { get; private set; }
+		internal static ThingsToDo Instance { get; private set; }
         public override void OnInitializeMelon()
 		{
 			Instance = this;

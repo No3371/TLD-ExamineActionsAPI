@@ -8,11 +8,11 @@ namespace ExamineActionsAPIDemo
     {
         string IExamineAction.Id => nameof(TestActionBruteForceSharpening);
 
-        string IExamineAction.MenuItemLocalizationKey => "Dumb Sharpen";
+        string IExamineAction.MenuItemLocalizationKey => "Brute Force Sharpen";
 
         string IExamineAction.MenuItemSpriteName => null;
 
-        LocalizedString IExamineAction.ActionButtonLocalizedString => new LocalizedString() { m_LocalizationID = "Dumb Sharpen" };
+        LocalizedString IExamineAction.ActionButtonLocalizedString => new LocalizedString() { m_LocalizationID = "Sharpen" };
 
         IExamineActionPanel? IExamineAction.CustomPanel => null;
 

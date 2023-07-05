@@ -2,7 +2,7 @@
 {
 	public static class BuildInfo
 	{
-		public const string Name = "ExamineActionsAPIDemo"; // Name of the Mod.  (MUST BE SET)
+		public const string Name = "ThingsToDo"; // Name of the Mod.  (MUST BE SET)
 		public const string Description = ""; // Description for the Mod.  (Set as null if none)
 		public const string Author = "BA"; // Author of the Mod.  (MUST BE SET)
 		public const string Company = null; // Company that made the Mod.  (Set as null if none)

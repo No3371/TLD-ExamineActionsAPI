@@ -2,8 +2,8 @@
     <!--This is an xml comment. Comments have no impact on compiling.-->
 
     <PropertyGroup>
-      <RootNamespace>ExamineActionsAPIDemo</RootNamespace>
-      <AssemblyName>ExamineActionsAPIDemo</AssemblyName>
+      <RootNamespace>ThingsToDo</RootNamespace>
+      <AssemblyName>ThingsToDo</AssemblyName>
     </PropertyGroup>
 
     <PropertyGroup>
