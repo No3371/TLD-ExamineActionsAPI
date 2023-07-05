@@ -61,7 +61,7 @@ namespace ExamineActionsAPI
                     flourType = Addressables.LoadAsset<PowderType>("POWDER_Flour").Result;
                     if (flourType == null) MelonLogger.Error("Failed to retrieve POWDER_Flour");
                 }
-                return FlourType;
+                return flourType;
             }
         }
 
@@ -76,7 +76,7 @@ namespace ExamineActionsAPI
                     saltType = Addressables.LoadAsset<PowderType>("POWDER_Salt").Result;
                     if (saltType == null) MelonLogger.Error("Failed to retrieve POWDER_Salt");
                 }
-                return SaltType;
+                return saltType;
             }
         }
 
@@ -90,7 +90,7 @@ namespace ExamineActionsAPI
                     oatsTinType = Addressables.LoadAsset<PowderType>("POWDER_OatsTin").Result;
                     if (oatsTinType == null) MelonLogger.Error("Failed to retrieve POWDER_OatsTin");
                 }
-                return OatsTinType;
+                return oatsTinType;
             }
         }
 
@@ -133,7 +133,7 @@ namespace ExamineActionsAPI
                     antisepticType = Addressables.LoadAsset<LiquidType>("LIQUID_Antiseptic").Result;
                     if (antisepticType == null) MelonLogger.Error("Failed to retrieve LIQUID_Antiseptic");
                 }
-                return AntisepticType;
+                return antisepticType;
             }
         }
 
@@ -151,7 +151,7 @@ namespace ExamineActionsAPI
                     accelerantType = Addressables.LoadAsset<LiquidType>("LIQUID_Accelerant").Result;
                     if (accelerantType == null) MelonLogger.Error("Failed to retrieve LIQUID_Accelerant");
                 }
-                return AccelerantType;
+                return accelerantType;
             }
         }
         // public static IReadOnlyDictionary<string, PowderType> PowderTypes
