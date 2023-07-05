@@ -11,7 +11,7 @@ namespace ExamineActionsAPI
 		internal const int CUSTOM_MENU_ITEM_COUNT = 7;
         private static void Postfix(Panel_Inventory_Examine __instance)
         {
-			MelonLogger.Msg($"+Initialize");
+			ExamineActionsAPI.VeryVerboseLog($"+Initialize");
 			foreach (var it in __instance.m_ButtonsMenuItems)
 				ExamineActionsAPI.Instance.OfficialActionMenuItems.Add(it);
 			for (int i = 0; i < CUSTOM_MENU_ITEM_COUNT; i++)
@@ -29,7 +29,7 @@ namespace ExamineActionsAPI
 				GameObject.Destroy(subLabel.GetComponent<UILocalize>());
                 ExamineActionsAPI.Instance.CustomActionMenuItemSubLabels.Add(subLabel);
 
-				MelonLogger.Msg($"Instantiated menu item: {mi.name}");
+				ExamineActionsAPI.VeryVerboseLog($"Instantiated menu item: {mi.name}");
 				mi.m_ButtonSpriteRef.onClick.Clear();
 				mi.gameObject.SetActive(false);
 				mi.gameObject.name = $"CustomAction{capturedId}";
@@ -39,7 +39,7 @@ namespace ExamineActionsAPI
 			}
 
 			ExamineActionsAPI.Instance.DefaultPanel = new DefaultPanel(__instance);
-			MelonLogger.Msg($"-Initialize");
+			ExamineActionsAPI.VeryVerboseLog($"-Initialize");
         }
     }
 }

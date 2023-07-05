@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ExamineActionsAPI
 {
-    class DebugAction_Simple : IExamineAction
+    class DebugAction_Simple : SimpleActionTemplate
     {
         public DebugAction_Simple()
         {
@@ -12,59 +12,32 @@ namespace ExamineActionsAPI
 			ActionButtonLocalizedString.m_LocalizationID = "Cant";
         }
 
-        IExamineActionPanel? IExamineAction.CustomPanel => null;
+        public override string Id => nameof(DebugAction_Simple);
+        public override string MenuItemLocalizationKey => "Cant";
+        public override string MenuItemSpriteName => "ico_lightSource_lantern";
+        public override LocalizedString ActionButtonLocalizedString { get; }
 
-        public string Id => nameof(DebugAction_Simple);
-        public string MenuItemLocalizationKey => "Cant";
-        public string MenuItemSpriteName => "ico_lightSource_lantern";
-        public LocalizedString ActionButtonLocalizedString { get; }
-
-        public int CalculateDurationMinutes(ExamineActionState state)
+        public override int CalculateDurationMinutes(ExamineActionState state)
         {
             return state.SubActionId == 1? 10 : 5;
         }
 
-        public float CalculateProgressSeconds(ExamineActionState state)
+        public override float CalculateProgressSeconds(ExamineActionState state)
         {
             return 20;
         }
-        int IExamineAction.GetSubActionCounts(ExamineActionState state) => 2;
 
-        public bool CanPerform(ExamineActionState state)
+        public override bool CanPerform(ExamineActionState state)
         {
             return state.SubActionId == 1;
         }
 
-        public bool ConsumeOnCancel(ExamineActionState state)
-        {
-            return false;
-        }
-
-        public bool IsActionAvailable(GearItem gi)
+        public override bool IsActionAvailable(GearItem gi)
         {
             return true;
         }
 
-        public void OnActionDeselected(ExamineActionState state)
-        {
-        }
-
-        public void OnActionSelected(ExamineActionState state)
-        {
-        }
-
-        public void OnInterrupted(ExamineActionState state)
-        {
-        }
-
-        public void OnPerform(ExamineActionState state)
-        {
-        }
-
-        public void OnSuccess(ExamineActionState state)
-        {
-        }
-
-        public bool ConsumeOnSuccess(ExamineActionState state) => false;
+        public override void OnSuccess(ExamineActionState state) {}
+        public override bool ConsumeOnSuccess(ExamineActionState state) => false;
     }
 }

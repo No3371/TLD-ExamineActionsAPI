@@ -1,4 +1,4 @@
-﻿// #define VERY_VERBOSE
+﻿#define VERY_VERBOSE
 using Il2Cpp;
 using MelonLoader;
 using UnityEngine;
@@ -26,8 +26,8 @@ namespace ExamineActionsAPI
 				Register(new DebugAction_Materials());
 				Register(new DebugAction_Salt());
 				Register(new DebugAction_Simple());
-				Register(new DebugAction_Tool());
 			}
+				Register(new DebugAction_Tool());
 
 			// uConsole.RegisterCommand("eaapi_tool", new Action(() => {
 			// 	uConsole.Log(InterfaceManager.GetPanel<Panel_Inventory_Examine>().GetSelectedTool().name);
@@ -47,12 +47,12 @@ namespace ExamineActionsAPI
 		{
 			// Filter out unsupported/bugged interface here
 			bool filtered = false;
-			if (action is IExamineActionProduceLiquid) filtered = true;
-			else if (action is IExamineActionProduceLiquid) filtered = true;
+			// if (action is IExamineActionRequireLiquid) filtered = true;
+			// else if (action is IExamineActionProduceLiquid) filtered = true;
 
 			if (filtered)
 			{
-				MelonLogger.Warning($"{action.Id} is not registered because it uses some functionalities that is still being fixed or worked on.");
+				MelonLogger.Warning($"{action.Id} is not registered because it uses some features that is still being fixed or worked on.");
 				return;
 			}
 
@@ -192,8 +192,8 @@ namespace ExamineActionsAPI
 			// if (State.Action is not IExamineActionCancellable)
 			// 	InterfaceManager.GetPanel<Panel_HUD>().m_ClickHoldCancelButton.transform.parent.parent.gameObject.SetActive(false); // Force my way to hide that damn button
 			State.ActiveResult = ActionResult.Success;
-			State.StartedRealtime = Time.realtimeSinceStartup;
-			State.StartedGameTime = new (GameManager.m_TimeOfDay.GetDayNumber(), GameManager.m_TimeOfDay.GetHour(), GameManager.m_TimeOfDay.GetMinutes());
+			State.StartedAtRealtime = Time.realtimeSinceStartup;
+			State.StartedAtGameTime = new (GameManager.m_TimeOfDay.GetDayNumber(), GameManager.m_TimeOfDay.GetHour(), GameManager.m_TimeOfDay.GetMinutes());
 			if (State.Action is IExamineActionFailable)
 				State.ActiveResult = (UnityEngine.Random.Range(0f, 100f) <= State.ActiveSuccessChance) ? ActionResult.Success : ActionResult.Failure;
             Panel_GenericProgressBar gpb = pie.m_GenericProgressBar.GetPanel();
@@ -206,7 +206,7 @@ namespace ExamineActionsAPI
 				new System.Action<bool, bool, float>(ActionCallback)
 			);
 
-			this.LoggerInstance.Msg($"Performing custom action {State.Action.Id}... ({State.StartedGameTime})");
+			this.LoggerInstance.Msg($"Performing custom action {State.Action.Id}... ({State.StartedAtGameTime})");
 			State.Panel.OnPerformingAction(State);
 			State.Action.OnPerform(State);
 			VeryVerboseLog($"->>>>>>>>>>>>>>PerformAction ({ GameManager.m_TimeOfDay.GetMinutes() }m");
@@ -215,12 +215,13 @@ namespace ExamineActionsAPI
 		internal void ActionCallback (bool success, bool playerCancel, float progress)
 		{
 			VeryVerboseLog($"ActionCallback success: {success} / cancel: {playerCancel} / progress: {progress}");
+			State.NormalizedProgress = progress;
 			if (success)
 				OnActionSucceed();
 			else if (playerCancel)
 				OnActionCancelled();
 			else if (State.InterruptionFlag)
-				OnActionInterrupted();
+				OnActionInterrupted(State.InterruptionSystemFlag);
 			else
 				OnActionFailed();
 
@@ -266,8 +267,11 @@ namespace ExamineActionsAPI
 
 		void PostActionFinished ()
 		{
-			State.StartedRealtime = null;
-			State.StartedGameTime = null;
+			State.StartedAtRealtime = null;
+			State.StartedAtGameTime = null;
+			State.NormalizedProgress = null;
+			State.InterruptionFlag = false;
+			State.InterruptionSystemFlag = false;
 
 			// because we are blocking UpdateLabels
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
@@ -280,9 +284,12 @@ namespace ExamineActionsAPI
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 
 			OnActionFinished();
-			if (State.Action is IExamineActionRequireMaterials arm) ConsumeMaterials(arm, ActionResult.Success);
+			if (State.Action is IExamineActionRequireItems arm) ConsumeItems(arm, ActionResult.Success);
+			if (State.Action is IExamineActionRequireLiquid arl) ConsumeLiquid(arl, ActionResult.Success);
+			if (State.Action is IExamineActionRequirePowder arp) ConsumePowder(arp, ActionResult.Success);
 			if (State.Action is IExamineActionProduceItems ari) YieldProducts(ari);
-			if (State.Action is IExamineActionProduceLiquid arl) YieldLiquidProducts(arl);
+			if (State.Action is IExamineActionProduceLiquid apl) YieldLiquidProducts(apl);
+			if (State.Action is IExamineActionProducePowder arpd) YieldPowderProducts(arpd);
 
 			var consumed = false;
 			var destroyed = false;
@@ -308,7 +315,9 @@ namespace ExamineActionsAPI
 			// VeryVerboseLog($"+OnActionFailed");
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 			OnActionFinished();
-			if (State.Action is IExamineActionRequireMaterials arm) ConsumeMaterials(arm, ActionResult.Failure);
+			if (State.Action is IExamineActionRequireItems arm) ConsumeItems(arm, ActionResult.Failure);
+			if (State.Action is IExamineActionRequireLiquid arl) ConsumeLiquid(arl, ActionResult.Failure);
+			if (State.Action is IExamineActionRequirePowder arp) ConsumePowder(arp, ActionResult.Failure);
 
 			HUDMessage.AddMessage(Localization.Get("GAMEPLAY_Failed"), false, false);
 			GameAudioManager.PlayGUIError();
@@ -335,18 +344,29 @@ namespace ExamineActionsAPI
 			VeryVerboseLog($"-OnActionFailed");
 
 		}
-		internal void OnActionInterrupted ()
+		internal void OnActionInterrupted (bool system)
 		{
 			VeryVerboseLog($"+OnActionInterrupted");
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 
 			OnActionFinished();
-			State.ActiveResult = ActionResult.Interruption;
-			if (State.Action is IExamineActionRequireMaterials arm) ConsumeMaterials(arm, ActionResult.Interruption);
-	
 			GameAudioManager.PlayGUIError();
 
-            IExamineActionInterruptable? interruptable = State.Action as IExamineActionInterruptable;
+			if (system) State.Action.OnActionInterruptedBySystem(State);
+
+			State.ActiveResult = ActionResult.Interruption;
+            
+			IExamineActionInterruptable? interruptable = State.Action as IExamineActionInterruptable;
+			if (interruptable == null) // Not a regular interruption, likely due to emmergencies like wolf attacks
+			{
+				PostActionFinished();
+				return;
+			}
+
+			if (State.Action is IExamineActionRequireItems arm) ConsumeItems(arm, ActionResult.Interruption);
+			if (State.Action is IExamineActionRequireLiquid arl) ConsumeLiquid(arl, ActionResult.Interruption);
+			if (State.Action is IExamineActionRequirePowder arp) ConsumePowder(arp, ActionResult.Interruption);
+	
 			var consumed = false;
 			var destroyed = false;
 			if (interruptable.ConsumeOnInterruption(State))
@@ -355,7 +375,7 @@ namespace ExamineActionsAPI
 				destroyed = ConsumeSubject(State.Action.OverrideConsumingUnits(State));
 			}
 			interruptable.OnInterrupted(State);
-			State.Panel.OnActionInterrupted(State);
+			State.Panel.OnActionInterrupted(State, system);
 			PostActionFinished();
 			if (consumed)
 				VeryVerboseLog("The gear is consumed because the action consumes on interruption too.");
@@ -401,10 +421,6 @@ namespace ExamineActionsAPI
 			// VeryVerboseLog($"-OnActionCancelled");
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns>destroyed</returns>
 		internal bool ConsumeSubject (int units)
 		{
 			// VeryVerboseLog($"+ConsumeSubject");
@@ -433,15 +449,17 @@ namespace ExamineActionsAPI
 			return false;
 		}
 
-		internal void ConsumeMaterials (IExamineActionRequireMaterials act, ActionResult result)
+		internal void ConsumeItems (IExamineActionRequireItems act, ActionResult result)
 		{
 			// VeryVerboseLog($"+ConsumeMaterials");
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 			Inventory inv = GameManager.GetInventoryComponent();
-            (string, int, byte)[] mats = act.GetMaterials(State);
-            for (int i = 0; i < mats.Length; i++)
+            List<(string gear_name, int units, byte chance)> items = new (1);
+			act.GetRequiredItems(State, items);
+			if (items == null) return;
+            for (int i = 0; i < items.Count; i++)
 			{
-                (string, int, byte) mat = mats[i];
+                (string, int, byte) mat = items[i];
                 byte chance = mat.Item3;
                 if (chance < 100)
 				{
@@ -450,7 +468,7 @@ namespace ExamineActionsAPI
 						SafeRemoveFromInventory(mat.Item1, mat.Item2);
 					}
 					else
-                        VeryVerboseLog($"{mat.Item1} x{mat.Item2} is kept because the {mat.Item3}% roll didn't pass.");
+                        this.LoggerInstance.Msg($"{mat.Item1} x{mat.Item2} is kept because the {mat.Item3}% roll didn't pass.");
 				}
 				else
 					SafeRemoveFromInventory(mat.Item1, mat.Item2);
@@ -494,13 +512,116 @@ namespace ExamineActionsAPI
 			}
 		}
 
+		internal void ConsumeLiquid (IExamineActionRequireLiquid act, ActionResult result)
+		{
+			// VeryVerboseLog($"+ConsumeLiquid");
+			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
+			Inventory inv = GameManager.GetInventoryComponent();
+            List<(LiquidType type, float units, byte chance)> liquids = new (1);
+			act.GetRequireLiquid(State, liquids);
+			if (liquids == null) return;
+            for (int i = 0; i < liquids.Count; i++)
+			{
+                var conf = liquids[i];
+                if (conf.chance < 100)
+				{
+					if (UnityEngine.Random.Range(0, 100) <= conf.chance)
+					{
+						RemoveLiquidFromInventory(conf.type, conf.units);
+						VeryVerboseLog($"{conf.type.name} x{conf.Item2}l is yielded.");
+					}
+					else
+						this.LoggerInstance.Msg($"{conf.type.name} x{conf.units} is kept because the {conf.chance}% roll didn't pass.");
+				}
+				else
+				{
+					RemoveLiquidFromInventory(conf.type, conf.units);
+					VeryVerboseLog($"{conf.type.name} x{conf.Item2}l is yielded.");
+				}
+			}
+			// VeryVerboseLog($"-ConsumePowder");
+
+			void RemoveLiquidFromInventory (LiquidType type, float units)
+			{
+				for (int i = 0 ; i < inv.m_Items.Count; i++)
+				{
+					var gi = inv.m_Items[i]?.m_GearItem;
+					var pi = gi?.m_LiquidItem;
+					if (gi == State.Subject || pi == null || pi.m_LiquidType != type.LegacyLiquidType || (int) pi.m_LiquidQuality != (int) type.Quality) continue;
+
+                    float taking = Mathf.Min(units, pi.m_LiquidLiters);
+					pi.m_LiquidLiters -= taking;
+                    units -= taking;
+					if (units <= 0) break;
+				}
+
+				if (units > 0)
+					this.LoggerInstance.Error($"Failed to remove enough liquid from inventory ({type.name}), please report to the author of EAAPI.");
+			}
+		}
+
+		internal void ConsumePowder (IExamineActionRequirePowder act, ActionResult result)
+		{
+			// VeryVerboseLog($"+ConsumePowder");
+			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
+			Inventory inv = GameManager.GetInventoryComponent();
+            List<(PowderType type, float units, byte chance)> powders = new (1);
+			act.GetRequiredPowder(State, powders);
+			if (powders == null) return;
+            for (int i = 0; i < powders.Count; i++)
+			{
+                var conf = powders[i];
+                if (conf.chance < 100)
+				{
+					if (UnityEngine.Random.Range(0, 100) <= conf.chance)
+					{
+						RemovePowderFromInventory(conf.type, conf.units);
+						VeryVerboseLog($"{conf.type.name} x{conf.Item2}kg is yielded.");
+					}
+					else
+						this.LoggerInstance.Msg($"{conf.type.name} x{conf.units} is kept because the {conf.chance}% roll didn't pass.");
+				}
+				else
+				{
+					RemovePowderFromInventory(conf.type, conf.units);
+					VeryVerboseLog($"{conf.type.name} x{conf.Item2}kg is yielded.");
+				}
+			}
+			// VeryVerboseLog($"-ConsumePowder");
+
+			/// <summary>
+			/// Because modder can now define almost anything as materials
+			/// we need to make sure ammo or fuel are removed from them
+			/// </summary>
+			void RemovePowderFromInventory (PowderType type, float units)
+			{
+				for (int i = 0 ; i < inv.m_Items.Count; i++)
+				{
+					var gi = inv.m_Items[i]?.m_GearItem;
+					var pi = gi?.m_PowderItem;
+					if (gi == State.Subject || pi == null || pi.m_Type != type) continue;
+
+
+                    float taking = Mathf.Min(units, pi.m_WeightKG);
+					pi.m_WeightKG -= taking;
+                    units -= taking;
+					if (units <= 0) break;
+				}
+
+				if (units > 0)
+					this.LoggerInstance.Error($"Failed to remove enough powder from inventory ({type.name}), please report to the author of EAAPI.");
+			}
+		}
+
 		internal void YieldProducts (IExamineActionProduceItems act)
 		{
 			// VeryVerboseLog($"+YieldProducts");
 			Inventory inv = GameManager.GetInventoryComponent();
 			PlayerManager pm = GameManager.GetPlayerManagerComponent();
-            (string, int, byte)[] products = act.GetProducts(State);
-            for (int pi = 0; pi < products.Length; pi++)
+            List<(string gear_name, int units, byte chance)> products = new (1);
+			act.GetProducts(State, products);
+			if (products == null) return;
+            for (int pi = 0; pi < products.Count; pi++)
 			{
 				GearItem prefab = act.OverrideProductPrefabs(State, pi);
 				if (prefab == null) prefab = GearItem.LoadGearItemPrefab(products[pi].Item1);
@@ -518,6 +639,7 @@ namespace ExamineActionsAPI
 				{
 					var p = pm.InstantiateItemInPlayerInventory(prefab, products[pi].Item2, 1, PlayerManager.InventoryInstantiateFlags.EnableNotificationFlag);
 					act.PostProcessProduct(State, pi, p);
+					VeryVerboseLog($"{products[pi].Item1} x{products[pi].Item2} is yielded.");
 				}
 			}
 			// VeryVerboseLog($"-YieldProducts");
@@ -527,23 +649,78 @@ namespace ExamineActionsAPI
 			// VeryVerboseLog($"+YieldProducts");
 			Inventory inv = GameManager.GetInventoryComponent();
 			PlayerManager pm = GameManager.GetPlayerManagerComponent();
-            List<(GearLiquidTypeEnum type, float units, byte chance)> liquids = new();
+            List<(LiquidType type, float units, byte chance)> liquids = new();
 			act.GetProductLiquid(State, liquids);
             for (int pi = 0; pi < liquids.Count; pi++)
 			{
-                (GearLiquidTypeEnum type, float units, byte chance) conf = liquids[pi];
+                (LiquidType type, float units, byte chance) conf = liquids[pi];
                 byte chance = conf.Item3;
                 if (chance < 100)
 				{
 					if (UnityEngine.Random.Range(0, 100) <= chance)
 					{
-						var p = pm.AddLiquidToInventory(conf.units, conf.type);
-                        VeryVerboseLog($"{conf.Item1} {conf.Item2}l is yielded because the {conf.Item3} roll passed.");
+						AddLiquidToInventory(conf.units, conf.type);
+                        VeryVerboseLog($"{conf.type.name} {conf.Item2}l is yielded because the {conf.Item3} roll passed.");
 					}
 				}
 				else
 				{
-					var p = pm.AddLiquidToInventory(conf.units, conf.type);
+					AddLiquidToInventory(conf.units, conf.type);
+					VeryVerboseLog($"{conf.type.name} x{conf.Item2}l is yielded.");
+				}
+			}
+			// VeryVerboseLog($"-YieldProducts");
+
+			void AddLiquidToInventory (float units, LiquidType type)
+			{
+				for (int i = 0 ; i < inv.m_Items.Count; i++)
+				{
+					var gi = inv.m_Items[i]?.m_GearItem;
+					var li = gi?.m_LiquidItem;
+					if (li == null
+					 || li.m_LiquidType != type.LegacyLiquidType
+					 || (int)li.m_LiquidQuality != (int)type.Quality ) continue;
+
+
+                    float adding = Mathf.Min(units, li.m_LiquidCapacityLiters - li.m_LiquidLiters);
+					li.m_LiquidLiters += adding;
+                    units -= adding;
+					if (units <= 0) break;
+				}
+
+				while (units > 0)
+				{
+					var p = pm.InstantiateItemInPlayerInventory(type.DefaultContainer.m_PrefabReference.GetOrLoadTypedAsset(), 1, 1, PlayerManager.InventoryInstantiateFlags.EnableNotificationFlag);
+                    float adding = Mathf.Min(units, p.m_LiquidItem.m_LiquidCapacityLiters);
+					p.m_LiquidItem.m_LiquidLiters = adding;
+					units -= adding;
+				}
+			}
+		}
+
+		internal void YieldPowderProducts (IExamineActionProducePowder act)
+		{
+			// VeryVerboseLog($"+YieldProducts");
+			Inventory inv = GameManager.GetInventoryComponent();
+			PlayerManager pm = GameManager.GetPlayerManagerComponent();
+            List<(PowderType type, float units, byte chance)> powders = new();
+			act.GetProductPowder(State, powders);
+            for (int pi = 0; pi < powders.Count; pi++)
+			{
+                (PowderType type, float units, byte chance) conf = powders[pi];
+                byte chance = conf.Item3;
+                if (chance < 100)
+				{
+					if (UnityEngine.Random.Range(0, 100) <= chance)
+					{
+						var p = pm.AddPowderToInventory(conf.units, conf.type);
+                        VeryVerboseLog($"{conf.type.name} {conf.Item2}kg is yielded because the {conf.Item3} roll passed.");
+					}
+				}
+				else
+				{
+					var p = pm.AddPowderToInventory(conf.units, conf.type);
+					VeryVerboseLog($"{conf.type.name} x{conf.Item2}kg is yielded.");
 				}
 			}
 			// VeryVerboseLog($"-YieldProducts");

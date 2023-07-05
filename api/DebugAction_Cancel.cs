@@ -60,6 +60,8 @@ namespace ExamineActionsAPI
         void IExamineActionCancellable.OnActionCanceled(ExamineActionState state) {}
         bool IExamineActionCancellable.ConsumeOnCancel(ExamineActionState state) => false;
 
+        void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
+
         // void IExamineActionProduceLiquid.GetProductLiquid(ExamineActionState state, List<(GearLiquidTypeEnum, float, byte)> liquids)
         // {
         //     liquids.Add((GearLiquidTypeEnum.Water, 1, 100));

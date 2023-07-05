@@ -11,7 +11,7 @@ namespace ExamineActionsAPI
 		/// The products to yield
 		/// </summary>
 		/// <value>("GEAR_XXX", number, chance)</value>
-		(string, int, byte)[] GetProducts(ExamineActionState state);
+		void GetProducts(ExamineActionState state, List<(string gear_name, int units, byte chance)> products);
 		GearItem OverrideProductPrefabs(ExamineActionState state, int index) => null;
 		/// <summary>
 		/// Implement this to do something about the products

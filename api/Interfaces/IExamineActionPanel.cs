@@ -9,7 +9,8 @@ namespace ExamineActionsAPI
 		void OnActionSucceed(ExamineActionState state);
 		void OnActionFailed(ExamineActionState state);
 		void OnActionCancelled(ExamineActionState state);
-		void OnActionInterrupted(ExamineActionState state);
+
+		void OnActionInterrupted(ExamineActionState state, bool force);
 		void OnSelectingTool (ExamineActionState state);
 		void OnSelectingToolChanged (ExamineActionState state);
 		void OnToolSelected (ExamineActionState state); 

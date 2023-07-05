@@ -7,6 +7,6 @@ namespace ExamineActionsAPI
 	/// </summary>
     public interface IExamineActionRequireLiquid
 	{
-		void GetRequireLiquid (ExamineActionState state, List<(LiquidType, int, byte)> liquids);
+		void GetRequireLiquid (ExamineActionState state, List<(LiquidType, float, byte)> liquids);
 	}
 }

@@ -14,6 +14,8 @@ namespace ExamineActionsAPI
                 if (state.ActionInProgress)
                 {
                     __instance.OnProgressBarCancel();
+                    state.InterruptionFlag = true;
+                    state.InterruptionSystemFlag = true;
                 }
                 __instance.Enable(false, ComingFromScreenCategory.Inventory_Examine);
                 return;

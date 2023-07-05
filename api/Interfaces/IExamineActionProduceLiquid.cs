@@ -1,4 +1,5 @@
 using Il2Cpp;
+using Il2CppTLD.Gear;
 
 namespace ExamineActionsAPI
 {
@@ -7,6 +8,6 @@ namespace ExamineActionsAPI
     /// </summary>
     public interface IExamineActionProduceLiquid
 	{
-		void GetProductLiquid (ExamineActionState state, List<(GearLiquidTypeEnum, float, byte)> liquids);
+		void GetProductLiquid (ExamineActionState state, List<(LiquidType, float, byte)> liquids);
 	}
 }

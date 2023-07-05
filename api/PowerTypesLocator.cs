@@ -6,7 +6,7 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 
 namespace ExamineActionsAPI
 {
-    public static class PowerTypesLocator
+    public static class PowerAndLiquidTypesLocator
     {
         private static PowderType gunPowderType;
 
@@ -22,6 +22,19 @@ namespace ExamineActionsAPI
             }
         }
 
+
+        private static LiquidType waterPottableType;
+        public static LiquidType WaterPottableType
+        {
+            get
+            {
+                if (waterPottableType == null)
+                {
+                    waterPottableType = Addressables.LoadAsset<LiquidType>("LIQUID_WaterPotable").Result;
+                }
+                return waterPottableType;
+            }
+        }
         // public static IReadOnlyDictionary<string, PowderType> PowderTypes
         // {
         //     get

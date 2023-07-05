@@ -61,12 +61,10 @@ namespace ExamineActionsAPI
 			return true;
         }
 
-        public (string, int, byte)[] GetProducts(ExamineActionState state)
+        public void GetProducts(ExamineActionState state, List<(string gear_name, int units, byte chance)> products)
         {
-            return new (string, int, byte)[]{
-				("GEAR_Knife", 1, 100),
-				("GEAR_WhiskyFlask", 1, 8)
-			};
+            products.Add(("GEAR_Knife", 1, 100));
+            products.Add(("GEAR_WhiskyFlask", 1, 8));
         }
 
 
@@ -133,5 +131,7 @@ namespace ExamineActionsAPI
         {
             return true;
         }
+
+        void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
     }
 }

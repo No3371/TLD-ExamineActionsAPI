@@ -58,11 +58,9 @@ namespace ExamineActionsAPIDemo
 
         bool IExamineAction.ConsumeOnSuccess(ExamineActionState state) => false;
 
-        (string, int, byte)[] IExamineActionProduceItems.GetProducts(ExamineActionState state)
+        void IExamineActionProduceItems.GetProducts(ExamineActionsAPI.ExamineActionState state, System.Collections.Generic.List<(string gear_name, int units, byte chance)> products)
         {
-            return new (string, int, byte)[]{
-                (state.Subject.name, 1, 100),
-            };
+            products.Add((state.Subject.name, 1, 100));
         }
 
         GearItem IExamineActionProduceItems.OverrideProductPrefabs(ExamineActionState state, int index) => state.Subject;
@@ -108,5 +106,6 @@ namespace ExamineActionsAPIDemo
                 "25~60"
             );
         }
+        void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
     }
 }

@@ -87,17 +87,22 @@ namespace ExamineActionsAPIDemo
             };
         }
 
-        (string, int, byte)[]? IExamineActionProduceItems.GetProducts(ExamineActionState state)
+        void IExamineActionProduceItems.GetProducts(ExamineActionsAPI.ExamineActionState state, List<(string gear_name, int units, byte chance)> products)
         {
-            return state.Subject.name switch
+            products.Add(state.Subject.name switch
             {
-                "GEAR_Stick" => state.SubActionId == 4 ? new (string, int, byte)[]{ ("GEAR_StickPile050", 1, 100) } : new (string, int, byte)[]{ ("GEAR_StickPile010", state.SubActionId + 1, 100) },
-                "GEAR_Stone" => new (string, int, byte)[]{ ("GEAR_StonePile010", state.SubActionId + 1, 100) },
-                "GEAR_Coal" => new (string, int, byte)[]{ ("GEAR_CoalPile004", state.SubActionId + 1, 100) },
-                "GEAR_Charcoal" => new (string, int, byte)[]{ ("GEAR_CharcoalPile010", state.SubActionId + 1, 100) },
-                "GEAR_CattailStalk" => new (string, int, byte)[]{ ("GEAR_CattailPile005", state.SubActionId + 1, 100) },
-                _ => null
-            };
+                "GEAR_Stick" => state.SubActionId switch
+                {
+                    4 => ("GEAR_StickPile050", 1, 100),
+                    _ => ("GEAR_StickPile010", state.SubActionId + 1, 100)
+                },
+                "GEAR_Stone" => ("GEAR_StonePile010", state.SubActionId + 1, 100),
+                "GEAR_Coal" => ("GEAR_CoalPile004", state.SubActionId + 1, 100),
+                "GEAR_Charcoal" => ("GEAR_CharcoalPile010", state.SubActionId + 1, 100),
+                "GEAR_CattailStalk" => ("GEAR_CattailPile005", state.SubActionId + 1, 100),
+                _ => ("", 0, 0)
+            });
         }
+        void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
     }
 }

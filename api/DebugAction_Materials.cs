@@ -3,7 +3,7 @@ using MelonLoader;
 
 namespace ExamineActionsAPI
 {
-    class DebugAction_Materials : IExamineAction, IExamineActionRequireMaterials, IExamineActionFailable, IExamineActionCustomInfo
+    class DebugAction_Materials : IExamineAction, IExamineActionRequireItems, IExamineActionFailable, IExamineActionCustomInfo
     {
         public DebugAction_Materials()
         {
@@ -62,14 +62,12 @@ namespace ExamineActionsAPI
 			return false;
         }
 
-        public (string, int, byte)[] GetMaterials(ExamineActionState state)
+        void IExamineActionRequireItems.GetRequiredItems(ExamineActionState state, System.Collections.Generic.List<(string gear_name, int units, byte chance)> items)
         {
-            return new (string, int, byte)[]{
-				("GEAR_Stick", 1, 100),
-				("GEAR_Stone", 2, 8),
-				("GEAR_Stone", 1, 55),
-				("GEAR_DustingSulfur", 1, 1)
-			};
+            items.Add(("GEAR_Stick", 1, 100));
+            items.Add(("GEAR_Stone", 2, 8));
+            items.Add(("GEAR_Stone", 1, 55));
+            items.Add(("GEAR_DustingSulfur", 1, 1));
         }
 
 
@@ -122,11 +120,6 @@ namespace ExamineActionsAPI
             return false;
         }
 
-        public bool KeepMaterialOnInterruption(ExamineActionState state, string matGearName)
-        {
-            return false;
-        }
-
         bool IExamineActionFailable.ConsumeOnFailure(ExamineActionState state)
         {
             return true;
@@ -136,5 +129,7 @@ namespace ExamineActionsAPI
         {
             return true;
         }
+
+        void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
     }
 }

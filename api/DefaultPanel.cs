@@ -1,3 +1,4 @@
+#define VERY_VERBOSE
 using Il2Cpp;
 using Il2CppAK.Wwise;
 using Il2CppTLD.Gear;
@@ -57,19 +58,25 @@ namespace ExamineActionsAPI
             // skillClone.transform.FindChild("ProgressBar").gameObject.SetActive(false);
 
             materialsClone = FindChildWrapper(repairPanelClone.transform, "GameObject/RequiredMaterials").gameObject;
-			Materials = new (3);
+			Materials = new (5);
             Materials.AddRange(materialsClone.GetComponentsInChildren<HarvestRepairMaterial>(true));
 			Materials.Add(GameObject.Instantiate(Materials[0], Materials[0].transform.parent).GetComponent<HarvestRepairMaterial>());
+            Materials[2].gameObject.name = "Item3";
 			Materials.Add(GameObject.Instantiate(Materials[0], Materials[0].transform.parent).GetComponent<HarvestRepairMaterial>());
+            Materials[3].gameObject.name = "Item4";
 			Materials.Add(GameObject.Instantiate(Materials[0], Materials[0].transform.parent).GetComponent<HarvestRepairMaterial>());
+            Materials[4].gameObject.name = "Item5";
 					// MelonLogger.Msg($"2: {__instance.m_HarvestYieldRoot}");
 
 			yieldsClone = GameObject.Instantiate(pie.m_HarvestYieldRoot, gameobjects);
-			Products = new (3);
+			Products = new (5);
             Products.AddRange(yieldsClone.GetComponentsInChildren<HarvestRepairMaterial>(true));
 			Products.Add(GameObject.Instantiate(Products[0], Products[0].transform.parent).GetComponent<HarvestRepairMaterial>());
+            Products[2].gameObject.name = "Item3";
 			Products.Add(GameObject.Instantiate(Products[0], Products[0].transform.parent).GetComponent<HarvestRepairMaterial>());
+            Products[3].gameObject.name = "Item4";
 			Products.Add(GameObject.Instantiate(Products[0], Products[0].transform.parent).GetComponent<HarvestRepairMaterial>());
+            Products[4].gameObject.name = "Item5";
 
 			materialChances = new (Materials.Count);
 			for (int i = 0; i < Materials.Count; i++)
@@ -181,8 +188,9 @@ namespace ExamineActionsAPI
             MaybeSetupTools(state);
             UpdateInfoBlock(state);
 
-            bool displayingMats = state.Action is IExamineActionRequireMaterials rMats && rMats.GetMaterials(state) != null;
-            bool displayingProducts = state.Action is IExamineActionProduceItems pItms && pItms.GetProducts(state) != null;
+            
+            bool displayingMats = state.GetAllMaterialCount() > 0;
+            bool displayingProducts = state.GetAllProductCount() > 0;
             int mid = infoBlockExtended ? -58 : -30;
             int upperY = infoBlockExtended ? -30 : 0;
             int lowerY = infoBlockExtended ? -134 : -112;
@@ -253,72 +261,136 @@ namespace ExamineActionsAPI
 
         private void MaybeSetupMaterials(ExamineActionState state)
         {
-            if (state.Action is IExamineActionRequireMaterials eam)
+            List<(string gear_name, int units, byte chance)> materials = null;
+            if (state.Action is IExamineActionRequireItems erm)
             {
-                materiaslLabel.color = (state.AllMaterialsReady.Value ? PIE.m_RequiredMaterialsLabelDefaultColor : PIE.m_RepairLabelColorDisabled);
-                var mats = eam.GetMaterials(state);
-                if (mats != null)
+                materials = new (1);
+                erm.GetRequiredItems(state, materials);
+            }
+            List<(LiquidType type, float units, byte chance)> liquids = null;
+            if (state.Action is IExamineActionRequireLiquid erl)
+            {
+                liquids = new(1);
+                erl.GetRequireLiquid(state, liquids);
+            }
+            List<(PowderType type, float units, byte chance)> powders = null;
+            if (state.Action is IExamineActionRequirePowder erp)
+            {
+                powders = new(1);
+                erp.GetRequiredPowder(state, powders);
+            }
+
+            int matCount = materials?.Count ?? 0;
+            int liqCount = liquids?.Count ?? 0;
+            int powCount = powders?.Count ?? 0;
+            int total = matCount + liqCount + powCount;
+            ExamineActionsAPI.VeryVerboseLog($"Materials: {matCount} items / {liqCount} liquid / {powCount} powders");
+            if (total == 0) return;
+
+            for (int configured = 0; configured < 5; configured++)
+            {
+                var slot = this.Materials[configured];
+                if (configured >= total)
                 {
-                    float num2 = (float)mats.Length / 2f - 0.5f;
-                    for (int i = 0; i < mats.Length; i++)
+                    slot.Hide();
+                    continue;
+                }
+                ExamineActionsAPI.VeryVerboseLog($"Configuring material#{configured+1}/{total}");
+    
+                Vector3 localPosition = slot.transform.localPosition;
+                localPosition.x = PIE.m_RequiredMaterialCenteredX;
+                localPosition.x += PIE.m_RequiredMaterialSpacing * ((float)configured - (total / 2f - 0.5f)) / (total >=4? 2f: 1.2f);
+                slot.transform.localPosition = localPosition;
+                slot.transform.localScale = total >= 4 ? new Vector3(0.8f, 0.8f, 1) : new Vector3(1f, 1f, 1);
+
+                if (configured >= matCount + liqCount) // Powder
+                {
+                    int pIdx = configured - (matCount + liqCount);
+                    var conf = powders[pIdx];
+                    
+                    if (conf.chance < 100)
                     {
-                        Vector3 localPosition = this.Materials[i].transform.localPosition;
-                        localPosition.x = PIE.m_RequiredMaterialCenteredX;
-                        localPosition.x += PIE.m_RequiredMaterialSpacing * ((float)i - num2) / (mats.Length >=4? 2f: 1.2f);
-                        this.Materials[i].transform.localPosition = localPosition;
-                        this.Materials[i].transform.localScale = mats.Length >= 4 ? new Vector3(0.8f, 0.8f, 1) : new Vector3(1f, 1f, 1);
-                        int stackNum = mats[i].Item2;
-                        int checkingStackNum = mats[i].Item2;
-                        if (state.Subject.name == mats[i].Item1) checkingStackNum += state.Subject.m_StackableItem?.m_Units?? 1;
-                        for (int j = 0; j < i; j++)
-                            if (mats[i].Item1 == mats[j].Item1) checkingStackNum += mats[j].Item2;
-                        var invItem = GameManager.GetInventoryComponent().GearInInventory(mats[i].Item1, checkingStackNum);
-                        GearItem prefab = GearItem.LoadGearItemPrefab(mats[i].Item1);
-                        if (prefab == null)
-                            MelonLogger.Error($"Invalid material: {mats[i].Item1}. There will be exception following this line of log. Check do you have the item mod installed or contact the mod providing this action or this action recipe.");
-                        this.Materials[i].ShowItem(prefab, stackNum, invItem != null);
-                        if (mats[i].Item3 < 100)
-                        {
-                            this.materialChances[i].text = $"{mats[i].Item3}%";
-                            this.materialChances[i].gameObject.SetActive(true);
-                        }
-                        else this.materialChances[i].gameObject.SetActive(false);
+                        this.materialChances[configured].text = $"{conf.chance}%";
+                        this.materialChances[configured].gameObject.SetActive(true);
                     }
-                    for (int j = mats.Length; j < this.Materials.Count; j++)
+                    else this.materialChances[configured].gameObject.SetActive(false);
+
+                    slot.ShowPowder(conf.type, conf.units);
+
+                    ExamineActionsAPI.VeryVerboseLog($"Showing {conf.type.name} {conf.units}kg");
+                    float owned = GameManager.m_Inventory.GetTotalPowderWeight(conf.type);
+                    PowderItem? subjectPowderItem = state.Subject?.m_PowderItem;
+                    if (subjectPowderItem != null && subjectPowderItem.m_Type == conf.type) owned -= subjectPowderItem.m_WeightKG;
+                    ExamineActionsAPI.VeryVerboseLog($"Found {conf.type.name} {owned}kg (+{state.Subject?.m_PowderItem?.m_WeightKG ?? 0})");
+                    float required = conf.units;
+                    for (int j = 0; j < pIdx; j++)
+                        if (conf.type == powders[j].type) required += powders[j].units;
+                    ExamineActionsAPI.VeryVerboseLog($"Requires {conf.type.name} {required}/{owned}kg");
+                    slot.m_GearLabel.color = owned >= required ? new Color(1, 1, 1) : slot.m_RedColorToUse;
+                }
+                else if (configured >= matCount) // Liquid
+                {
+                    int idx = configured - matCount;
+                    var conf = liquids[idx];
+                    
+                    if (conf.chance < 100)
                     {
-                        this.Materials[j].Hide();
+                        this.materialChances[configured].text = $"{conf.chance}%";
+                        this.materialChances[configured].gameObject.SetActive(true);
                     }
-                    materialsClone.SetActive(true);
-                    if (!bg2.gameObject.activeSelf) bg2.gameObject.SetActive(true);
+                    else this.materialChances[configured].gameObject.SetActive(false);
+
+                    slot.ShowItem(conf.type.DefaultContainer.PrefabReference.GetOrLoadTypedAsset(), 0);
+                    slot.m_StackLabel.text = $"{conf.units} l";
+
+                    ExamineActionsAPI.VeryVerboseLog($"Showing {conf.type.name} {conf.units}l");
+                    float owned = GameManager.m_Inventory.GetTotalLiquidVolume(conf.type);
+                    LiquidItem? subjectLiquidItem = state.Subject?.m_LiquidItem;
+                    if (subjectLiquidItem != null && subjectLiquidItem.m_LiquidType == conf.type.LegacyLiquidType
+                     && (int) subjectLiquidItem.m_LiquidQuality == (int) conf.type.Quality) owned -= subjectLiquidItem.m_LiquidLiters;
+                    ExamineActionsAPI.VeryVerboseLog($"Found {conf.type.name} {owned}l (+{subjectLiquidItem?.m_LiquidLiters ?? 0})");
+                    float required = conf.units;
+                    for (int j = 0; j < idx; j++)
+                        if (conf.type == liquids[j].type) required += liquids[j].units;
+                    ExamineActionsAPI.VeryVerboseLog($"Requires {conf.type.name} {required}/{owned}l");
+                    slot.m_GearLabel.color = owned >= required ? new Color(1, 1, 1) : slot.m_RedColorToUse;
                 }
                 else
                 {
-                    // foreach (var m in Materials)
-                    //     m.Hide();
+                    var conf = materials[configured];
+                    int stackNum = conf.units;
+                    int checkingStackNum = conf.units;
+                    if (state.Subject.name == conf.gear_name) checkingStackNum += state.Subject.m_StackableItem?.m_Units?? 1;
+                    for (int j = 0; j < configured; j++)
+                        if (conf.gear_name == materials[j].gear_name) checkingStackNum += materials[j].units;
+                    var invItem = GameManager.GetInventoryComponent().GearInInventory(conf.gear_name, checkingStackNum);
+                    GearItem prefab = GearItem.LoadGearItemPrefab(conf.gear_name);
+                    if (prefab == null)
+                        MelonLogger.Error($"Invalid material: {conf.gear_name}. There will be exception following this line of log. Check do you have the item mod installed or contact the mod providing this action or this action recipe.");
+
+                    if (conf.chance < 100)
+                    {
+                        this.materialChances[configured].text = $"{conf.chance}%";
+                        this.materialChances[configured].gameObject.SetActive(true);
+                    }
+                    else this.materialChances[configured].gameObject.SetActive(false);
+                    slot.ShowItem(prefab, conf.units);
                 }
-                
             }
+            if (state.AllMaterialsReady ?? false) materiaslLabel.color = PIE.m_RequiredMaterialsLabelDefaultColor;
+            else materiaslLabel.color = PIE.m_RepairLabelColorDisabled;
+            materialsClone.SetActive(true);
+            if (!bg2.gameObject.activeSelf) bg2.gameObject.SetActive(true);
         }
 
         private void MaybeSetupProducts(ExamineActionState state)
         {
-            (string gear_name, int units, byte chance)[] mats = null;
-            if (state.Action is IExamineActionProduceItems eap)
-                mats = eap.GetProducts(state);
-            List<(GearLiquidTypeEnum type, float units, byte chance)> liquids = null;
-            if (state.Action is IExamineActionProduceLiquid eapl)
-            {
-                liquids = new();
-                eapl.GetProductLiquid(state, liquids);
-            }
-            List<(PowderType type, float units, byte chance)> powders = null;
-            if (state.Action is IExamineActionProducePowder eapp)
-            {
-                powders = new();
-                eapp.GetProductPowder(state, powders);
-            }
+            List<(string gear_name, int units, byte chance)> items;
+            List<(LiquidType type, float units, byte chance)> liquids;
+            List<(PowderType type, float units, byte chance)> powders;
+            state.GetAllProducts(out items, out liquids, out powders);
 
-            int matCount = mats?.Length ?? 0;
+            int matCount = items?.Count ?? 0;
             int liqCount = liquids?.Count ?? 0;
             int powCount = powders?.Count ?? 0;
             int total = matCount + liqCount + powCount;
@@ -326,22 +398,23 @@ namespace ExamineActionsAPI
 
             for (int configured = 0; configured < 5; configured++)
             {
+                var slot = this.Products[configured];
                 if (configured >= total)
                 {
-                    this.Products[configured].Hide();
+                    slot.Hide();
                     continue;
                 }
-    
-                Vector3 localPosition = this.Products[configured].transform.localPosition;
+
+                Vector3 localPosition = slot.transform.localPosition;
                 localPosition.x = PIE.m_RequiredMaterialCenteredX;
-                localPosition.x += PIE.m_RequiredMaterialSpacing * ((float)configured - (total / 2f - 0.5f)) / (total >=4? 2f: 1.2f);
-                this.Products[configured].transform.localPosition = localPosition;
-                this.Products[configured].transform.localScale = total >= 4 ? new Vector3(0.8f, 0.8f, 1) : new Vector3(1f, 1f, 1);
+                localPosition.x += PIE.m_RequiredMaterialSpacing * ((float)configured - (total / 2f - 0.5f)) / (total >= 4 ? 2f : 1.2f);
+                slot.transform.localPosition = localPosition;
+                slot.transform.localScale = total >= 4 ? new Vector3(0.8f, 0.8f, 1) : new Vector3(1f, 1f, 1);
 
                 if (configured >= matCount + liqCount) // Powder
                 {
-                    var conf = powders[configured - matCount];
-                    
+                    var conf = powders[configured - (matCount + liqCount)];
+
                     if (conf.chance < 100)
                     {
                         this.productChances[configured].text = $"{conf.chance}%";
@@ -349,12 +422,12 @@ namespace ExamineActionsAPI
                     }
                     else this.productChances[configured].gameObject.SetActive(false);
 
-                    this.Products[configured].ShowPowder(conf.type, conf.units);
+                    slot.ShowPowder(conf.type, conf.units);
                 }
                 else if (configured >= matCount) // Liquid
                 {
                     var conf = liquids[configured - matCount];
-                    
+
                     if (conf.chance < 100)
                     {
                         this.productChances[configured].text = $"{conf.chance}%";
@@ -362,11 +435,14 @@ namespace ExamineActionsAPI
                     }
                     else this.productChances[configured].gameObject.SetActive(false);
 
-                    this.Products[configured].ShowLiquid(conf.type, conf.units, false);
+
+                    slot.ShowItem(conf.type.DefaultContainer.PrefabReference.GetOrLoadTypedAsset(), 0);
+                    slot.m_StackLabel.text = $"{conf.units} l";
+                    ExamineActionsAPI.VeryVerboseLog($"Showing {conf.type.name} {conf.units}l");
                 }
                 else
                 {
-                    var conf = mats[configured];
+                    var conf = items[configured];
                     GearItem prefab = GearItem.LoadGearItemPrefab(conf.gear_name);
                     if (prefab == null)
                         MelonLogger.Error($"Invalid prodcut: {conf.gear_name}. There will be exception following this line of log. Contact mod providing this action or this action recipe.");
@@ -377,7 +453,7 @@ namespace ExamineActionsAPI
                         this.productChances[configured].gameObject.SetActive(true);
                     }
                     else this.productChances[configured].gameObject.SetActive(false);
-                    this.Products[configured].ShowItem(prefab, conf.units);
+                    slot.ShowItem(prefab, conf.units);
                 }
             }
             yieldsClone.SetActive(true);
@@ -549,7 +625,7 @@ namespace ExamineActionsAPI
 
         public void OnActionCancelled(ExamineActionState state) {}
 
-        public void OnActionInterrupted(ExamineActionState state) {}
+        public void OnActionInterrupted(ExamineActionState state, bool force) {}
 
         public void OnSelectingToolChanged(ExamineActionState state)
         {

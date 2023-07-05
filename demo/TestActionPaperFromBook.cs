@@ -52,12 +52,10 @@ namespace ExamineActionsAPIDemo
 
         bool IExamineAction.ConsumeOnSuccess(ExamineActionState state) => true;
 
-        (string, int, byte)[] IExamineActionProduceItems.GetProducts(ExamineActionState state)
+        void IExamineActionProduceItems.GetProducts(ExamineActionsAPI.ExamineActionState state, System.Collections.Generic.List<(string gear_name, int units, byte chance)> products)
         {
-            return new (string, int, byte)[]{
-                ("GEAR_PaperStack", 1, 100),
-                ("GEAR_PaperStack", 1, 25),
-            };
+            products.Add(("GEAR_PaperStack", 1, 100));
+            products.Add(("GEAR_PaperStack", 1, 25));
         }
 
         void IExamineActionRequireTool.GetToolOptions(ExamineActionState state, Il2CppSystem.Collections.Generic.List<GameObject> tools)
@@ -74,5 +72,6 @@ namespace ExamineActionsAPIDemo
                 }
             }
         }
+        void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
     }
 }

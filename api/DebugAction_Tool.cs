@@ -6,14 +6,14 @@ using UnityEngine;
 namespace ExamineActionsAPI
 {
 
-    class DebugAction_Tool : IExamineAction, IExamineActionRequireTool, IExamineActionCustomInfo, IExamineActionProducePowder
+    class DebugAction_Tool : IExamineAction, IExamineActionRequireTool, IExamineActionCustomInfo, IExamineActionProducePowder, IExamineActionRequirePowder, IExamineActionRequireLiquid, IExamineActionProduceLiquid
     {
         public DebugAction_Tool()
         {
 			ActionButtonLocalizedString = new LocalizedString();
 			ActionButtonLocalizedString.m_LocalizationID = "TOOL";
 			this.Info1 = new InfoItemConfig(new LocalizedString(), "TEST");
-			this.Info1.Title.m_LocalizationID = "Test Title";
+			this.Info1.Title.m_LocalizationID = "GGGGe";
         }
 
 
@@ -65,17 +65,14 @@ namespace ExamineActionsAPI
 
         public void OnPerform(ExamineActionState state)
         {
-			MelonLogger.Msg($"Performing TOOL");
         }
 
         public void OnActionSelected(ExamineActionState state)
         {
-			MelonLogger.Msg($"TOOL selected");
         }
 
         public void OnActionDeselected(ExamineActionState state)
         {
-			MelonLogger.Msg($"TOOL deselected");
         }
 
         public void GetToolOptions(ExamineActionState state, Il2CppSystem.Collections.Generic.List<GameObject> tools)
@@ -121,12 +118,33 @@ namespace ExamineActionsAPI
 
         public bool ConsumeOnSuccess(ExamineActionState state)
         {
-            return true;
+            return false;
         }
 
         void IExamineActionProducePowder.GetProductPowder(ExamineActionState state, List<(PowderType, float, byte)> powders)
         {
-            powders.Add((PowerTypesLocator.GunPowderType, 0.33f, 100));
+            powders.Add((PowerAndLiquidTypesLocator.GunPowderType, 0.33f, 100));
+        }
+
+        void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
+
+        void IExamineActionRequirePowder.GetRequiredPowder(ExamineActionState state, List<(PowderType, float, byte)> powders)
+        {
+            powders.Add((PowerAndLiquidTypesLocator.GunPowderType, 0.05f, 100));
+            powders.Add((PowerAndLiquidTypesLocator.GunPowderType, 0.11f, 100));
+            powders.Add((PowerAndLiquidTypesLocator.GunPowderType, 0.05f, 50));
+        }
+
+        void IExamineActionRequireLiquid.GetRequireLiquid(ExamineActionState state, List<(LiquidType, float, byte)> liquids)
+        {
+            liquids.Add((PowerAndLiquidTypesLocator.WaterPottableType, 0.05f, 100));
+            liquids.Add((PowerAndLiquidTypesLocator.WaterPottableType, 0.05f, 50));
+        }
+
+        void IExamineActionProduceLiquid.GetProductLiquid(ExamineActionState state, List<(LiquidType, float, byte)> liquids)
+        {
+            liquids.Add((PowerAndLiquidTypesLocator.WaterPottableType, 0.10f, 100));
+            liquids.Add((PowerAndLiquidTypesLocator.WaterPottableType, 0.05f, 50));
         }
     }
 }

@@ -3,7 +3,7 @@ using MelonLoader;
 
 namespace ExamineActionsAPI
 {
-    class DebugAction_Salt : IExamineAction, IExamineActionRequireMaterials, IExamineActionProduceItems, IExamineActionFailable, IExamineActionCustomInfo, IExamineActionCancellable
+    class DebugAction_Salt : IExamineAction, IExamineActionRequireItems, IExamineActionProduceItems, IExamineActionFailable, IExamineActionCustomInfo, IExamineActionCancellable
     {
         public DebugAction_Salt()
         {
@@ -61,23 +61,19 @@ namespace ExamineActionsAPI
 			return true;
         }
 
-        public (string, int, byte)[] GetMaterials(ExamineActionState state)
+        void IExamineActionRequireItems.GetRequiredItems(ExamineActionState state, System.Collections.Generic.List<(string gear_name, int units, byte chance)> items)
         {
-            return new (string, int, byte)[]{
-				("GEAR_Stone", 2, 8),
-				("GEAR_Stone", 1, 55),
-				("GEAR_Broth", 1, 55)
-			};
+            items.Add(("GEAR_Stone", 2, 8));
+            items.Add(("GEAR_Stone", 1, 55));
+            items.Add(("GEAR_Broth", 1, 55));
         }
 
-        public (string, int, byte)[] GetProducts(ExamineActionState state)
+        void IExamineActionProduceItems.GetProducts(ExamineActionState state, List<(string gear_name, int units, byte chance)> products)
         {
-            return new (string, int, byte)[]{
-				("GEAR_Knife", 1, 100),
-				("GEAR_WhiskyFlask", 1, 8),
-				("GEAR_BeerBottle", 1, 55),
-				("GEAR_Broth", 2, 55)
-			};
+            products.Add(("GEAR_Knife", 1, 100));
+            products.Add(("GEAR_WhiskyFlask", 1, 8));
+            products.Add(("GEAR_BeerBottle", 1, 55));
+            products.Add(("GEAR_Broth", 2, 55));
         }
 
 
@@ -154,5 +150,7 @@ namespace ExamineActionsAPI
         {
             return true;
         }
+
+        void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
     }
 }
