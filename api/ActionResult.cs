@@ -1,6 +1,6 @@
 namespace ExamineActionsAPI
 {
-    internal enum ActionResult
+    public enum ActionResult
 	{
 		Success,
 		Failure,

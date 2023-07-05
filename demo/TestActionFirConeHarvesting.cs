@@ -3,11 +3,10 @@ using Il2Cpp;
 
 namespace ExamineActionsAPIDemo
 {
-    // 1FirConeFuel
-    // 3FirConeSeeds *2
-    // 4FirCone
-    // 10min
-    class TestActionFirConeHarvesting : IExamineAction, IExamineActionProduceItems
+    /// <summary>
+    /// This action provides an easy way to harvest fir cones from Bountiful Foraging mod.
+    /// </summary>
+    class TestActionFirConeHarvesting : IExamineAction, IExamineActionProduceItems, IExamineActionInterruptable
     {
         public TestActionFirConeHarvesting() {}
         IExamineActionPanel? IExamineAction.CustomPanel => null;
@@ -19,6 +18,20 @@ namespace ExamineActionsAPIDemo
         string IExamineAction.MenuItemSpriteName => null;
 
         LocalizedString IExamineAction.ActionButtonLocalizedString { get; } = new LocalizedString() { m_LocalizationID = "Harvest" };
+
+        ActionsToBlock? IExamineActionInterruptable.LightRequirementType => null;
+
+        bool IExamineActionInterruptable.InterruptOnStarving => true;
+
+        bool IExamineActionInterruptable.InterruptOnExhausted => true;
+
+        bool IExamineActionInterruptable.InterruptOnFreezing => true;
+
+        bool IExamineActionInterruptable.InterruptOnDehydrated => true;
+
+        bool IExamineActionInterruptable.InterruptOnNonRiskAffliction => true;
+
+        float IExamineActionInterruptable.MinimumCondition => 0.5f;
 
         bool IExamineAction.IsActionAvailable(GearItem item)
         {
@@ -49,11 +62,16 @@ namespace ExamineActionsAPIDemo
 
         int IExamineAction.GetSubActionCounts(ExamineActionState state) => state.Subject.m_StackableItem.m_Units;
 
-        void IExamineActionProduceItems.GetProducts(ExamineActionsAPI.ExamineActionState state, System.Collections.Generic.List<(string gear_name, int units, byte chance)> products)
+        void IExamineActionProduceItems.GetProducts(ExamineActionsAPI.ExamineActionState state, System.Collections.Generic.List<MaterialOrProductItemConf> products)
         {
-            products.Add(("GEAR_1FirConeFuel", 1 * (state.SubActionId + 1), 100));
-            products.Add(("GEAR_3FirConeSeeds", 2 * (state.SubActionId + 1), 100));
+            products.Add(new ("GEAR_1FirConeFuel", 1 * (state.SubActionId + 1), 100));
+            products.Add(new ("GEAR_3FirConeSeeds", 2 * (state.SubActionId + 1), 100));
         }
         void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
+
+        void IExamineActionInterruptable.OnInterrupted(ExamineActionState state)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

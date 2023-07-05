@@ -52,16 +52,16 @@ namespace ExamineActionsAPIDemo
 
         bool IExamineAction.ConsumeOnSuccess(ExamineActionState state) => true;
 
-        void IExamineActionProduceItems.GetProducts(ExamineActionsAPI.ExamineActionState state, System.Collections.Generic.List<(string gear_name, int units, byte chance)> products)
+        void IExamineActionProduceItems.GetProducts(ExamineActionsAPI.ExamineActionState state, System.Collections.Generic.List<MaterialOrProductItemConf> products)
         {
-            products.Add(("GEAR_PaperStack", 1, 100));
-            products.Add(("GEAR_PaperStack", 1, 25));
+            products.Add(new ("GEAR_PaperStack", 1, 100));
+            products.Add(new ("GEAR_PaperStack", 1, 25));
         }
 
         void IExamineActionRequireTool.GetToolOptions(ExamineActionState state, Il2CppSystem.Collections.Generic.List<GameObject> tools)
         {
             Inventory inventory = GameManager.GetInventoryComponent();
-            tools.Add(null);
+            tools.Add(null); 
             foreach (var gi in inventory.m_Items)
             if (gi != null)
             {

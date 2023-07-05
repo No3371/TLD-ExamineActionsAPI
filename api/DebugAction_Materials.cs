@@ -62,12 +62,12 @@ namespace ExamineActionsAPI
 			return false;
         }
 
-        void IExamineActionRequireItems.GetRequiredItems(ExamineActionState state, System.Collections.Generic.List<(string gear_name, int units, byte chance)> items)
+        void IExamineActionRequireItems.GetRequiredItems(ExamineActionState state, System.Collections.Generic.List<MaterialOrProductItemConf> items)
         {
-            items.Add(("GEAR_Stick", 1, 100));
-            items.Add(("GEAR_Stone", 2, 8));
-            items.Add(("GEAR_Stone", 1, 55));
-            items.Add(("GEAR_DustingSulfur", 1, 1));
+            items.Add(new ("GEAR_Stick", 1, 100));
+            items.Add(new ("GEAR_Stone", 2, 8));
+            items.Add(new ("GEAR_Stone", 1, 55));
+            items.Add(new ("GEAR_DustingSulfur", 1, 1));
         }
 
 

@@ -58,19 +58,19 @@ namespace ExamineActionsAPIDemo
 
         bool IExamineAction.ConsumeOnSuccess(ExamineActionState state) => false;
 
-        void IExamineActionProduceItems.GetProducts(ExamineActionsAPI.ExamineActionState state, System.Collections.Generic.List<(string gear_name, int units, byte chance)> products)
+        void IExamineActionProduceItems.GetProducts(ExamineActionsAPI.ExamineActionState state, System.Collections.Generic.List<MaterialOrProductItemConf> products)
         {
-            products.Add((state.Subject.name, 1, 100));
+            products.Add(new (state.Subject.name, 1, 100));
         }
 
-        GearItem IExamineActionProduceItems.OverrideProductPrefabs(ExamineActionState state, int index) => state.Subject;
+        GearItem IExamineActionProduceItems.OverrideProductPrefab(ExamineActionState state, int index) => state.Subject;
 
+        // We are using the subject as the prefab so we can have an new meat item that every part of it is identical to the subject
+        // Then we modify the calories of the new meat (meat weight is calculated from calories)
         void IExamineActionProduceItems.PostProcessProduct(ExamineActionState state, int index, GearItem product)
         {
             float ratio = (float) state.Temp[0];
 			// MelonLogger.Msg($"==PostProcessProduct#{index} {product.name} {product.m_FoodItem.m_CaloriesRemaining}cal {product.WeightKG}kg {state.Subject.WeightKG}kg ratio={ratio}");
-            float weight = ratio * state.Subject.WeightKG;
-            product.CurrentHP = state.Subject.CurrentHP;
             product.m_FoodItem.m_CaloriesRemaining = ratio * state.Subject.m_FoodItem.m_CaloriesRemaining;
 			// MelonLogger.Msg($"--PostProcessProduct#{index} {product.name} {product.m_FoodItem.m_CaloriesRemaining}cal {product.WeightKG}kg {state.Subject.WeightKG}kg ratio={ratio}");
         }

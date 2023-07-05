@@ -151,20 +151,20 @@ namespace ExamineActionsAPI
 
         internal bool CheckMaterials (IExamineAction act)
 		{
-            List<(string gear_name, int units, byte chance)> materials = null;
+            List<MaterialOrProductItemConf> materials = null;
             if (act is IExamineActionRequireItems erm)
             {
                 materials = new (1);
                 erm.GetRequiredItems(this, materials);
 				for (int i = 0; i < materials.Count; i++)
 				{
-					int totalOfTheGearTypeToCheck = materials[i].Item2;
+					int totalOfTheGearTypeToCheck = materials[i].Units;
 					for (int j = 0; j < materials.Count; j++)
-						if (i != j && materials[i].Item1 == materials[j].Item1) totalOfTheGearTypeToCheck += materials[j].Item2;
+						if (i != j && materials[i].GearName == materials[j].GearName) totalOfTheGearTypeToCheck += materials[j].Units;
 					
-					ExamineActionsAPI.VeryVerboseLog($"Checking for mat: {materials[i].Item1} x{totalOfTheGearTypeToCheck} (x{materials[i].Item2})");
+					ExamineActionsAPI.VeryVerboseLog($"Checking for mat: {materials[i].GearName} x{totalOfTheGearTypeToCheck} (x{materials[i].Units})");
 					Il2CppSystem.Collections.Generic.List<GearItem> gears = new (1);
-					GameManager.GetInventoryComponent().GearInInventory(materials[i].Item1, gears);
+					GameManager.GetInventoryComponent().GearInInventory(materials[i].GearName, gears);
 					for (int g = 0; g < gears.Count; g++)
 					{
 						GearItem gearItem = gears[g];
@@ -176,44 +176,48 @@ namespace ExamineActionsAPI
 					if (totalOfTheGearTypeToCheck > 0) return false;
 				}
             }
-            List<(LiquidType type, float units, byte chance)> liquids = null;
+            List<MaterialOrProductLiquidConf> liquids = null;
             if (act is IExamineActionRequireLiquid erl)
             {
                 liquids = new(1);
                 erl.GetRequireLiquid(this, liquids);
 				for (int i = 0; i < liquids.Count; i++)
 				{
-					float totalToCheck = liquids[i].units;
+                    if (liquids[i].Type == null)
+                        MelonLogger.Error($"Liquid type provided by action {act.Id} is null, this is a severe error and you should avoid this action for now. Contact the mod author providing the action.");
+					float totalToCheck = liquids[i].Liters;
 					for (int j = 0; j < liquids.Count; j++)
-						if (i != j && liquids[i].Item1 == liquids[j].Item1) totalToCheck += liquids[j].units;
+						if (i != j && liquids[i].Type == liquids[j].Type) totalToCheck += liquids[j].Liters;
 					
-					ExamineActionsAPI.VeryVerboseLog($"Checking for liquid: {liquids[i].Item1} x{totalToCheck} (x{liquids[i].Item2})");
+					ExamineActionsAPI.VeryVerboseLog($"Checking for liquid: {liquids[i].Type} x{totalToCheck} (x{liquids[i].Liters})");
 					Il2CppSystem.Collections.Generic.List<GearItem> gears = new (1);
-					var totalInInv = GameManager.GetInventoryComponent().GetTotalLiquidVolume(liquids[i].type);
+					var totalInInv = GameManager.GetInventoryComponent().GetTotalLiquidVolume(liquids[i].Type);
                     
 					if (Subject.m_LiquidItem != null
-                    && Subject.m_LiquidItem.m_LiquidType == liquids[i].type.LegacyLiquidType
-                    && (int) Subject.m_LiquidItem.m_LiquidQuality == (int)liquids[i].type.Quality)
+                    && Subject.m_LiquidItem.m_LiquidType == liquids[i].Type.LegacyLiquidType
+                    && (int) Subject.m_LiquidItem.m_LiquidQuality == (int)liquids[i].Type.Quality)
                         totalInInv -= Subject.m_LiquidItem.m_LiquidLiters;
 					if (totalToCheck > totalInInv) return false;
 					break;
 				}
             }
-            List<(PowderType type, float units, byte chance)> powders = null;
+            List<MaterialOrProductPowderConf> powders = null;
             if (act is IExamineActionRequirePowder erp)
             {
                 powders = new(1);
                 erp.GetRequiredPowder(this, powders);
 				for (int i = 0; i < powders.Count; i++)
 				{
-					float totalToCheck = powders[i].units;
+                    if (powders[i].Type == null)
+                        MelonLogger.Error($"Liquid type provided by action {act.Id} is null, this is a severe error and you should avoid this action for now. Contact the mod author providing the action.");
+					float totalToCheck = powders[i].Kgs;
 					for (int j = 0; j < i; j++)
-						if (powders[i].type == powders[j].type) totalToCheck += powders[j].units;
+						if (powders[i].Type == powders[j].Type) totalToCheck += powders[j].Kgs;
 					
 					Il2CppSystem.Collections.Generic.List<GearItem> gears = new (1);
-					var totalInInv = GameManager.GetInventoryComponent().GetTotalPowderWeight(powders[i].type);
-					ExamineActionsAPI.VeryVerboseLog($"Checking for powder: {powders[i].Item1} x{totalToCheck} (x{powders[i].Item2}) (has: {totalInInv})");
-					if (Subject.m_PowderItem?.m_Type == powders[i].type) totalInInv -= Subject.m_PowderItem.m_WeightKG;
+					var totalInInv = GameManager.GetInventoryComponent().GetTotalPowderWeight(powders[i].Type);
+					ExamineActionsAPI.VeryVerboseLog($"Checking for powder: {powders[i].Type} x{totalToCheck} (x{powders[i].Kgs}) (has: {totalInInv})");
+					if (Subject.m_PowderItem?.m_Type == powders[i].Type) totalInInv -= Subject.m_PowderItem.m_WeightKG;
 					if (totalToCheck > totalInInv) return false;
 					break;
 				}
@@ -223,7 +227,7 @@ namespace ExamineActionsAPI
 		}
 
 
-        internal void GetAllMaterials(out List<(string gear_name, int units, byte chance)>? items, out List<(LiquidType type, float units, byte chance)>? liquids, out List<(PowderType type, float units, byte chance)>? powders)
+        internal void GetAllMaterials(out List<MaterialOrProductItemConf>? items, out List<MaterialOrProductLiquidConf>? liquids, out List<MaterialOrProductPowderConf>? powders)
         {
             items = null;
             if (this.Action is IExamineActionRequireItems erm)
@@ -251,7 +255,7 @@ namespace ExamineActionsAPI
 			return (items?.Count ?? 0) + (liquids?.Count ?? 0) + (powders?.Count ?? 0);
         }
 
-        internal void GetAllProducts(out List<(string gear_name, int units, byte chance)>? items, out List<(LiquidType type, float units, byte chance)>? liquids, out List<(PowderType type, float units, byte chance)>? powders)
+        internal void GetAllProducts(out List<MaterialOrProductItemConf>? items, out List<MaterialOrProductLiquidConf>? liquids, out List<MaterialOrProductPowderConf>? powders)
         {
             items = null;
             if (this.Action is IExamineActionProduceItems erm)

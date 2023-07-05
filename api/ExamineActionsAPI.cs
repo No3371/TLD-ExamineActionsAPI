@@ -1,4 +1,4 @@
-﻿#define VERY_VERBOSE
+﻿// #define VERY_VERBOSE
 using Il2Cpp;
 using MelonLoader;
 using UnityEngine;
@@ -26,9 +26,10 @@ namespace ExamineActionsAPI
 				Register(new DebugAction_Materials());
 				Register(new DebugAction_Salt());
 				Register(new DebugAction_Simple());
-			}
 				Register(new DebugAction_Tool());
+			}
 
+			PowderAndLiquidTypesLocator.PreLoad();
 			// uConsole.RegisterCommand("eaapi_tool", new Action(() => {
 			// 	uConsole.Log(InterfaceManager.GetPanel<Panel_Inventory_Examine>().GetSelectedTool().name);
 			// }));
@@ -454,24 +455,23 @@ namespace ExamineActionsAPI
 			// VeryVerboseLog($"+ConsumeMaterials");
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 			Inventory inv = GameManager.GetInventoryComponent();
-            List<(string gear_name, int units, byte chance)> items = new (1);
+            List<MaterialOrProductItemConf> items = new (1);
 			act.GetRequiredItems(State, items);
 			if (items == null) return;
             for (int i = 0; i < items.Count; i++)
 			{
-                (string, int, byte) mat = items[i];
-                byte chance = mat.Item3;
+                byte chance = items[i].Chance;
                 if (chance < 100)
 				{
 					if (UnityEngine.Random.Range(0, 100) <= chance)
 					{
-						SafeRemoveFromInventory(mat.Item1, mat.Item2);
+						SafeRemoveFromInventory(items[i].GearName, items[i].Units);
 					}
 					else
-                        this.LoggerInstance.Msg($"{mat.Item1} x{mat.Item2} is kept because the {mat.Item3}% roll didn't pass.");
+                        this.LoggerInstance.Msg($"{items[i].GearName} x{items[i].Units} is kept because the {items[i].Chance}% roll didn't pass.");
 				}
 				else
-					SafeRemoveFromInventory(mat.Item1, mat.Item2);
+					SafeRemoveFromInventory(items[i].GearName, items[i].Units);
 			}
 			// VeryVerboseLog($"-ConsumeMaterials");
 
@@ -517,31 +517,31 @@ namespace ExamineActionsAPI
 			// VeryVerboseLog($"+ConsumeLiquid");
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 			Inventory inv = GameManager.GetInventoryComponent();
-            List<(LiquidType type, float units, byte chance)> liquids = new (1);
+            List<MaterialOrProductLiquidConf> liquids = new (1);
 			act.GetRequireLiquid(State, liquids);
 			if (liquids == null) return;
             for (int i = 0; i < liquids.Count; i++)
 			{
                 var conf = liquids[i];
-                if (conf.chance < 100)
+                if (conf.Chance < 100)
 				{
-					if (UnityEngine.Random.Range(0, 100) <= conf.chance)
+					if (UnityEngine.Random.Range(0, 100) <= conf.Chance)
 					{
-						RemoveLiquidFromInventory(conf.type, conf.units);
-						VeryVerboseLog($"{conf.type.name} x{conf.Item2}l is yielded.");
+						RemoveLiquidFromInventory(conf.Type, conf.Liters);
+						VeryVerboseLog($"{conf.Type.name} x{conf.Liters}l is yielded.");
 					}
 					else
-						this.LoggerInstance.Msg($"{conf.type.name} x{conf.units} is kept because the {conf.chance}% roll didn't pass.");
+						this.LoggerInstance.Msg($"{conf.Type.name} x{conf.Liters} is kept because the {conf.Chance}% roll didn't pass.");
 				}
 				else
 				{
-					RemoveLiquidFromInventory(conf.type, conf.units);
-					VeryVerboseLog($"{conf.type.name} x{conf.Item2}l is yielded.");
+					RemoveLiquidFromInventory(conf.Type, conf.Liters);
+					VeryVerboseLog($"{conf.Type.name} x{conf.Liters}l is yielded.");
 				}
 			}
 			// VeryVerboseLog($"-ConsumePowder");
 
-			void RemoveLiquidFromInventory (LiquidType type, float units)
+			void RemoveLiquidFromInventory (LiquidType type, float liters)
 			{
 				for (int i = 0 ; i < inv.m_Items.Count; i++)
 				{
@@ -549,13 +549,13 @@ namespace ExamineActionsAPI
 					var pi = gi?.m_LiquidItem;
 					if (gi == State.Subject || pi == null || pi.m_LiquidType != type.LegacyLiquidType || (int) pi.m_LiquidQuality != (int) type.Quality) continue;
 
-                    float taking = Mathf.Min(units, pi.m_LiquidLiters);
+                    float taking = Mathf.Min(liters, pi.m_LiquidLiters);
 					pi.m_LiquidLiters -= taking;
-                    units -= taking;
-					if (units <= 0) break;
+                    liters -= taking;
+					if (liters <= 0) break;
 				}
 
-				if (units > 0)
+				if (liters > 0)
 					this.LoggerInstance.Error($"Failed to remove enough liquid from inventory ({type.name}), please report to the author of EAAPI.");
 			}
 		}
@@ -565,26 +565,26 @@ namespace ExamineActionsAPI
 			// VeryVerboseLog($"+ConsumePowder");
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 			Inventory inv = GameManager.GetInventoryComponent();
-            List<(PowderType type, float units, byte chance)> powders = new (1);
+            List<MaterialOrProductPowderConf> powders = new (1);
 			act.GetRequiredPowder(State, powders);
 			if (powders == null) return;
             for (int i = 0; i < powders.Count; i++)
 			{
                 var conf = powders[i];
-                if (conf.chance < 100)
+                if (conf.Chance < 100)
 				{
-					if (UnityEngine.Random.Range(0, 100) <= conf.chance)
+					if (UnityEngine.Random.Range(0, 100) <= conf.Chance)
 					{
-						RemovePowderFromInventory(conf.type, conf.units);
-						VeryVerboseLog($"{conf.type.name} x{conf.Item2}kg is yielded.");
+						RemovePowderFromInventory(conf.Type, conf.Kgs);
+						VeryVerboseLog($"{conf.Type.name} x{conf.Kgs}kg is yielded.");
 					}
 					else
-						this.LoggerInstance.Msg($"{conf.type.name} x{conf.units} is kept because the {conf.chance}% roll didn't pass.");
+						this.LoggerInstance.Msg($"{conf.Type.name} x{conf.Kgs} is kept because the {conf.Chance}% roll didn't pass.");
 				}
 				else
 				{
-					RemovePowderFromInventory(conf.type, conf.units);
-					VeryVerboseLog($"{conf.type.name} x{conf.Item2}kg is yielded.");
+					RemovePowderFromInventory(conf.Type, conf.Kgs);
+					VeryVerboseLog($"{conf.Type.name} x{conf.Kgs}kg is yielded.");
 				}
 			}
 			// VeryVerboseLog($"-ConsumePowder");
@@ -618,28 +618,27 @@ namespace ExamineActionsAPI
 			// VeryVerboseLog($"+YieldProducts");
 			Inventory inv = GameManager.GetInventoryComponent();
 			PlayerManager pm = GameManager.GetPlayerManagerComponent();
-            List<(string gear_name, int units, byte chance)> products = new (1);
+            List<MaterialOrProductItemConf> products = new (1);
 			act.GetProducts(State, products);
 			if (products == null) return;
             for (int pi = 0; pi < products.Count; pi++)
 			{
-				GearItem prefab = act.OverrideProductPrefabs(State, pi);
-				if (prefab == null) prefab = GearItem.LoadGearItemPrefab(products[pi].Item1);
-                byte chance = products[pi].Item3;
-                if (chance < 100)
+				GearItem prefab = act.OverrideProductPrefab(State, pi);
+				if (prefab == null) prefab = GearItem.LoadGearItemPrefab(products[pi].GearName);
+                if (products[pi].Chance < 100)
 				{
-					if (UnityEngine.Random.Range(0, 100) <= chance)
+					if (UnityEngine.Random.Range(0, 100) <= (byte)products[pi].Chance)
 					{
-						var p = pm.InstantiateItemInPlayerInventory(prefab, products[pi].Item2, 1, PlayerManager.InventoryInstantiateFlags.EnableNotificationFlag);
+						var p = pm.InstantiateItemInPlayerInventory(prefab, products[pi].Units, 1, PlayerManager.InventoryInstantiateFlags.EnableNotificationFlag);
 						act.PostProcessProduct(State, pi, p);
-						VeryVerboseLog($"{products[pi].Item1} x{products[pi].Item2} is yielded because the {products[pi].Item3} roll passed.");
+						VeryVerboseLog($"{products[pi].GearName} x{products[pi].Units} is yielded because the {products[pi].Chance} roll passed.");
 					}
 				}
 				else
 				{
-					var p = pm.InstantiateItemInPlayerInventory(prefab, products[pi].Item2, 1, PlayerManager.InventoryInstantiateFlags.EnableNotificationFlag);
+					var p = pm.InstantiateItemInPlayerInventory(prefab, products[pi].Units, 1, PlayerManager.InventoryInstantiateFlags.EnableNotificationFlag);
 					act.PostProcessProduct(State, pi, p);
-					VeryVerboseLog($"{products[pi].Item1} x{products[pi].Item2} is yielded.");
+					VeryVerboseLog($"{products[pi].GearName} x{products[pi].Units} is yielded.");
 				}
 			}
 			// VeryVerboseLog($"-YieldProducts");
@@ -649,29 +648,29 @@ namespace ExamineActionsAPI
 			// VeryVerboseLog($"+YieldProducts");
 			Inventory inv = GameManager.GetInventoryComponent();
 			PlayerManager pm = GameManager.GetPlayerManagerComponent();
-            List<(LiquidType type, float units, byte chance)> liquids = new();
+            List<MaterialOrProductLiquidConf> liquids = new();
 			act.GetProductLiquid(State, liquids);
             for (int pi = 0; pi < liquids.Count; pi++)
 			{
-                (LiquidType type, float units, byte chance) conf = liquids[pi];
-                byte chance = conf.Item3;
+                MaterialOrProductLiquidConf conf = liquids[pi];
+                byte chance = conf.Chance;
                 if (chance < 100)
 				{
 					if (UnityEngine.Random.Range(0, 100) <= chance)
 					{
-						AddLiquidToInventory(conf.units, conf.type);
-                        VeryVerboseLog($"{conf.type.name} {conf.Item2}l is yielded because the {conf.Item3} roll passed.");
+						AddLiquidToInventory(conf.Liters, conf.Type);
+                        VeryVerboseLog($"{conf.Type.name} {conf.Liters}l is yielded because the {conf.Chance} roll passed.");
 					}
 				}
 				else
 				{
-					AddLiquidToInventory(conf.units, conf.type);
-					VeryVerboseLog($"{conf.type.name} x{conf.Item2}l is yielded.");
+					AddLiquidToInventory(conf.Liters, conf.Type);
+					VeryVerboseLog($"{conf.Type.name} x{conf.Liters}l is yielded.");
 				}
 			}
 			// VeryVerboseLog($"-YieldProducts");
 
-			void AddLiquidToInventory (float units, LiquidType type)
+			void AddLiquidToInventory (float liters, LiquidType type)
 			{
 				for (int i = 0 ; i < inv.m_Items.Count; i++)
 				{
@@ -682,18 +681,18 @@ namespace ExamineActionsAPI
 					 || (int)li.m_LiquidQuality != (int)type.Quality ) continue;
 
 
-                    float adding = Mathf.Min(units, li.m_LiquidCapacityLiters - li.m_LiquidLiters);
+                    float adding = Mathf.Min(liters, li.m_LiquidCapacityLiters - li.m_LiquidLiters);
 					li.m_LiquidLiters += adding;
-                    units -= adding;
-					if (units <= 0) break;
+                    liters -= adding;
+					if (liters <= 0) break;
 				}
 
-				while (units > 0)
+				while (liters > 0)
 				{
 					var p = pm.InstantiateItemInPlayerInventory(type.DefaultContainer.m_PrefabReference.GetOrLoadTypedAsset(), 1, 1, PlayerManager.InventoryInstantiateFlags.EnableNotificationFlag);
-                    float adding = Mathf.Min(units, p.m_LiquidItem.m_LiquidCapacityLiters);
+                    float adding = Mathf.Min(liters, p.m_LiquidItem.m_LiquidCapacityLiters);
 					p.m_LiquidItem.m_LiquidLiters = adding;
-					units -= adding;
+					liters -= adding;
 				}
 			}
 		}
@@ -703,24 +702,24 @@ namespace ExamineActionsAPI
 			// VeryVerboseLog($"+YieldProducts");
 			Inventory inv = GameManager.GetInventoryComponent();
 			PlayerManager pm = GameManager.GetPlayerManagerComponent();
-            List<(PowderType type, float units, byte chance)> powders = new();
+            List<MaterialOrProductPowderConf> powders = new();
 			act.GetProductPowder(State, powders);
             for (int pi = 0; pi < powders.Count; pi++)
 			{
-                (PowderType type, float units, byte chance) conf = powders[pi];
-                byte chance = conf.Item3;
+                MaterialOrProductPowderConf conf = powders[pi];
+                byte chance = conf.Chance;
                 if (chance < 100)
 				{
 					if (UnityEngine.Random.Range(0, 100) <= chance)
 					{
-						var p = pm.AddPowderToInventory(conf.units, conf.type);
-                        VeryVerboseLog($"{conf.type.name} {conf.Item2}kg is yielded because the {conf.Item3} roll passed.");
+						var p = pm.AddPowderToInventory(conf.Kgs, conf.Type);
+                        VeryVerboseLog($"{conf.Type.name} {conf.Kgs}kg is yielded because the {conf.Chance} roll passed.");
 					}
 				}
 				else
 				{
-					var p = pm.AddPowderToInventory(conf.units, conf.type);
-					VeryVerboseLog($"{conf.type.name} x{conf.Item2}kg is yielded.");
+					var p = pm.AddPowderToInventory(conf.Kgs, conf.Type);
+					VeryVerboseLog($"{conf.Type.name} x{conf.Kgs}kg is yielded.");
 				}
 			}
 			// VeryVerboseLog($"-YieldProducts");

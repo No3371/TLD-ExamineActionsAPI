@@ -61,10 +61,10 @@ namespace ExamineActionsAPI
 			return true;
         }
 
-        public void GetProducts(ExamineActionState state, List<(string gear_name, int units, byte chance)> products)
+        public void GetProducts(ExamineActionState state, List<MaterialOrProductItemConf> products)
         {
-            products.Add(("GEAR_Knife", 1, 100));
-            products.Add(("GEAR_WhiskyFlask", 1, 8));
+            products.Add(new ("GEAR_Knife", 1, 100));
+            products.Add(new ("GEAR_WhiskyFlask", 1, 8));
         }
 
 

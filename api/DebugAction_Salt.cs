@@ -61,19 +61,19 @@ namespace ExamineActionsAPI
 			return true;
         }
 
-        void IExamineActionRequireItems.GetRequiredItems(ExamineActionState state, System.Collections.Generic.List<(string gear_name, int units, byte chance)> items)
+        void IExamineActionRequireItems.GetRequiredItems(ExamineActionState state, System.Collections.Generic.List<MaterialOrProductItemConf> items)
         {
-            items.Add(("GEAR_Stone", 2, 8));
-            items.Add(("GEAR_Stone", 1, 55));
-            items.Add(("GEAR_Broth", 1, 55));
+            items.Add(new ("GEAR_Stone", 2, 8));
+            items.Add(new ("GEAR_Stone", 1, 55));
+            items.Add(new ("GEAR_Broth", 1, 55));
         }
 
-        void IExamineActionProduceItems.GetProducts(ExamineActionState state, List<(string gear_name, int units, byte chance)> products)
+        void IExamineActionProduceItems.GetProducts(ExamineActionState state, List<MaterialOrProductItemConf> products)
         {
-            products.Add(("GEAR_Knife", 1, 100));
-            products.Add(("GEAR_WhiskyFlask", 1, 8));
-            products.Add(("GEAR_BeerBottle", 1, 55));
-            products.Add(("GEAR_Broth", 2, 55));
+            products.Add(new ("GEAR_Knife", 1, 100));
+            products.Add(new ("GEAR_WhiskyFlask", 1, 8));
+            products.Add(new ("GEAR_BeerBottle", 1, 55));
+            products.Add(new ("GEAR_Broth", 2, 55));
         }
 
 

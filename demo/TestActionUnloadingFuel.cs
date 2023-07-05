@@ -43,9 +43,9 @@ namespace ExamineActionsAPIDemo
 
         public override bool ConsumeOnSuccess(ExamineActionState state) => false;
 
-        void IExamineActionProduceItems.GetProducts(ExamineActionsAPI.ExamineActionState state, System.Collections.Generic.List<(string gear_name, int units, byte chance)> products)
+        void IExamineActionProduceItems.GetProducts(ExamineActionsAPI.ExamineActionState state, System.Collections.Generic.List<MaterialOrProductItemConf> products)
         {
-            products.Add( ("GEAR_LampFuel", 1, 100) );
+            products.Add(new ("GEAR_LampFuel", 1, 100) );
         }
 
         void IExamineActionProduceItems.PostProcessProduct(ExamineActionState state, int index, Il2Cpp.GearItem product)

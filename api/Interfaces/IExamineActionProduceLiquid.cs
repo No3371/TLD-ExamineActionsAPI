@@ -3,11 +3,9 @@ using Il2CppTLD.Gear;
 
 namespace ExamineActionsAPI
 {
-    /// <summary>
-    /// Not implemented. Not working.
-    /// </summary>
     public interface IExamineActionProduceLiquid
 	{
-		void GetProductLiquid (ExamineActionState state, List<(LiquidType, float, byte)> liquids);
+		void GetProductLiquid (ExamineActionState state, List<MaterialOrProductLiquidConf> liquids);
+		/// <summary>
 	}
 }

@@ -60,14 +60,14 @@ namespace ExamineActionsAPIDemo
 
         // For this action, we are using the sub action feature as "how many acorn to prepare"
         // So according to the SubActionId we are returning different units or make it a large portion one
-        void IExamineActionProduceItems.GetProducts(ExamineActionState state, List<(string gear_name, int units, byte chance)> products)
+        void IExamineActionProduceItems.GetProducts(ExamineActionState state, List<MaterialOrProductItemConf> products)
         {
             products.Add(state.SubActionId switch
             {
-                0 => ("GEAR_AcornShelled", 1, 100),
-                1 => ("GEAR_AcornShelled", 2, 100),
-                2 => ("GEAR_AcornShelled", 3, 100),
-                3 => ("GEAR_AcornShelledBig", 1, 100)
+                0 => new ("GEAR_AcornShelled", 1, 100),
+                1 => new ("GEAR_AcornShelled", 2, 100),
+                2 => new ("GEAR_AcornShelled", 3, 100),
+                3 => new ("GEAR_AcornShelledBig", 1, 100)
             });
         }
 

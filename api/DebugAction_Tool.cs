@@ -83,7 +83,7 @@ namespace ExamineActionsAPI
 			foreach (var item in list) tools.Add(item.gameObject);
 			inv.GearInInventory("GEAR_KnifeJ", list);
 			foreach (var item in list) tools.Add(item.gameObject);
-			inv.GearInInventory("GEAR_SewingKit", list);
+			inv.GearInInventory("GEAR_Stone", list);
 			foreach (var item in list) tools.Add(item.gameObject);
 			inv.GearInInventory("GEAR_Hatchet", list);
 			foreach (var item in list) tools.Add(item.gameObject);
@@ -121,30 +121,30 @@ namespace ExamineActionsAPI
             return false;
         }
 
-        void IExamineActionProducePowder.GetProductPowder(ExamineActionState state, List<(PowderType, float, byte)> powders)
+        void IExamineActionProducePowder.GetProductPowder(ExamineActionState state, List<MaterialOrProductPowderConf> powders)
         {
-            powders.Add((PowerAndLiquidTypesLocator.GunPowderType, 0.33f, 100));
+            powders.Add(new (PowderAndLiquidTypesLocator.GunPowderType, 0.33f, 100));
         }
 
         void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
 
-        void IExamineActionRequirePowder.GetRequiredPowder(ExamineActionState state, List<(PowderType, float, byte)> powders)
+        void IExamineActionRequirePowder.GetRequiredPowder(ExamineActionState state, List<MaterialOrProductPowderConf> powders)
         {
-            powders.Add((PowerAndLiquidTypesLocator.GunPowderType, 0.05f, 100));
-            powders.Add((PowerAndLiquidTypesLocator.GunPowderType, 0.11f, 100));
-            powders.Add((PowerAndLiquidTypesLocator.GunPowderType, 0.05f, 50));
+            powders.Add(new (PowderAndLiquidTypesLocator.GunPowderType, 0.05f, 100));
+            powders.Add(new (PowderAndLiquidTypesLocator.GunPowderType, 0.11f, 100));
+            powders.Add(new (PowderAndLiquidTypesLocator.GunPowderType, 0.05f, 50));
         }
 
-        void IExamineActionRequireLiquid.GetRequireLiquid(ExamineActionState state, List<(LiquidType, float, byte)> liquids)
+        void IExamineActionRequireLiquid.GetRequireLiquid(ExamineActionState state, List<MaterialOrProductLiquidConf> liquids)
         {
-            liquids.Add((PowerAndLiquidTypesLocator.WaterPottableType, 0.05f, 100));
-            liquids.Add((PowerAndLiquidTypesLocator.WaterPottableType, 0.05f, 50));
+            liquids.Add(new (PowderAndLiquidTypesLocator.WaterPottableType, 0.05f, 100));
+            liquids.Add(new (PowderAndLiquidTypesLocator.WaterPottableType, 0.05f, 50));
         }
 
-        void IExamineActionProduceLiquid.GetProductLiquid(ExamineActionState state, List<(LiquidType, float, byte)> liquids)
+        void IExamineActionProduceLiquid.GetProductLiquid(ExamineActionState state, List<MaterialOrProductLiquidConf> liquids)
         {
-            liquids.Add((PowerAndLiquidTypesLocator.WaterPottableType, 0.10f, 100));
-            liquids.Add((PowerAndLiquidTypesLocator.WaterPottableType, 0.05f, 50));
+            liquids.Add(new (PowderAndLiquidTypesLocator.WaterPottableType, 0.10f, 100));
+            liquids.Add(new (PowderAndLiquidTypesLocator.WaterPottableType, 0.05f, 50));
         }
     }
 }
