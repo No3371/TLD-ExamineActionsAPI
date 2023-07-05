@@ -6,33 +6,152 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 
 namespace ExamineActionsAPI
 {
-    public static class PowerAndLiquidTypesLocator
-    {
-        private static PowderType gunPowderType;
 
-        public static PowderType GunPowderType
+    public static class PowderAndLiquidTypesLocator
+    {
+        public static void PreLoad ()
+        {
+            MelonLogger.Msg($"Preloading official powder: { GunPowderType?.name}");
+            MelonLogger.Msg($"Preloading official powder: { FlourType?.name}");
+            MelonLogger.Msg($"Preloading official powder: { OatsTinType?.name}");
+            MelonLogger.Msg($"Preloading official powder: { SaltType?.name}");
+            MelonLogger.Msg($"Preloading official liquid: { WaterPottableType?.name}");
+            MelonLogger.Msg($"Preloading official liquid: { WaterNonPottableType?.name}");
+            MelonLogger.Msg($"Preloading official liquid: { AntisepticType?.name}");
+            MelonLogger.Msg($"Preloading official liquid: { KeroseneType?.name}");
+            MelonLogger.Msg($"Preloading official liquid: { AccelerantType?.name}");
+        }
+        private static PowderType? gunPowderType;
+
+        public static PowderType? GunPowderType
         {
             get
             {
                 if (gunPowderType == null)
                 {
                     gunPowderType = Addressables.LoadAsset<PowderType>("POWDER_GunPowder").Result;
+                    if (gunPowderType == null) MelonLogger.Error("Failed to retrieve POWDER_GunPowder");
                 }
                 return gunPowderType;
             }
         }
 
 
-        private static LiquidType waterPottableType;
-        public static LiquidType WaterPottableType
+        private static LiquidType? waterPottableType;
+        public static LiquidType? WaterPottableType
         {
             get
             {
                 if (waterPottableType == null)
                 {
                     waterPottableType = Addressables.LoadAsset<LiquidType>("LIQUID_WaterPotable").Result;
+                    if (waterPottableType == null) MelonLogger.Error("Failed to retrieve LIQUID_WaterPotable");
                 }
                 return waterPottableType;
+            }
+        }
+
+        private static PowderType? flourType;
+        public static PowderType? FlourType
+        {
+            get
+            {
+                if (flourType == null)
+                {
+                    flourType = Addressables.LoadAsset<PowderType>("POWDER_Flour").Result;
+                    if (flourType == null) MelonLogger.Error("Failed to retrieve POWDER_Flour");
+                }
+                return FlourType;
+            }
+        }
+
+
+        private static PowderType? saltType;
+        public static PowderType? SaltType
+        {
+            get
+            {
+                if (saltType == null)
+                {
+                    saltType = Addressables.LoadAsset<PowderType>("POWDER_Salt").Result;
+                    if (saltType == null) MelonLogger.Error("Failed to retrieve POWDER_Salt");
+                }
+                return SaltType;
+            }
+        }
+
+        private static PowderType? oatsTinType;
+        public static PowderType? OatsTinType
+        {
+            get
+            {
+                if (oatsTinType == null)
+                {
+                    oatsTinType = Addressables.LoadAsset<PowderType>("POWDER_OatsTin").Result;
+                    if (oatsTinType == null) MelonLogger.Error("Failed to retrieve POWDER_OatsTin");
+                }
+                return OatsTinType;
+            }
+        }
+
+
+        private static LiquidType? waterNonPottableType;
+        public static LiquidType? WaterNonPottableType
+        {
+            get
+            {
+                if (waterNonPottableType == null)
+                {
+                    waterNonPottableType = Addressables.LoadAsset<LiquidType>("LIQUID_WaterNonPotable").Result;
+                    if (waterNonPottableType == null) MelonLogger.Error("Failed to retrieve LIQUID_WaterNonPotable");
+                }
+                return waterNonPottableType;
+            }
+        }
+
+        private static LiquidType? keroseneType;
+        public static LiquidType? KeroseneType
+        {
+            get
+            {
+                if (keroseneType == null)
+                {
+                    keroseneType = Addressables.LoadAsset<LiquidType>("LIQUID_Kerosene").Result;
+                    if (keroseneType == null) MelonLogger.Error("Failed to retrieve LIQUID_Kerosene");
+                }
+                return keroseneType;
+            }
+        }
+
+        private static LiquidType? antisepticType;
+        public static LiquidType? AntisepticType
+        {
+            get
+            {
+                if (antisepticType == null)
+                {
+                    antisepticType = Addressables.LoadAsset<LiquidType>("LIQUID_Antiseptic").Result;
+                    if (antisepticType == null) MelonLogger.Error("Failed to retrieve LIQUID_Antiseptic");
+                }
+                return AntisepticType;
+            }
+        }
+
+        private static LiquidType? accelerantType;
+        /// <summary>
+        /// NOTE: HL is not using this as in July 2023
+        /// </summary>
+        /// <value></value>
+        public static LiquidType? AccelerantType
+        {
+            get
+            {
+                if (accelerantType == null)
+                {
+                    accelerantType = Addressables.LoadAsset<LiquidType>("LIQUID_Accelerant").Result;
+                    if (accelerantType == null) MelonLogger.Error("Failed to retrieve LIQUID_Accelerant");
+                }
+                return AccelerantType;
             }
         }
         // public static IReadOnlyDictionary<string, PowderType> PowderTypes
