@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace ExamineActionsAPIDemo
 {
-    class TestActionPiling : IExamineAction, IExamineActionProduceItems
+    class ActionPiling : IExamineAction, IExamineActionProduceItems
     {
-        public TestActionPiling() {}
+        public ActionPiling() {}
         IExamineActionPanel? IExamineAction.CustomPanel => null;
 
-        string IExamineAction.Id => nameof(TestActionPiling);
+        string IExamineAction.Id => nameof(ActionPiling);
 
         string IExamineAction.MenuItemLocalizationKey => "Pile";
 
@@ -26,6 +26,10 @@ namespace ExamineActionsAPIDemo
                 "GEAR_Coal" => true && item.m_StackableItem.m_Units >= 4,
                 "GEAR_Charcoal" => true && item.m_StackableItem.m_Units >= 10,
                 "GEAR_CattailStalk" => true && item.m_StackableItem.m_Units >= 5,
+                "GEAR_Softwood" => true && item.m_StackableItem.m_Units >= 5,
+                "GEAR_Hardwood" => true && item.m_StackableItem.m_Units >= 5,
+                "GEAR_ScrapMetal" => true && item.m_StackableItem.m_Units >= 10,
+                "GEAR_ReclaimedWoodB" => true && item.m_StackableItem.m_Units >= 10,
                 _ => false
             };
             
@@ -40,6 +44,10 @@ namespace ExamineActionsAPIDemo
                 "GEAR_Coal" => state.Subject.m_StackableItem.m_Units >= 4 * (state.SubActionId + 1),
                 "GEAR_Charcoal" => state.Subject.m_StackableItem.m_Units >= 10 * (state.SubActionId + 1),
                 "GEAR_CattailStalk" => state.Subject.m_StackableItem.m_Units >= 5 * (state.SubActionId + 1),
+                "GEAR_Softwood" => true && state.Subject.m_StackableItem.m_Units >= 5 * (state.SubActionId + 1),
+                "GEAR_Hardwood" => true && state.Subject.m_StackableItem.m_Units >= 5 * (state.SubActionId + 1),
+                "GEAR_ScrapMetal" => true && state.Subject.m_StackableItem.m_Units >= 10 * (state.SubActionId + 1),
+                "GEAR_ReclaimedWoodB" => true && state.Subject.m_StackableItem.m_Units >= 10 * (state.SubActionId + 1),
                 _ => false
             };
         }
@@ -70,6 +78,10 @@ namespace ExamineActionsAPIDemo
                 "GEAR_Coal" => (state.SubActionId + 1) * 4,
                 "GEAR_Charcoal" => (state.SubActionId + 1) * 10,
                 "GEAR_CattailStalk" => (state.SubActionId + 1) * 5,
+                "GEAR_Softwood" => (state.SubActionId + 1) * 5,
+                "GEAR_Hardwood" => (state.SubActionId + 1) * 5,
+                "GEAR_ScrapMetal" => (state.SubActionId + 1) * 10,
+                "GEAR_ReclaimedWoodB" => (state.SubActionId + 1) * 10,
                 _ => 1
             };
         }
@@ -83,6 +95,10 @@ namespace ExamineActionsAPIDemo
                 "GEAR_Coal" => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 4, 1, 5),
                 "GEAR_Charcoal" => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 10, 1, 5),
                 "GEAR_CattailStalk" => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 5, 1, 5),
+                "GEAR_Softwood" => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 5, 1, 5),
+                "GEAR_Hardwood" => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 5, 1, 5),
+                "GEAR_ScrapMetal" => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 10, 1, 5),
+                "GEAR_ReclaimedWoodB" => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 10, 1, 5),
                 _ => 1
             };
         }
@@ -100,6 +116,10 @@ namespace ExamineActionsAPIDemo
                 "GEAR_Coal" => new ("GEAR_CoalPile004", state.SubActionId + 1, 100),
                 "GEAR_Charcoal" => new ("GEAR_CharcoalPile010", state.SubActionId + 1, 100),
                 "GEAR_CattailStalk" => new ("GEAR_CattailPile005", state.SubActionId + 1, 100),
+                "GEAR_Softwood" => new ("GEAR_SoftwoodPile005", state.SubActionId + 1, 100),
+                "GEAR_Hardwood" => new ("GEAR_HardwoodPile005", state.SubActionId + 1, 100),
+                "GEAR_ScrapMetal" => new ("GEAR_ScrapPile010", state.SubActionId + 1, 100),
+                "GEAR_ReclaimedWoodB" => new ("GEAR_RwoodPile010", state.SubActionId + 1, 100),
                 _ => new ("", 0, 0)
             });
         }

@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace ExamineActionsAPIDemo
 {
-    class TestActionSliceMeat : IExamineAction, IExamineActionProduceItems, IExamineActionRequireTool, IExamineActionCustomInfo
+    class ActionSliceMeat : IExamineAction, IExamineActionProduceItems, IExamineActionRequireTool, IExamineActionCustomInfo
     {
-        public TestActionSliceMeat() {}
+        public ActionSliceMeat() {}
         IExamineActionPanel? IExamineAction.CustomPanel => null;
 
         public LocalizedString ActionButtonLocalizedString { get; }
 
-        string IExamineAction.Id => nameof(TestActionSliceMeat);
+        string IExamineAction.Id => nameof(ActionSliceMeat);
 
         string IExamineAction.MenuItemLocalizationKey => "Slice";
 

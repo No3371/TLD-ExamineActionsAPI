@@ -6,6 +6,7 @@ namespace ExamineActionsAPI
 		void OnActionSelected (ExamineActionState state);
 		void OnActionDeselected (ExamineActionState state);
 		void OnPerformingAction (ExamineActionState state);
+		void OnBlockedPerformingAction (ExamineActionState state, PerformingBlockedReased reason);
 		void OnActionSucceed(ExamineActionState state);
 		void OnActionFailed(ExamineActionState state);
 		void OnActionCancelled(ExamineActionState state);
@@ -14,5 +15,12 @@ namespace ExamineActionsAPI
 		void OnSelectingTool (ExamineActionState state);
 		void OnSelectingToolChanged (ExamineActionState state);
 		void OnToolSelected (ExamineActionState state); 
+	}
+
+	public enum PerformingBlockedReased
+	{
+		Action,
+		Requirements,
+		Interruption
 	}
 }

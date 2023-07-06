@@ -12,12 +12,12 @@ namespace ExamineActionsAPIDemo
         public override void OnInitializeMelon()
 		{
 			Instance = this;
-			ExamineActionsAPI.ExamineActionsAPI.Register(new TestActionPaperFromBooks());
-			ExamineActionsAPI.ExamineActionsAPI.Register(new TestActionBruteForceSharpening());
-			ExamineActionsAPI.ExamineActionsAPI.Register(new TestActionSliceMeat());
-			ExamineActionsAPI.ExamineActionsAPI.Register(new TestActionAcornPreparing());
-			ExamineActionsAPI.ExamineActionsAPI.Register(new TestActionDisposingRuined());
-			ExamineActionsAPI.ExamineActionsAPI.Register(new TestActionUnloadingFuel());
+			ExamineActionsAPI.ExamineActionsAPI.Register(new ActionPaperFromBooks());
+			ExamineActionsAPI.ExamineActionsAPI.Register(new ActionBruteForceSharpening());
+			ExamineActionsAPI.ExamineActionsAPI.Register(new ActionSliceMeat());
+			ExamineActionsAPI.ExamineActionsAPI.Register(new ActionAcornPreparing());
+			ExamineActionsAPI.ExamineActionsAPI.Register(new ActionDisposingRuined());
+			ExamineActionsAPI.ExamineActionsAPI.Register(new ActionUnloadingFuel());
 			
 			// To add actions that depend on other mods
 			// We need to check if other mods are loaded
@@ -27,12 +27,13 @@ namespace ExamineActionsAPIDemo
 			if (GearItem.LoadGearItemPrefab("GEAR_StickPile010") != null)
 			{
 				this.LoggerInstance.Msg("Found Item Pile mod...");
-				ExamineActionsAPI.ExamineActionsAPI.Register(new TestActionPiling());
+				ExamineActionsAPI.ExamineActionsAPI.Register(new ActionPiling());
 			}
 			if (GearItem.LoadGearItemPrefab("GEAR_4FirCone") != null)
 			{
 				this.LoggerInstance.Msg("Found Bountiful Foraging mod...");
-				ExamineActionsAPI.ExamineActionsAPI.Register(new TestActionFirConeHarvesting());
+				ExamineActionsAPI.ExamineActionsAPI.Register(new ActionFirConeHarvesting());
+				ExamineActionsAPI.ExamineActionsAPI.Register(new ActionFirSeedBunch());
 			}
 		}
 

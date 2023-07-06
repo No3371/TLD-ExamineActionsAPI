@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace ExamineActionsAPIDemo
 {
-    class TestActionBruteForceSharpening : IExamineAction, IExamineActionInterruptable, IExamineActionCancellable, IExamineActionCustomInfo
+    class ActionBruteForceSharpening : IExamineAction, IExamineActionInterruptable, IExamineActionCancellable, IExamineActionCustomInfo
     {
-        string IExamineAction.Id => nameof(TestActionBruteForceSharpening);
+        string IExamineAction.Id => nameof(ActionBruteForceSharpening);
 
         string IExamineAction.MenuItemLocalizationKey => "Brute Force Sharpen";
 

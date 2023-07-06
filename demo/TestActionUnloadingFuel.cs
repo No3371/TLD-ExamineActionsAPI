@@ -3,11 +3,11 @@ using Il2Cpp;
 
 namespace ExamineActionsAPIDemo
 {
-    class TestActionUnloadingFuel : SimpleActionTemplate, IExamineActionProduceItems
+    class ActionUnloadingFuel : SimpleActionTemplate, IExamineActionProduceItems
     {
-        public TestActionUnloadingFuel() {}
+        public ActionUnloadingFuel() {}
 
-        public override string Id => nameof(TestActionUnloadingFuel);
+        public override string Id => nameof(ActionUnloadingFuel);
 
         public override string MenuItemLocalizationKey => "Unload";
 

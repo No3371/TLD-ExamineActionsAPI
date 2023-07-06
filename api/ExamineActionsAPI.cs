@@ -137,11 +137,26 @@ namespace ExamineActionsAPI
 		{
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 			VeryVerboseLog($"+OnPerformSelectedAction");
-			if (!State.Action.CanPerform(State) || !State.ActiveActionRequirementsMet.Value)
+			
+			if (!State.Action.CanPerform(State))
 			{
 				GameAudioManager.PlayGUIError();
+				State.Panel.OnBlockedPerformingAction(State, PerformingBlockedReased.Action);
+			}
+	
+			if (State.Action is IExamineActionInterruptable interruptable && ExamineActionsAPI.Instance.ShouldInterrupt(interruptable))
+			{
+				GameAudioManager.PlayGUIError();
+				State.Panel.OnBlockedPerformingAction(State, PerformingBlockedReased.Interruption);
+			}
+
+			if (!State.ActiveActionRequirementsMet.Value)
+			{
+				GameAudioManager.PlayGUIError();
+				State.Panel.OnBlockedPerformingAction(State, PerformingBlockedReased.Requirements);
 				return;
 			}
+	
 			LastTriedToPerformedCache = State.Action;
 			if (State.Action is IExamineActionRequireTool)
 			{
@@ -213,16 +228,16 @@ namespace ExamineActionsAPI
 			VeryVerboseLog($"->>>>>>>>>>>>>>PerformAction ({ GameManager.m_TimeOfDay.GetMinutes() }m");
 		}
 
-		internal void ActionCallback (bool success, bool playerCancel, float progress)
+		internal void ActionCallback (bool success, bool cancel, float progress)
 		{
-			VeryVerboseLog($"ActionCallback success: {success} / cancel: {playerCancel} / progress: {progress}");
+			VeryVerboseLog($"ActionCallback success: {success} / cancel: {cancel} / progress: {progress}");
 			State.NormalizedProgress = progress;
 			if (success)
 				OnActionSucceed();
-			else if (playerCancel)
-				OnActionCancelled();
-			else if (State.InterruptionFlag)
+			else if (cancel && State.InterruptionFlag)
 				OnActionInterrupted(State.InterruptionSystemFlag);
+			else if (cancel)
+				OnActionCancelled();
 			else
 				OnActionFailed();
 

@@ -19,5 +19,7 @@ namespace ExamineActionsAPI
         public virtual void OnActionSelected(ExamineActionState state) {}
         public virtual void OnPerform(ExamineActionState state) {}
         public abstract void OnSuccess(ExamineActionState state);
+        public virtual int GetSubActionCount(ExamineActionState state) => 1;
+        public virtual int OverrideConsumingUnits(ExamineActionState state) => 1;
     }
 }

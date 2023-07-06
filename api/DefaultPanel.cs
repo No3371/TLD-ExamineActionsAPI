@@ -16,7 +16,7 @@ namespace ExamineActionsAPI
 		internal UISprite bg1, bg2;
 		Vector2 info1Pos, info2Pos;
 		internal UIButton buttonContinue, buttonSubLeft, buttonSubRight;
-		internal UILabel buttonLabel, materiaslLabel, requiresToolLabel, consumeLabel, stopLabel;
+		internal UILabel buttonLabel, materiaslLabel, bottomWarningLabel, consumeLabel, stopLabel;
         public Panel_Inventory_Examine PIE { get; }
 		bool infoBlockExtended;
 
@@ -117,7 +117,7 @@ namespace ExamineActionsAPI
 				MonoBehaviour.Destroy(buttonLabel.GetComponent<UILocalize>());
 			}
 
-			requiresToolLabel = FindChildWrapper(repairPanelClone.transform, "RequiresToolLabel").GetComponent<UILabel>();
+			bottomWarningLabel = FindChildWrapper(repairPanelClone.transform, "RequiresToolLabel").GetComponent<UILabel>();
 			materiaslLabel = FindChildWrapper(materialsClone.transform, "Label_RequiredMaterials").GetComponent<UILabel>();
 
             buttonSubLeft = GameObject.Instantiate(pie.m_Button_ToolDecrease, buttonClone.transform.parent).GetComponent<UIButton>();
@@ -127,12 +127,12 @@ namespace ExamineActionsAPI
             buttonSubLeft.onClick[0] = new EventDelegate(new System.Action(ExamineActionsAPI.Instance.OnPreviousSubAction));
             buttonSubRight.onClick[0] = new EventDelegate(new System.Action(ExamineActionsAPI.Instance.OnNextSubAction));
 
-            consumeLabel = GameObject.Instantiate(requiresToolLabel, buttonClone.transform.parent).GetComponent<UILabel>();
+            consumeLabel = GameObject.Instantiate(bottomWarningLabel, buttonClone.transform.parent).GetComponent<UILabel>();
             MonoBehaviour.Destroy(consumeLabel.GetComponent<UIAnchor>());
             consumeLabel.transform.localPosition = buttonClone.transform.localPosition + new Vector3(0, -24);
             consumeLabel.color += new Color(0f, 0.3f, -0.1f);
 
-            stopLabel = GameObject.Instantiate(requiresToolLabel, buttonClone.transform.parent).GetComponent<UILabel>();
+            stopLabel = GameObject.Instantiate(bottomWarningLabel, buttonClone.transform.parent).GetComponent<UILabel>();
             MonoBehaviour.Destroy(stopLabel.GetComponent<UIAnchor>());
             stopLabel.transform.localPosition = buttonClone.transform.localPosition + new Vector3(0, -44);
             stopLabel.color += new Color(0f, 0.3f, -0.1f);
@@ -176,6 +176,7 @@ namespace ExamineActionsAPI
             yieldsClone.SetActive(false);
             PIE.m_ActionToolSelect.SetActive(false);
             bg2.gameObject.SetActive(false);
+            bottomWarningLabel.gameObject.SetActive(false);
             int subs = state.Action.GetSubActionCounts(state);
             ExamineActionsAPI.VeryVerboseLog($"Sub {state.SubActionId + 1} / {subs}");
             buttonSubLeft.gameObject.SetActive(state.SubActionId > 0);
@@ -529,10 +530,9 @@ namespace ExamineActionsAPI
             {
                 if (PIE.m_Tools.Count == 0)
                 {
-                    requiresToolLabel.gameObject.SetActive(true);
-                    requiresToolLabel.text = Localization.Get("GAMEPLAY_ToolRequired");
+                    bottomWarningLabel.gameObject.SetActive(true);
+                    bottomWarningLabel.text = Localization.Get("GAMEPLAY_ToolRequired");
                 }
-                else requiresToolLabel.gameObject.SetActive(false);
 
                 PIE.m_ToolScrollList.CleanUp();
                 PIE.m_ToolScrollList.CreateList(PIE.m_Tools.Count);
@@ -556,7 +556,7 @@ namespace ExamineActionsAPI
                 }
                 PIE.RefreshSelectedActionTool();
             }
-            else requiresToolLabel.gameObject.SetActive(false);
+            else bottomWarningLabel.gameObject.SetActive(false);
         }
 
         void UpdateStopLabel (ExamineActionState state)
@@ -649,6 +649,17 @@ namespace ExamineActionsAPI
         public void OnSelectingToolChanged(ExamineActionState state)
         {
             UpdateInfoBlock(state);
+        }
+
+        void IExamineActionPanel.OnBlockedPerformingAction(ExamineActionState state, PerformingBlockedReased reason)
+        {
+            bottomWarningLabel.gameObject.SetActive(true);
+            bottomWarningLabel.text = reason switch
+            {
+                PerformingBlockedReased.Interruption => Localization.Get("Action will be interrupted") ?? null,
+                PerformingBlockedReased.Action => Localization.Get("Action can not be performed") ?? null,
+                PerformingBlockedReased.Requirements => Localization.Get("Action requirements not satisfied") ?? null,
+            };
         }
 
         public class InfoBlock

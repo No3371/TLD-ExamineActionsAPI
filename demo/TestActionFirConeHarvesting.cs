@@ -6,12 +6,12 @@ namespace ExamineActionsAPIDemo
     /// <summary>
     /// This action provides an easy way to harvest fir cones from Bountiful Foraging mod.
     /// </summary>
-    class TestActionFirConeHarvesting : IExamineAction, IExamineActionProduceItems, IExamineActionInterruptable
+    class ActionFirConeHarvesting : IExamineAction, IExamineActionProduceItems, IExamineActionInterruptable
     {
-        public TestActionFirConeHarvesting() {}
+        public ActionFirConeHarvesting() {}
         IExamineActionPanel? IExamineAction.CustomPanel => null;
 
-        string IExamineAction.Id => nameof(TestActionFirConeHarvesting);
+        string IExamineAction.Id => nameof(ActionFirConeHarvesting);
 
         string IExamineAction.MenuItemLocalizationKey => "Harvest";
 
@@ -64,8 +64,12 @@ namespace ExamineActionsAPIDemo
 
         void IExamineActionProduceItems.GetProducts(ExamineActionsAPI.ExamineActionState state, System.Collections.Generic.List<MaterialOrProductItemConf> products)
         {
-            products.Add(new ("GEAR_1FirConeFuel", 1 * (state.SubActionId + 1), 100));
-            products.Add(new ("GEAR_3FirConeSeeds", 2 * (state.SubActionId + 1), 100));
+            int times = state.SubActionId + 1;
+            products.Add(new ("GEAR_1FirConeFuel", 1 * times, 100));
+            if (times % 5 == 0)
+                products.Add(new ("GEAR_2FirSeedBunch", 2 * times / 5, 100));
+            else 
+                products.Add(new ("GEAR_3FirConeSeeds", 2 * times, 100));
         }
         void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
 

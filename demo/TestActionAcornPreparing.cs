@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace ExamineActionsAPIDemo
 {
-    class TestActionAcornPreparing : IExamineAction, IExamineActionProduceItems
+    class ActionAcornPreparing : IExamineAction, IExamineActionProduceItems
     {
-        public TestActionAcornPreparing() {}
+        public ActionAcornPreparing() {}
         IExamineActionPanel? IExamineAction.CustomPanel => null;
 
-        string IExamineAction.Id => nameof(TestActionAcornPreparing);
+        string IExamineAction.Id => nameof(ActionAcornPreparing);
 
         string IExamineAction.MenuItemLocalizationKey => "Prepare";
 

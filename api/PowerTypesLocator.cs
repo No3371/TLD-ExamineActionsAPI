@@ -30,7 +30,7 @@ namespace ExamineActionsAPI
                 if (gunPowderType == null)
                 {
                     gunPowderType = Addressables.LoadAsset<PowderType>("POWDER_GunPowder").Result;
-                    if (gunPowderType == null) MelonLogger.Error("Failed to retrieve POWDER_GunPowder");
+                    if (gunPowderType == null) MelonLogger.Error("Failed to retrieve POWDER_GunPowder (It's ok this happens on game start)");
                 }
                 return gunPowderType;
             }
@@ -45,7 +45,7 @@ namespace ExamineActionsAPI
                 if (waterPottableType == null)
                 {
                     waterPottableType = Addressables.LoadAsset<LiquidType>("LIQUID_WaterPotable").Result;
-                    if (waterPottableType == null) MelonLogger.Error("Failed to retrieve LIQUID_WaterPotable");
+                    if (waterPottableType == null) MelonLogger.Error("Failed to retrieve LIQUID_WaterPotable (It's ok this happens on game start)");
                 }
                 return waterPottableType;
             }
@@ -59,7 +59,7 @@ namespace ExamineActionsAPI
                 if (flourType == null)
                 {
                     flourType = Addressables.LoadAsset<PowderType>("POWDER_Flour").Result;
-                    if (flourType == null) MelonLogger.Error("Failed to retrieve POWDER_Flour");
+                    if (flourType == null) MelonLogger.Error("Failed to retrieve POWDER_Flour (It's ok this happens on game start)");
                 }
                 return flourType;
             }
@@ -74,7 +74,7 @@ namespace ExamineActionsAPI
                 if (saltType == null)
                 {
                     saltType = Addressables.LoadAsset<PowderType>("POWDER_Salt").Result;
-                    if (saltType == null) MelonLogger.Error("Failed to retrieve POWDER_Salt");
+                    if (saltType == null) MelonLogger.Error("Failed to retrieve POWDER_Salt (It's ok this happens on game start)");
                 }
                 return saltType;
             }
@@ -88,7 +88,7 @@ namespace ExamineActionsAPI
                 if (oatsTinType == null)
                 {
                     oatsTinType = Addressables.LoadAsset<PowderType>("POWDER_OatsTin").Result;
-                    if (oatsTinType == null) MelonLogger.Error("Failed to retrieve POWDER_OatsTin");
+                    if (oatsTinType == null) MelonLogger.Error("Failed to retrieve POWDER_OatsTin (It's ok this happens on game start)");
                 }
                 return oatsTinType;
             }
@@ -103,7 +103,7 @@ namespace ExamineActionsAPI
                 if (waterNonPottableType == null)
                 {
                     waterNonPottableType = Addressables.LoadAsset<LiquidType>("LIQUID_WaterNonPotable").Result;
-                    if (waterNonPottableType == null) MelonLogger.Error("Failed to retrieve LIQUID_WaterNonPotable");
+                    if (waterNonPottableType == null) MelonLogger.Error("Failed to retrieve LIQUID_WaterNonPotable (It's ok this happens on game start)");
                 }
                 return waterNonPottableType;
             }
@@ -117,7 +117,7 @@ namespace ExamineActionsAPI
                 if (keroseneType == null)
                 {
                     keroseneType = Addressables.LoadAsset<LiquidType>("LIQUID_Kerosene").Result;
-                    if (keroseneType == null) MelonLogger.Error("Failed to retrieve LIQUID_Kerosene");
+                    if (keroseneType == null) MelonLogger.Error("Failed to retrieve LIQUID_Kerosene (It's ok this happens on game start)");
                 }
                 return keroseneType;
             }
@@ -131,7 +131,7 @@ namespace ExamineActionsAPI
                 if (antisepticType == null)
                 {
                     antisepticType = Addressables.LoadAsset<LiquidType>("LIQUID_Antiseptic").Result;
-                    if (antisepticType == null) MelonLogger.Error("Failed to retrieve LIQUID_Antiseptic");
+                    if (antisepticType == null) MelonLogger.Error("Failed to retrieve LIQUID_Antiseptic (It's ok this happens on game start)");
                 }
                 return antisepticType;
             }
@@ -149,7 +149,7 @@ namespace ExamineActionsAPI
                 if (accelerantType == null)
                 {
                     accelerantType = Addressables.LoadAsset<LiquidType>("LIQUID_Accelerant").Result;
-                    if (accelerantType == null) MelonLogger.Error("Failed to retrieve LIQUID_Accelerant");
+                    if (accelerantType == null) MelonLogger.Error("Failed to retrieve LIQUID_Accelerant (It's ok this happens on game start)");
                 }
                 return accelerantType;
             }

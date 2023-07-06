@@ -4,12 +4,12 @@ using Il2Cpp;
 namespace ExamineActionsAPIDemo
 {
     // Items that can be harvested does not disappear even when ruined
-    class TestActionDisposingRuined : IExamineAction
+    class ActionDisposingRuined : IExamineAction
     {
-        public TestActionDisposingRuined() {}
+        public ActionDisposingRuined() {}
         IExamineActionPanel? IExamineAction.CustomPanel => null;
 
-        string IExamineAction.Id => nameof(TestActionDisposingRuined);
+        string IExamineAction.Id => nameof(ActionDisposingRuined);
 
         string IExamineAction.MenuItemLocalizationKey => "Dispose (Destroy)";
 
