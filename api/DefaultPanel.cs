@@ -177,7 +177,7 @@ namespace ExamineActionsAPI
             PIE.m_ActionToolSelect.SetActive(false);
             bg2.gameObject.SetActive(false);
             bottomWarningLabel.gameObject.SetActive(false);
-            int subs = state.Action.GetSubActionCounts(state);
+            int subs = state.Action.GetSubActionCount(state);
             ExamineActionsAPI.VeryVerboseLog($"Sub {state.SubActionId + 1} / {subs}");
             buttonSubLeft.gameObject.SetActive(state.SubActionId > 0);
             buttonSubRight.gameObject.SetActive(state.SubActionId < subs - 1);

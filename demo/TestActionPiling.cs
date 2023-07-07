@@ -86,7 +86,7 @@ namespace ExamineActionsAPIDemo
             };
         }
 
-        int IExamineAction.GetSubActionCounts(ExamineActionState state)
+        int IExamineAction.GetSubActionCount(ExamineActionState state)
         {
             return state.Subject.name switch
             {

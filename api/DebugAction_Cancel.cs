@@ -18,7 +18,7 @@ namespace ExamineActionsAPI
         public LocalizedString ActionButtonLocalizedString { get; } = new LocalizedString() { m_LocalizationID = "Cancellable" };
 
         public IExamineActionPanel? CustomPanel => null;
-        int IExamineAction.GetSubActionCounts(ExamineActionState state) => 2;
+        int IExamineAction.GetSubActionCount(ExamineActionState state) => 2;
         public int CalculateDurationMinutes(ExamineActionState state)
         {
             return state.SubActionId == 0 ? 30 : 10;

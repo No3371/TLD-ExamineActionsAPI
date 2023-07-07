@@ -56,7 +56,7 @@ namespace ExamineActionsAPIDemo
         // For this action, we are using the sub action feature as "how many acorn to prepare"
         // So it's important to tell the API how many SubActions are availabe based on how many acorns in the stack the player is examining
         // And we are limiting it to up to 4 because 4 is the number that acorns can be prepared into 1 large portion prepared acrons
-        int IExamineAction.GetSubActionCounts(ExamineActionState state) => Mathf.Min(4, state.Subject.m_StackableItem?.m_Units ?? 1);
+        int IExamineAction.GetSubActionCount(ExamineActionState state) => Mathf.Min(4, state.Subject.m_StackableItem?.m_Units ?? 1);
 
         // For this action, we are using the sub action feature as "how many acorn to prepare"
         // So according to the SubActionId we are returning different units or make it a large portion one

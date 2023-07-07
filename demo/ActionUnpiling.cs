@@ -64,7 +64,7 @@ namespace ExamineActionsAPIDemo
             return state.SubActionId + 1;
         }
 
-        int IExamineAction.GetSubActionCounts(ExamineActionState state)
+        int IExamineAction.GetSubActionCount(ExamineActionState state)
         {
             return state.Subject.m_StackableItem.m_Units;
         }

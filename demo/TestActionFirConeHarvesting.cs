@@ -60,7 +60,7 @@ namespace ExamineActionsAPIDemo
         bool IExamineAction.ConsumeOnSuccess(ExamineActionState state) => true;
         int IExamineAction.OverrideConsumingUnits(ExamineActionState state) => (state.SubActionId + 1);
 
-        int IExamineAction.GetSubActionCounts(ExamineActionState state) => state.Subject.m_StackableItem.m_Units;
+        int IExamineAction.GetSubActionCount(ExamineActionState state) => state.Subject.m_StackableItem.m_Units;
 
         void IExamineActionProduceItems.GetProducts(ExamineActionsAPI.ExamineActionState state, System.Collections.Generic.List<MaterialOrProductItemConf> products)
         {

@@ -108,7 +108,7 @@ namespace ExamineActionsAPI
 		public void OnNextSubAction ()
 		{
 			// VeryVerboseLog($"+OnNextSubAction {State.SubActionId}");
-            int max = State.Action.GetSubActionCounts(State);
+            int max = State.Action.GetSubActionCount(State);
             if (State.SubActionId + 1 < max)
 			{
 				State.SubActionId += 1;
@@ -808,7 +808,7 @@ namespace ExamineActionsAPI
 			var act = ExamineActionsAPI.Instance.AvailableCustomActions[index];
 			var it = ExamineActionsAPI.Instance.CustomActionMenuItems[index];
 
-			int subs = act.GetSubActionCounts(ExamineActionsAPI.Instance.State);
+			int subs = act.GetSubActionCount(ExamineActionsAPI.Instance.State);
 			VeryVerboseLog($"+RefreshCustomActionMenuItemState {index}");
             bool activeActionRequirementsMet = State.ActiveActionRequirementsMet ?? true; // If null, means the state is not yet fully loaded
             bool canPerform = activeActionRequirementsMet && act.CanPerform(Instance.State);

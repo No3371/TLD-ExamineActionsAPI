@@ -36,7 +36,7 @@ namespace ExamineActionsAPIDemo
 
         // For this action, we are using SubActions as a scaling factor of how much condition to sharpen
         // I picked 5 because players don't really spend more hours at once
-        int IExamineAction.GetSubActionCounts(ExamineActionState state) => 5;
+        int IExamineAction.GetSubActionCount(ExamineActionState state) => 5;
         // The base ingame time to sharpen is 2 hours, and we scale it by SubActionId
         // SubActionid is 0 based so we add 1 to it
         int IExamineAction.CalculateDurationMinutes(ExamineActionState state)
