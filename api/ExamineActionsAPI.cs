@@ -213,14 +213,28 @@ namespace ExamineActionsAPI
 			if (State.Action is IExamineActionFailable)
 				State.ActiveResult = (UnityEngine.Random.Range(0f, 100f) <= State.ActiveSuccessChance) ? ActionResult.Success : ActionResult.Failure;
             Panel_GenericProgressBar gpb = pie.m_GenericProgressBar.GetPanel();
-            gpb.Launch(
-                State.Action.ActionButtonLocalizedString.Text(),
-                State.Action.CalculateProgressSeconds(State),
-                State.ActiveActionDurationMinutes.Value,
-                State.ActiveResult.Value == ActionResult.Success? 1 : UnityEngine.Random.Range(0.2f, 0.8f),
-				true,
-				new System.Action<bool, bool, float>(ActionCallback)
-			);
+			var audio = State.Action.GetAudioName(State);
+			if (audio != null)
+				gpb.Launch(
+					State.Action.ActionButtonLocalizedString.Text(),
+					State.Action.CalculateProgressSeconds(State),
+					State.ActiveActionDurationMinutes.Value,
+					State.ActiveResult.Value == ActionResult.Success? 1 : UnityEngine.Random.Range(0.2f, 0.8f),
+					audio,
+					null,
+					false,
+					true,
+					new System.Action<bool, bool, float>(ActionCallback)
+				);
+			else
+				gpb.Launch(
+					State.Action.ActionButtonLocalizedString.Text(),
+					State.Action.CalculateProgressSeconds(State),
+					State.ActiveActionDurationMinutes.Value,
+					State.ActiveResult.Value == ActionResult.Success? 1 : UnityEngine.Random.Range(0.2f, 0.8f),
+					true,
+					new System.Action<bool, bool, float>(ActionCallback)
+				);
 
 			this.LoggerInstance.Msg($"Performing custom action {State.Action.Id}... ({State.StartedAtGameTime})");
 			State.Panel.OnPerformingAction(State);

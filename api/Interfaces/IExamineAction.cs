@@ -49,6 +49,7 @@ namespace ExamineActionsAPI
 		/// If the action should use a custom panel, provide the panel instance here.
 		/// </summary>
 		IExamineActionPanel? CustomPanel { get; }
+        string? GetAudioName (ExamineActionState state) => null;
 		/// <summary>
 		/// <para>Called when the player selects the menu button in the Examine menu</para>
 		/// <para>Suggestion: Don't do anything to the player's items, do UI things only</para>
