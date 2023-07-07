@@ -10,7 +10,7 @@ It's a very flexible framework, a lot of options can be combined to design custo
 ExamineActionAPI.Register(new YourAction());
 ```
 
-Action documentation is WIP. At the moment please refer to the example files under the demo folder.
+Action documentation is WIP. At the moment please refer to the example mod files under the demo folder.
 
 ## Interfaces
 
@@ -18,18 +18,19 @@ Action documentation is WIP. At the moment please refer to the example files und
 
 - The core interface, classes implementing this are qualified as custom actions
 - Without implementing other interfaces, the action will always success and be finished
+    - Only exception is the action is forcefully interrupted in situations like wolf attacks
+- Action menu name & sprite, button text and progress audio can be customized.
 
-### IExamineActionRequireMaterials
+### IExamineActionRequireItems
 
-- Supports up to 5 materials
+- Setup what are required (and to be consumed) for the action
 - The parameters of each:
     - Name of the gear ("GEAR_???")
     - How many units to consume
     - The chance the maaterial is consumed, ranging from 0 to 100
 - Edge case: Subject and Materials are same type of gears
     - The subject item/stack is always ignored/excluded in the material check and consumation.
-    - This means if the subject is stackable and it always stack, the edge case will never works because you never have 2 stack of that type of items.
-    - Example: An action available to Stick and has Stick in the material list will never works because you can't have 2 stacks of stick.
+    - For example, you are examine a stack of 99 sticks, even if the action only requires 1 sticks, it can't be performed because the stack of 99 sticks is excluded.
 
 ### IExamineActionProduceItems
 
@@ -60,13 +61,18 @@ Action documentation is WIP. At the moment please refer to the example files und
 
 There are 4 actions availabe in the demo mod:
 
-- Paper From Books: you can tear books into paper stacks.
+- Paper From Books: Tear books into paper stacks.
     - Available on any researchable items.
-- Brute Force Sharpening: you can spend hours to mildly sharpen tools.
+- Brute Force Sharpening: Spend hours to merely sharpen tools without whetstone.
     - Available on any sharpenable items.
-- Slice Meat: You can cut a small piece from meats.
+- Slice Meat: Cut a small piece from meats.
     - Available on any meat or fish.
-- Prepare Acorns: You can prepare up to 3 acorns or 1 large portion, at once.
+- Prepare Acorns: Prepare up to 3 acorns or 1 large portion, at once.
     - Available on acorns.
-- (ItemPile compat) Easily pile sticks/coals/charcoals/cattails/stones without crafting.
+- Unload Storm Lanterns: Unload fuel from storm lanterns.
+    - Available on storm lanterns.
+- (ItemPile compat) Pile sticks/coals/charcoals/cattails/stones without crafting.
     - Only availabe when stickpile item is found registered.
+- (ItemPile compat) unpile multiple piles of sticks/coals/charcoals/cattails/stones at once.
+    - Only availabe when stickpile item is found registered.
+- (Bountiful Foraging compat) Fir Cones harvesting and making bunches.
