@@ -142,12 +142,14 @@ namespace ExamineActionsAPI
 			{
 				GameAudioManager.PlayGUIError();
 				State.Panel.OnBlockedPerformingAction(State, PerformingBlockedReased.Action);
+				return;
 			}
 	
 			if (State.Action is IExamineActionInterruptable interruptable && ExamineActionsAPI.Instance.ShouldInterrupt(interruptable))
 			{
 				GameAudioManager.PlayGUIError();
 				State.Panel.OnBlockedPerformingAction(State, PerformingBlockedReased.Interruption);
+				return;
 			}
 
 			if (!State.ActiveActionRequirementsMet.Value)
