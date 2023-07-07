@@ -4,7 +4,6 @@ using MelonLoader;
 
 namespace ExamineActionsAPI
 {
-    // Inlined
     [HarmonyPatch(typeof(Panel_GenericProgressBar), nameof(Panel_GenericProgressBar.CanUserCancelAction))]
     internal class PatchCanUserCancelAction
     {
