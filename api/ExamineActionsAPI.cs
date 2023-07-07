@@ -202,7 +202,7 @@ namespace ExamineActionsAPI
 			pie.m_Slider_ActionProgress.value = 0;
 			pie.m_ElapsedProgressBarSeconds = 0;
 			pie.m_GearItem.SetHaltDecay(true);
-			InterfaceManager.GetPanel<Panel_Inventory>().GetComponent<UIPanel>().alpha = 0f;
+			pie.SetInventoryAlpha(0);
 			// pie.m_ProgressBarTimeSeconds = SelectedCustomAction.CalculateProgressSeconds(State);
 			// pie.AccelerateTimeOfDay(duration, false);
 			State.ActionInProgress = true;
