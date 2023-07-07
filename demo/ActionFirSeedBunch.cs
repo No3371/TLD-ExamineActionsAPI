@@ -27,7 +27,7 @@ namespace ExamineActionsAPIDemo
 
         public bool IsActionAvailable(GearItem item)
         {
-            return item.name == "GEAR_3FirConeSeeds" || item.name == "GEAR_2FirConeSeedsRoasted";
+            return (item.name == "GEAR_3FirConeSeeds" || item.name == "GEAR_2FirConeSeedsRoasted") && (item?.m_StackableItem?.m_Units ?? 1) >= 5;
         }
 
         public void OnSuccess(ExamineActionState state) {}
