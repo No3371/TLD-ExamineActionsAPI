@@ -1,5 +1,13 @@
 # ExamineActionsAPI
 
+https://github.com/No3371/TLD-ExamineActionsAPI/assets/1814971/66c2b391-f448-4243-b912-ecc1354b2f1e
+
+https://github.com/No3371/TLD-ExamineActionsAPI/assets/1814971/0e4a3a36-4e96-4c0e-8d74-e28311d9ae7c
+
+https://github.com/No3371/TLD-ExamineActionsAPI/assets/1814971/ef699713-a31a-40cf-a389-fe685bcf321c
+
+https://github.com/No3371/TLD-ExamineActionsAPI/assets/1814971/c7b85a53-3038-477f-b014-3e07ed6da257
+
 The API provides a easy way to add new examine actions (like harvest/repair/sharpen) to the game The Long Dark.
 
 It's a very flexible framework, a lot of options can be combined to design custom actions that have totally dynamic behaviors according to what is being examined, what tools is selected... etc.
