@@ -12,7 +12,7 @@ namespace ExamineActionsAPI
 			ExamineActionsAPI.Instance.State.Subject = __instance.m_GearItem;
 			ExamineActionsAPI.Instance.AvailableCustomActions.Clear();
 			foreach (var mi in ExamineActionsAPI.Instance.CustomActionMenuItems) mi.gameObject.SetActive(false);
-			if (PatchOnExamine.LastTriedToExamine == null)
+			if (PatchOnEquip.lastUse > PatchOnExamine.lastExamine)
 			{
 				return;
 			}

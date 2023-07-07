@@ -34,11 +34,35 @@ namespace ExamineActionsAPI
                 ExamineActionsAPI.VeryVerboseLog($"LastTriedToExamine: {value?.name}");
             }
         }
+        internal static float lastExamine;
         private static void Prefix(Panel_Inventory __instance)
         {
             LastTriedToExamine = __instance.GetCurrentlySelectedGearItem();
-            ExamineActionsAPI.VeryVerboseLog($"++++++++OnExamine {LastTriedToExamine?.name}");
+            lastExamine = Time.realtimeSinceStartup;
             ExamineActionsAPI.Instance.LastTriedToPerformedCache = null;
+        }
+    }
+    [HarmonyPatch(typeof(Panel_Inventory), nameof(Panel_Inventory.OnEquip))]
+    internal class PatchOnEquip
+    {
+        private static GearItem? lastTriedToUse;
+        /// <summary>
+        /// Used to distinguish use/examine.
+        /// </summary>
+        /// <value></value>
+        internal static GearItem? LastTriedToUse
+        {
+            get => lastTriedToUse; set
+            {
+                lastTriedToUse = value;
+                ExamineActionsAPI.VeryVerboseLog($"LastTriedToUse: {value?.name}");
+            }
+        }
+        internal static float lastUse;
+        private static void Prefix(Panel_Inventory __instance)
+        {
+            LastTriedToUse = __instance.GetCurrentlySelectedGearItem();
+            lastUse = Time.realtimeSinceStartup;
         }
     }
 }

@@ -11,7 +11,8 @@ namespace ExamineActionsAPI
     {
         private static bool Prefix(Panel_Inventory_Examine __instance)
         {
-			return PatchOnExamine.LastTriedToExamine == null|| PatchOnExamine.LastTriedToExamine.m_ResearchItem == null;
+			return PatchOnEquip.lastUse > PatchOnExamine.lastExamine;
+                // || PatchOnExamine.LastTriedToExamine == null
         }
     }
 }
