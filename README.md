@@ -35,7 +35,9 @@ There are 9 actions availabe in the demo mod:
 
 ## Usage
 
-Refer to the [example mod](https://github.com/No3371/TLD-ExamineActionsAPI/blob/master/demo/ThingsToDo.cs) files under the demo folder.
+Start by implementing IExamineAction on your action class, once all the required properties are implemented, it's good to go. Call  `ExamineActionsAPI.Regsiter()` to regsiter the action.
+
+Please refer to the [example mod](https://github.com/No3371/TLD-ExamineActionsAPI/blob/master/demo/ThingsToDo.cs) files under the demo folder.
 
 ## Interfaces
 
