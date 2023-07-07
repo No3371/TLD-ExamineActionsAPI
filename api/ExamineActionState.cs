@@ -82,6 +82,21 @@ namespace ExamineActionsAPI
 		/// </summary>
 		/// <value></value>
 		public TLDDateTimeEAPI? StartedAtGameTime { get; internal set; }
+        public int? ElapsedIngameMinutesPerforming
+        {
+            get
+            {
+                var now = new TLDDateTimeEAPI(GameManager.m_TimeOfDay.GetDayNumber(), GameManager.m_TimeOfDay.GetHour(), GameManager.m_TimeOfDay.GetMinutes());
+                return (now - StartedAtGameTime)?.TotalMinutes;
+            }
+        }
+        public float? ElapsedRealtimeSecondsPerforming
+        {
+            get
+            {
+                return Time.realtimeSinceStartup - StartedAtRealtime;
+            }
+        }
 		/// <summary>
 		/// The 0-1 percentage of the elapsed execution time
 		/// Main purpose is for actions to access how much has been performed on non-success result
