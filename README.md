@@ -59,7 +59,7 @@ Action documentation is WIP. At the moment please refer to the example mod files
 
 ## Demo
 
-There are 4 actions availabe in the demo mod:
+There are 9 actions availabe in the demo mod:
 
 - Paper From Books: Tear books into paper stacks.
     - Available on any researchable items.
@@ -75,4 +75,5 @@ There are 4 actions availabe in the demo mod:
     - Only availabe when stickpile item is found registered.
 - (ItemPile compat) unpile multiple piles of sticks/coals/charcoals/cattails/stones at once.
     - Only availabe when stickpile item is found registered.
-- (Bountiful Foraging compat) Fir Cones harvesting and making bunches.
+- (Bountiful Foraging compat) Harvest Fir cones.
+- (Bountiful Foraging compat) Make Fir Cones Seeds bunches.
