@@ -28,6 +28,7 @@ namespace ExamineActionsAPIDemo
 			{
 				this.LoggerInstance.Msg("Found Item Pile mod...");
 				ExamineActionsAPI.ExamineActionsAPI.Register(new ActionPiling());
+				ExamineActionsAPI.ExamineActionsAPI.Register(new ActionUnpiling());
 			}
 			if (GearItem.LoadGearItemPrefab("GEAR_4FirCone") != null)
 			{

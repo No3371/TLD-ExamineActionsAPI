@@ -3,29 +3,31 @@ using Il2Cpp;
 
 namespace ExamineActionsAPIDemo
 {
-    class ActionUnloadingFuel : SimpleActionTemplate, IExamineActionProduceItems
+    class ActionUnloadingFuel : IExamineAction, IExamineActionProduceLiquid
     {
         public ActionUnloadingFuel() {}
 
-        public override string Id => nameof(ActionUnloadingFuel);
+        public string Id => nameof(ActionUnloadingFuel);
 
-        public override string MenuItemLocalizationKey => "Unload";
+        public string MenuItemLocalizationKey => "Unload";
 
-        public override string MenuItemSpriteName => null;
+        public string MenuItemSpriteName => null;
 
-        public override LocalizedString ActionButtonLocalizedString { get; } = new LocalizedString() { m_LocalizationID = "Unload" };
+        public LocalizedString ActionButtonLocalizedString { get; } = new LocalizedString() { m_LocalizationID = "Unload" };
 
-        public override bool IsActionAvailable(GearItem item)
+        IExamineActionPanel? IExamineAction.CustomPanel => null;
+
+        public bool IsActionAvailable(GearItem item)
         {
             return item.m_KeroseneLampItem != null;
             
         }
 
-        public override bool CanPerform(ExamineActionState state)
+        public bool CanPerform(ExamineActionState state)
         {
             return state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters > 0;
         }
-        public override void OnPerform(ExamineActionState state)
+        public void OnPerform(ExamineActionState state)
         {
             Il2CppTLD.Gear.KeroseneLampItem lamp = state.Subject.m_KeroseneLampItem;
             if (lamp.IsOn()) lamp.TurnOff(true);
@@ -33,24 +35,33 @@ namespace ExamineActionsAPIDemo
             state.Temp[0] = state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters;
         }
 
-        public override int CalculateDurationMinutes(ExamineActionState state) => 3;
+        public int CalculateDurationMinutes(ExamineActionState state) => 3;
 
-        public override float CalculateProgressSeconds(ExamineActionState state) => 2;
-        public override void OnSuccess(ExamineActionState state)
+        public float CalculateProgressSeconds(ExamineActionState state) => 2;
+        public void OnSuccess(ExamineActionState state)
         {
             state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters = 0;
         }
 
-        public override bool ConsumeOnSuccess(ExamineActionState state) => false;
+        public bool ConsumeOnSuccess(ExamineActionState state) => false;
 
-        void IExamineActionProduceItems.GetProducts(ExamineActionsAPI.ExamineActionState state, System.Collections.Generic.List<MaterialOrProductItemConf> products)
-        {
-            products.Add(new ("GEAR_LampFuel", 1, 100) );
-        }
+        // void IExamineActionProduceItems.GetProducts(ExamineActionsAPI.ExamineActionState state, System.Collections.Generic.List<MaterialOrProductItemConf> products)
+        // {
+        //     products.Add(new ("GEAR_LampFuel", 1, 100));
+        // }
 
-        void IExamineActionProduceItems.PostProcessProduct(ExamineActionState state, int index, Il2Cpp.GearItem product)
+        // void IExamineActionProduceItems.PostProcessProduct(ExamineActionState state, int index, Il2Cpp.GearItem product)
+        // {
+        //     product.m_LiquidItem.m_LiquidLiters = (float) state.Temp[0];
+        // }
+
+        void IExamineAction.OnActionSelected(ExamineActionState state) {}
+        void IExamineAction.OnActionDeselected(ExamineActionState state) {}
+        void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
+
+        void IExamineActionProduceLiquid.GetProductLiquid(ExamineActionState state, List<MaterialOrProductLiquidConf> liquids)
         {
-            product.m_LiquidItem.m_LiquidLiters = (float) state.Temp[0];
+            liquids.Add(new (ExamineActionsAPI.PowderAndLiquidTypesLocator.KeroseneType, state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters, 100));
         }
     }
 }

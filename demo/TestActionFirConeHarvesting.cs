@@ -21,17 +21,17 @@ namespace ExamineActionsAPIDemo
 
         ActionsToBlock? IExamineActionInterruptable.LightRequirementType => null;
 
-        bool IExamineActionInterruptable.InterruptOnStarving => true;
+        bool IExamineActionInterruptable.InterruptOnStarving => false;
 
-        bool IExamineActionInterruptable.InterruptOnExhausted => true;
+        bool IExamineActionInterruptable.InterruptOnExhausted => false;
 
-        bool IExamineActionInterruptable.InterruptOnFreezing => true;
+        bool IExamineActionInterruptable.InterruptOnFreezing => false;
 
-        bool IExamineActionInterruptable.InterruptOnDehydrated => true;
+        bool IExamineActionInterruptable.InterruptOnDehydrated => false;
 
-        bool IExamineActionInterruptable.InterruptOnNonRiskAffliction => true;
+        bool IExamineActionInterruptable.InterruptOnNonRiskAffliction => false;
 
-        float IExamineActionInterruptable.MinimumCondition => 0.5f;
+        float IExamineActionInterruptable.MinimumCondition => 0f;
 
         bool IExamineAction.IsActionAvailable(GearItem item)
         {
@@ -71,11 +71,17 @@ namespace ExamineActionsAPIDemo
             else 
                 products.Add(new ("GEAR_3FirConeSeeds", 2 * times, 100));
         }
-        void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
+        void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state)
+        {
+            (this as IExamineActionInterruptable)?.OnInterrupted(state);
+        }
 
         void IExamineActionInterruptable.OnInterrupted(ExamineActionState state)
         {
-            throw new NotImplementedException();
+            int completed = (int) (state.NormalizedProgress!.Value * state.SubActionId);
+            GameManager.m_PlayerManager.InstantiateItemInPlayerInventory(GearItem.LoadGearItemPrefab("GEAR_1FirConeFuel"), completed);
+            GameManager.m_PlayerManager.InstantiateItemInPlayerInventory(GearItem.LoadGearItemPrefab("GEAR_3FirConeSeeds"), completed * 2);
+            state.Subject!.m_StackableItem.m_Units -= completed;
         }
     }
 }
