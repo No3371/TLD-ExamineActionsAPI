@@ -12,6 +12,27 @@ The API provides a easy way to add new examine actions (like harvest/repair/shar
 
 It's a very flexible framework, a lot of options can be combined to design custom actions that have totally dynamic behaviors according to what is being examined, what tools is selected... etc.
 
+## Demo
+
+There are 9 actions availabe in the demo mod:
+
+- Paper From Books: Tear books into paper stacks.
+    - Available on any researchable items.
+- Brute Force Sharpening: Spend hours to merely sharpen tools without whetstone.
+    - Available on any sharpenable items.
+- Slice Meat: Cut a small piece from meats.
+    - Available on any meat or fish.
+- Prepare Acorns: Prepare up to 3 acorns or 1 large portion, at once.
+    - Available on acorns.
+- Unload Storm Lanterns: Unload fuel from storm lanterns.
+    - Available on storm lanterns.
+- (ItemPile compat) Pile sticks/coals/charcoals/cattails/stones without crafting.
+    - Only availabe when stickpile item is found registered.
+- (ItemPile compat) unpile multiple piles of sticks/coals/charcoals/cattails/stones at once.
+    - Only availabe when stickpile item is found registered.
+- (Bountiful Foraging compat) Harvest Fir cones.
+- (Bountiful Foraging compat) Make Fir Cones Seeds bunches.
+
 ## Usage
 
 Refer to the [example mod](https://github.com/No3371/TLD-ExamineActionsAPI/blob/master/demo/ThingsToDo.cs) files under the demo folder.
@@ -44,6 +65,11 @@ Refer to the [example mod](https://github.com/No3371/TLD-ExamineActionsAPI/blob/
     - How many units to produce
     - The chance the product is yieled, ranging from 0 to 100.
 
+### IExamineActionRequireLiquid
+### IExamineActionProduceLiquid
+### IExamineActionRequirePowder
+### IExamineActionProducePowder
+
 ### IExamineActionFailable
 
 - Make the action possible to fail by chance
@@ -52,6 +78,10 @@ Refer to the [example mod](https://github.com/No3371/TLD-ExamineActionsAPI/blob/
 
 - Make the action possible to be interrupted due to light/conditions/afflictions...
 
+### IExamineActionCancellable
+
+- Make the action can be cancelled by players
+  
 ### IExamineActionRequireTool
 
 - Make the action requires tool to be performed.
@@ -60,24 +90,3 @@ Refer to the [example mod](https://github.com/No3371/TLD-ExamineActionsAPI/blob/
 ### IExamineActionCustomInfo
 
 - Display up to 2 information like how the duration/chance is shown.
-
-## Demo
-
-There are 9 actions availabe in the demo mod:
-
-- Paper From Books: Tear books into paper stacks.
-    - Available on any researchable items.
-- Brute Force Sharpening: Spend hours to merely sharpen tools without whetstone.
-    - Available on any sharpenable items.
-- Slice Meat: Cut a small piece from meats.
-    - Available on any meat or fish.
-- Prepare Acorns: Prepare up to 3 acorns or 1 large portion, at once.
-    - Available on acorns.
-- Unload Storm Lanterns: Unload fuel from storm lanterns.
-    - Available on storm lanterns.
-- (ItemPile compat) Pile sticks/coals/charcoals/cattails/stones without crafting.
-    - Only availabe when stickpile item is found registered.
-- (ItemPile compat) unpile multiple piles of sticks/coals/charcoals/cattails/stones at once.
-    - Only availabe when stickpile item is found registered.
-- (Bountiful Foraging compat) Harvest Fir cones.
-- (Bountiful Foraging compat) Make Fir Cones Seeds bunches.
