@@ -14,11 +14,7 @@ It's a very flexible framework, a lot of options can be combined to design custo
 
 ## Usage
 
-```csharp
-ExamineActionAPI.Register(new YourAction());
-```
-
-Action documentation is WIP. At the moment please refer to the example mod files under the demo folder.
+Refer to the [example mod](https://github.com/No3371/TLD-ExamineActionsAPI/blob/master/demo/ThingsToDo.cs) files under the demo folder.
 
 ## Interfaces
 
