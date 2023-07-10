@@ -41,14 +41,14 @@ Please refer to the [example mod](https://github.com/No3371/TLD-ExamineActionsAP
 
 ## Interfaces
 
-### IExamineAction
+### [IExamineAction](api/Interfaces/IExamineAction.cs)
 
 - The core interface, classes implementing this are qualified as custom actions
 - Without implementing other interfaces, the action will always success and be finished
     - Only exception is the action is forcefully interrupted in situations like wolf attacks
 - Action menu name & sprite, button text and progress audio can be customized.
 
-### IExamineActionRequireItems
+### [IExamineActionRequireItems](api/Interfaces/IExamineActionRequireItems.cs)
 
 - Setup what are required (and to be consumed) for the action
 - The parameters of each:
@@ -59,7 +59,7 @@ Please refer to the [example mod](https://github.com/No3371/TLD-ExamineActionsAP
     - The subject item/stack is always ignored/excluded in the material check and consumation.
     - For example, you are examine a stack of 99 sticks, even if the action only requires 1 sticks, it can't be performed because the stack of 99 sticks is excluded.
 
-### IExamineActionProduceItems
+### [IExamineActionProduceItems](api/Interfaces/IExamineActionProduceItems.cs)
 
 - Supports up to 5 in total of items/liquid/powder
 - The parameters of each:
@@ -67,7 +67,7 @@ Please refer to the [example mod](https://github.com/No3371/TLD-ExamineActionsAP
     - How many units to produce
     - The chance the product is yieled, ranging from 0 to 100.
 
-### IExamineActionRequireLiquid
+### [IExamineActionRequireLiquid](api/Interfaces/IExamineActionRequireLiquid.cs)
 
 - Supports up to 5 in total of items/liquid/powder
 - The parameters of each:
@@ -76,7 +76,7 @@ Please refer to the [example mod](https://github.com/No3371/TLD-ExamineActionsAP
     - How many liters to consume
     - The chance these liquid is consumed, ranging from 0 to 100
 
-### IExamineActionProduceLiquid
+### [IExamineActionProduceLiquid](api/Interfaces/IExamineActionProduceLiquid.cs)
 
 - Supports up to 5 in total of items/liquid/powder
 - The parameters of each:
@@ -85,7 +85,7 @@ Please refer to the [example mod](https://github.com/No3371/TLD-ExamineActionsAP
     - How many liters to produce
     - The chance these liquid is produced, ranging from 0 to 100
   
-### IExamineActionRequirePowder
+### [IExamineActionRequirePowder](api/Interfaces/IExamineActionRequirePowder.cs)
 
 - Supports up to 5 in total of items/liquid/powder
 - The parameters of each:
@@ -94,7 +94,7 @@ Please refer to the [example mod](https://github.com/No3371/TLD-ExamineActionsAP
     - How many kilograms to consume
     - The chance these powder is consumed, ranging from 0 to 100
 
-### IExamineActionProducePowder
+### [IExamineActionProducePowder](api/Interfaces/IExamineActionProducePowder.cs)
 
 - Supports up to 5 in total of items/liquid/powder
 - The parameters of each:
@@ -103,26 +103,26 @@ Please refer to the [example mod](https://github.com/No3371/TLD-ExamineActionsAP
     - How many kilograms to produce
     - The chance these powder is produced, ranging from 0 to 100
 
-### IExamineActionFailable
+### [IExamineActionFailable](api/Interfaces/IExamineActionFailable.cs)
 
 - Make the action possible to fail by chance (0 ~ 100)
 - You can control should the subject to be still consumed on a failure
 
-### IExamineActionInterruptable
+### [IExamineActionInterruptable](api/Interfaces/IExamineActionInterruptable.cs)
 
 - Make the action possible to be interrupted due to light/conditions/afflictions...
 - You can control should the subject to be still consumed on a interruption
 
-### IExamineActionCancellable
+### [IExamineActionCancellable](api/Interfaces/IExamineActionCancellable.cs)
 
 - Make the action can be cancelled by players
 - You can control should the subject to be still consumed on a cancellation
   
-### IExamineActionRequireTool
+### [IExamineActionRequireTool](api/Interfaces/IExamineActionRequireTool.cs)
 
 - Make the action requires tool to be performed.
 - You can also scale how much condition to be reduced on the tool.
 
-### IExamineActionCustomInfo
+### [IExamineActionCustomInfo](api/Interfaces/IExamineActionCustomInfo.cs)
 
 - Display up to 2 information like how the duration/chance is shown.
