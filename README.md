@@ -61,33 +61,67 @@ Please refer to the [example mod](https://github.com/No3371/TLD-ExamineActionsAP
 
 ### IExamineActionProduceItems
 
-- Supports up to 5 products
+- Supports up to 5 in total of items/liquid/powder
 - The parameters of each:
     - Name of the gear ("GEAR_???")
     - How many units to produce
     - The chance the product is yieled, ranging from 0 to 100.
 
 ### IExamineActionRequireLiquid
+
+- Supports up to 5 in total of items/liquid/powder
+- The parameters of each:
+    - Type object of the liquid
+        - Use references in `PowderAndLiquidTypesLocator` if you want to use official types
+    - How many liters to consume
+    - The chance these liquid is consumed, ranging from 0 to 100
+
 ### IExamineActionProduceLiquid
+
+- Supports up to 5 in total of items/liquid/powder
+- The parameters of each:
+    - Type object of the liquid
+        - Use references in `PowderAndLiquidTypesLocator` if you want to use official types
+    - How many liters to produce
+    - The chance these liquid is produced, ranging from 0 to 100
+  
 ### IExamineActionRequirePowder
+
+- Supports up to 5 in total of items/liquid/powder
+- The parameters of each:
+    - Type object of the powder
+        - Use references in `PowderAndLiquidTypesLocator` if you want to use official types
+    - How many kilograms to consume
+    - The chance these powder is consumed, ranging from 0 to 100
+
 ### IExamineActionProducePowder
+
+- Supports up to 5 in total of items/liquid/powder
+- The parameters of each:
+    - Type object of the powder
+        - Use references in `PowderAndLiquidTypesLocator` if you want to use official types
+    - How many kilograms to produce
+    - The chance these powder is produced, ranging from 0 to 100
 
 ### IExamineActionFailable
 
-- Make the action possible to fail by chance
+- Make the action possible to fail by chance (0 ~ 100)
+- You can control should the subject to be still consumed on a failure
 
 ### IExamineActionInterruptable
 
 - Make the action possible to be interrupted due to light/conditions/afflictions...
+- You can control should the subject to be still consumed on a interruption
 
 ### IExamineActionCancellable
 
 - Make the action can be cancelled by players
+- You can control should the subject to be still consumed on a cancellation
   
 ### IExamineActionRequireTool
 
 - Make the action requires tool to be performed.
-- You can also adjust how much condition to be reduced on the tool.
+- You can also scale how much condition to be reduced on the tool.
 
 ### IExamineActionCustomInfo
 
