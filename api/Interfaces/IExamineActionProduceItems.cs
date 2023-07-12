@@ -12,9 +12,12 @@ namespace ExamineActionsAPI
 		/// </summary>
 		/// <value>("GEAR_XXX", number, chance)</value>
 		void GetProducts(ExamineActionState state, List<MaterialOrProductItemConf> products);
+		/// <summary>
+		/// Use this to decide what GearItem to be used as the prefab. Otherwise by default EAAPI get a prefab by the item name.
+		/// </summary>
 		GearItem OverrideProductPrefab(ExamineActionState state, int index) => null;
 		/// <summary>
-		/// Implement this to do something about the products
+		/// Implement this to do something to the actual products
 		/// </summary>
 		void PostProcessProduct (ExamineActionState state, int index, GearItem product) {}
 		/// <summary>

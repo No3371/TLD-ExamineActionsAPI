@@ -5,17 +5,12 @@ namespace ExamineActionsAPI
     public interface IExamineActionRequireItems
 	{
 		/// <summary>
-		/// <para> Decides the shown ingredients and can the action be performed. Won't get removed automatically on success/failure. </para>
-		/// <para> Can return null if no materials is required (for one of the sub actions). </para>
+		/// <para> Decides the required material items.</para>
+		/// <para> Required items are checked before performing the action and the items will be consumed.</para>
+		/// <para> Items with non-100 chance are required to perform but will not be consumed if the roll doesn't pass. </para>
+		/// <para> Can add nothing to the list to make it free (ex: for one of the sub actions)</para>
 		/// </summary>
 		/// <param name="items">("GEAR_NNN", N, 0-100)</param>
 		void GetRequiredItems(ExamineActionState state, List<MaterialOrProductItemConf> items);
-		
-		/// <summary>
-		/// <para> Override consumption of each material with this.</para>
-		/// <para> If the material is not guaranteed to be consumed (<100%), this only get called when the it's rolled to be consumed.</para>
-		/// <para> It's recommended to only override this for interruption and cancellation to compensate long actions.</para>
-		/// </summary>
-		// int OverrideMaterialItemConsumption(ExamineActionState state, int index, MaterialOrProductItemConf material, ActionResult result) => material.Units;
 	}
 }
