@@ -192,7 +192,6 @@ namespace ExamineActionsAPI
             
             bool displayingMats = state.GetAllMaterialCount() > 0;
             bool displayingProducts = state.GetAllProductCount() > 0;
-            int mid = infoBlockExtended ? -58 : -30;
             int upperY = infoBlockExtended ? -30 : 0;
             int lowerY = infoBlockExtended ? -134 : -112;
             if (displayingMats && displayingProducts)
@@ -202,11 +201,11 @@ namespace ExamineActionsAPI
             }
             else if (displayingMats)
             {
-                materialsClone.transform.localPosition = new Vector3(materialsClone.transform.localPosition.x, mid, materialsClone.transform.localPosition.z);
+                materialsClone.transform.localPosition = new Vector3(materialsClone.transform.localPosition.x, infoBlockExtended ? -96 : -30, materialsClone.transform.localPosition.z);
             }
             else if (displayingProducts)
             {
-                yieldsClone.transform.localPosition = new Vector3(yieldsClone.transform.localPosition.x, mid, yieldsClone.transform.localPosition.z);
+                yieldsClone.transform.localPosition = new Vector3(yieldsClone.transform.localPosition.x, infoBlockExtended ? -52 : -30, yieldsClone.transform.localPosition.z);
             }
 
 
