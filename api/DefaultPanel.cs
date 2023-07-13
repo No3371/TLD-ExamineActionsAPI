@@ -389,7 +389,7 @@ namespace ExamineActionsAPI
                         this.materialChances[configured].gameObject.SetActive(true);
                     }
                     else this.materialChances[configured].gameObject.SetActive(false);
-                    slot.ShowItem(prefab, conf.Units);
+                    slot.ShowItem(prefab, conf.Units, invItem != null);
                 }
             }
             if (state.AllMaterialsReady ?? false) materiaslLabel.color = PIE.m_RequiredMaterialsLabelDefaultColor;
