@@ -847,14 +847,13 @@ namespace ExamineActionsAPI
 				for (int s = 0; s < subs; s++)
 				{
 					ExamineActionsAPI.Instance.State.SubActionId = s;
-					if (canPerform)
+					if (act.CanPerform(Instance.State))
 					{
 						canPerf++;
 						if (cache == s) canPerfThis = true;
 					}
 				}
 				ExamineActionsAPI.Instance.State.SubActionId = cache;
-				it.SetDisabled(!canPerfThis);
 				if (canPerf == 0)
 				{
 					CustomActionMenuItemSubLabels[index].color = it.m_TextColor_Disabled;
