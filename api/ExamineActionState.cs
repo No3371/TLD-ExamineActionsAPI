@@ -49,6 +49,7 @@ namespace ExamineActionsAPI
             }
         }
         internal IExamineActionPanel Panel { get; set; }
+        internal IExamineActionPanel PanelExtension { get; set; }
         internal bool ActionInProgress
         {
             get => actionInProgress;
@@ -117,6 +118,7 @@ namespace ExamineActionsAPI
 			SelectingTool = false;
 			Panel?.Toggle(false);
 			Panel = null;
+            PanelExtension = null;
 			Temp.Clear();
 			SubActionId = 0;
 			StartedAtRealtime = null;

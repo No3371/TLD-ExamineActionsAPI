@@ -2,6 +2,10 @@ namespace ExamineActionsAPI
 {
     public interface IExamineActionPanel
 	{
+		/// <summary>
+		/// If a panel is an extension, it will run alongside DefaultPanel (all the methods are called after DefaultPanel)
+		/// </summary>
+		bool IsExtension { get; }
 		void Toggle (bool toggle);
 		void OnActionSelected (ExamineActionState state);
 		void OnActionDeselected (ExamineActionState state);

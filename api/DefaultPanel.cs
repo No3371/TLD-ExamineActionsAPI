@@ -9,6 +9,7 @@ namespace ExamineActionsAPI
 {
     public class DefaultPanel : IExamineActionPanel
     {
+        
 		internal GameObject repairPanelClone/*, toolSelectionClone*/, materialsClone, yieldsClone, chanceClone, durationClone, buttonClone, buttonRoot;
 		internal List<HarvestRepairMaterial> Materials, Products;
 		internal List<UILabel> materialChances, productChances;
@@ -18,7 +19,8 @@ namespace ExamineActionsAPI
 		internal UIButton buttonContinue, buttonSubLeft, buttonSubRight;
 		internal UILabel buttonLabel, materiaslLabel, bottomWarningLabel, consumeLabel, stopLabel;
         public Panel_Inventory_Examine PIE { get; }
-		bool infoBlockExtended;
+        public bool IsExtension => false;
+        bool infoBlockExtended;
 
         public DefaultPanel(Panel_Inventory_Examine pie)
         {

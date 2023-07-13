@@ -86,9 +86,16 @@ namespace ExamineActionsAPI
 			State.Action.OnActionSelected(State);
 
 			State.Recalculate();
-			State.Panel = State.Action.CustomPanel?? DefaultPanel;
+			if (State.Action.CustomPanel != null)
+			{
+				if (State.Action.CustomPanel.IsExtension) State.PanelExtension = State.Action.CustomPanel;
+				else State.Panel = State.Action.CustomPanel;
+			}
+			else State.Panel = DefaultPanel;
 			State.Panel.OnActionSelected(State);
+			State.PanelExtension?.OnActionSelected(State);
 			State.Panel.Toggle(true);
+			State.PanelExtension?.Toggle(true);
 
 			if (pie.m_ReadPanel.active) pie.m_ReadPanel.SetActive(false);
 			// VeryVerboseLog($"-OnCustomActionSelected {index}");
@@ -101,6 +108,7 @@ namespace ExamineActionsAPI
 			SelectedCustomMenuItemIndex = -1;
 			State.Action?.OnActionDeselected(State);
 			State.Panel?.OnActionDeselected(State);
+			State.PanelExtension?.OnActionDeselected(State);
 			State.Action = null;
 			// VeryVerboseLog($"-DeselectActiveCustomAction");
 		}
@@ -115,6 +123,7 @@ namespace ExamineActionsAPI
 				State.Recalculate();
 				State.Action.OnActionSelected(State);
 				State.Panel.OnActionSelected(State);
+				State.PanelExtension?.OnActionSelected(State);
 				RefreshCustomActionMenuItemState(SelectedCustomMenuItemIndex);
 			}
 			// VeryVerboseLog($"-OnNextSubAction {State.SubActionId}");
@@ -128,6 +137,7 @@ namespace ExamineActionsAPI
 				State.Recalculate();
 				State.Action.OnActionSelected(State);
 				State.Panel.OnActionSelected(State);
+				State.PanelExtension?.OnActionSelected(State);
 				RefreshCustomActionMenuItemState(SelectedCustomMenuItemIndex);
 			}
 			// VeryVerboseLog($"-OnPreviousSubAction {State.SubActionId}");
@@ -142,6 +152,7 @@ namespace ExamineActionsAPI
 			{
 				GameAudioManager.PlayGUIError();
 				State.Panel.OnBlockedPerformingAction(State, PerformingBlockedReased.Action);
+				State.PanelExtension?.OnBlockedPerformingAction(State, PerformingBlockedReased.Action);
 				return;
 			}
 	
@@ -149,6 +160,7 @@ namespace ExamineActionsAPI
 			{
 				GameAudioManager.PlayGUIError();
 				State.Panel.OnBlockedPerformingAction(State, PerformingBlockedReased.Interruption);
+				State.PanelExtension?.OnBlockedPerformingAction(State, PerformingBlockedReased.Interruption);
 				return;
 			}
 
@@ -156,6 +168,7 @@ namespace ExamineActionsAPI
 			{
 				GameAudioManager.PlayGUIError();
 				State.Panel.OnBlockedPerformingAction(State, PerformingBlockedReased.Requirements);
+				State.PanelExtension?.OnBlockedPerformingAction(State, PerformingBlockedReased.Requirements);
 				return;
 			}
 	
@@ -167,6 +180,7 @@ namespace ExamineActionsAPI
 					VeryVerboseLog($"GetSelectedTool {pie.GetSelectedTool()?.name}");
 					State.SelectingTool = false;
 					State.Panel.OnToolSelected(State);
+					State.PanelExtension?.OnToolSelected(State);
 					PerformAction();
 					pie.SelectWindow(pie.m_ActionInProgressWindow);
 				}
@@ -174,6 +188,7 @@ namespace ExamineActionsAPI
 				{
 					State.SelectingTool = true;
 					State.Panel.OnSelectingTool(State);
+					State.PanelExtension?.OnSelectingTool(State);
 					pie.SelectWindow(pie.m_ActionToolSelect);
 				}
 			}
@@ -240,6 +255,7 @@ namespace ExamineActionsAPI
 
 			this.LoggerInstance.Msg($"Performing custom action {State.Action.Id}... ({State.StartedAtGameTime})");
 			State.Panel.OnPerformingAction(State);
+			State.PanelExtension?.OnPerformingAction(State);
 			State.Action.OnPerform(State);
 			VeryVerboseLog($"->>>>>>>>>>>>>>PerformAction ({ GameManager.m_TimeOfDay.GetMinutes() }m");
 		}
@@ -332,6 +348,7 @@ namespace ExamineActionsAPI
 			}
 			State.Action.OnSuccess(State);
 			State.Panel.OnActionSucceed(State);
+			State.PanelExtension?.OnActionSucceed(State);
 			PostActionFinished();
 			if (destroyed)
 			{
@@ -364,6 +381,7 @@ namespace ExamineActionsAPI
 			}
             eaf.OnActionFailed(State);
 			State.Panel.OnActionFailed(State);
+			State.PanelExtension?.OnActionFailed(State);
 			PostActionFinished();
 			if (consumed)
 				VeryVerboseLog("The gear is consumed because the action consumes on failure too.");
@@ -408,6 +426,7 @@ namespace ExamineActionsAPI
 			}
 			interruptable.OnInterrupted(State);
 			State.Panel.OnActionInterrupted(State, system);
+			State.PanelExtension?.OnActionInterrupted(State, system);
 			PostActionFinished();
 			if (consumed)
 				VeryVerboseLog("The gear is consumed because the action consumes on interruption too.");
@@ -441,6 +460,7 @@ namespace ExamineActionsAPI
 			}
             cancellable.OnActionCanceled(State);
 			State.Panel.OnActionCancelled(State);
+			State.PanelExtension?.OnActionCancelled(State);
 			PostActionFinished();
 			if (consumed)
 				VeryVerboseLog("The gear is consumed because the action consumes on cancellation too.");
