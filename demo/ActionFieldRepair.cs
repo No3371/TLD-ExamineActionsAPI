@@ -75,7 +75,7 @@ namespace ExamineActionsAPIDemo
 
         void IExamineAction.OnSuccess(ExamineActionState state)
         {
-            state.Subject.SetNormalizedHP(state.Subject.m_Repairable.m_RepairConditionCap/10f);
+            state.Subject.SetNormalizedHP(state.Subject.m_Repairable.m_RepairConditionCap/1000f);
         }
 
         InfoItemConfig? IExamineActionCustomInfo.GetInfo1(ExamineActionState state)
@@ -98,7 +98,7 @@ namespace ExamineActionsAPIDemo
 
         float IExamineActionFailable.CalculateFailureChance(ExamineActionState state)
         {
-            return 50;
+            return 10;
         }
 
         void IExamineActionFailable.OnActionFailed(ExamineActionState state) {}
