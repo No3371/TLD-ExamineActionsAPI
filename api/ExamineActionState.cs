@@ -136,12 +136,11 @@ namespace ExamineActionsAPI
 
 		public void Recalculate ()
         {
-            ActiveActionRequirementsMet = true;
             MaybeUpdateSuccessChance();
+            ActiveActionRequirementsMet = true;
 
-			AllMaterialsReady = CheckMaterials(Action);
-			if (!AllMaterialsReady.Value) ActiveActionRequirementsMet = false;
-            ExamineActionsAPI.VeryVerboseLog($"  Materials ready? {AllMaterialsReady}");
+            AllMaterialsReady = CheckMaterials(this, Action);
+			if (!AllMaterialsReady.Value) ActiveActionRequirementsMet = false;;
 
             if (Action is IExamineActionRequireTool eat)
             {
@@ -155,7 +154,23 @@ namespace ExamineActionsAPI
                     ActiveActionRequirementsMet = false;
                 }
             }
-            ActiveActionDurationMinutes = Action.CalculateDurationMinutes(this);
+            ActiveActionDurationMinutes = this.Action.CalculateDurationMinutes(this);
+        }
+        static Il2CppSystem.Collections.Generic.List<GameObject> temp = new ();
+        public static bool CheckRequirements (ExamineActionState state, IExamineAction act)
+        {
+            var mats = CheckMaterials(state, act);
+			if (!mats) return false;
+
+            if (act is IExamineActionRequireTool eat)
+            {
+                temp.Clear();
+                eat.GetToolOptions(state, temp);
+                if (temp.Count == 0) // No tool
+                    return false;
+            }
+
+            return true;
         }
 
         private void MaybeUpdateSuccessChance()
@@ -168,13 +183,13 @@ namespace ExamineActionsAPI
             }
         }
 
-        internal bool CheckMaterials (IExamineAction act)
+        internal static bool CheckMaterials (ExamineActionState state, IExamineAction act)
 		{
             List<MaterialOrProductItemConf> materials = null;
             if (act is IExamineActionRequireItems erm)
             {
                 materials = new (1);
-                erm.GetRequiredItems(this, materials);
+                erm.GetRequiredItems(state, materials);
 				for (int i = 0; i < materials.Count; i++)
 				{
 					int totalOfTheGearTypeToCheck = materials[i].Units;
@@ -187,7 +202,7 @@ namespace ExamineActionsAPI
 					for (int g = 0; g < gears.Count; g++)
 					{
 						GearItem gearItem = gears[g];
-						if (gearItem == Subject) continue; // Exclude the subject
+						if (gearItem == state.Subject) continue; // Exclude the subject
 
                         int units = gearItem.m_StackableItem?.m_Units ?? 1;
 						totalOfTheGearTypeToCheck -= units;
@@ -201,7 +216,7 @@ namespace ExamineActionsAPI
             if (act is IExamineActionRequireLiquid erl)
             {
                 liquids = new(1);
-                erl.GetRequireLiquid(this, liquids);
+                erl.GetRequireLiquid(state, liquids);
 				for (int i = 0; i < liquids.Count; i++)
 				{
                     if (liquids[i].Type == null)
@@ -214,10 +229,10 @@ namespace ExamineActionsAPI
 					Il2CppSystem.Collections.Generic.List<GearItem> gears = new (1);
 					var totalInInv = GameManager.GetInventoryComponent().GetTotalLiquidVolume(liquids[i].Type);
                     
-					if (Subject.m_LiquidItem != null
-                    && Subject.m_LiquidItem.m_LiquidType == liquids[i].Type.LegacyLiquidType
-                    && (int) Subject.m_LiquidItem.m_LiquidQuality == (int)liquids[i].Type.Quality)
-                        totalInInv -= Subject.m_LiquidItem.m_LiquidLiters;
+					if (state.Subject.m_LiquidItem != null
+                    && state.Subject.m_LiquidItem.m_LiquidType == liquids[i].Type.LegacyLiquidType
+                    && (int) state.Subject.m_LiquidItem.m_LiquidQuality == (int)liquids[i].Type.Quality)
+                        totalInInv -= state.Subject.m_LiquidItem.m_LiquidLiters;
 					if (totalToCheck > totalInInv) return false;
 					break;
 				}
@@ -226,7 +241,7 @@ namespace ExamineActionsAPI
             if (act is IExamineActionRequirePowder erp)
             {
                 powders = new(1);
-                erp.GetRequiredPowder(this, powders);
+                erp.GetRequiredPowder(state, powders);
 				for (int i = 0; i < powders.Count; i++)
 				{
                     if (powders[i].Type == null)
@@ -238,7 +253,7 @@ namespace ExamineActionsAPI
 					Il2CppSystem.Collections.Generic.List<GearItem> gears = new (1);
 					var totalInInv = GameManager.GetInventoryComponent().GetTotalPowderWeight(powders[i].Type);
 					ExamineActionsAPI.VeryVerboseLog($"Checking for powder: {powders[i].Type} x{totalToCheck} (x{powders[i].Kgs}) (has: {totalInInv})");
-					if (Subject.m_PowderItem?.m_Type == powders[i].Type) totalInInv -= Subject.m_PowderItem.m_WeightKG;
+					if (state.Subject.m_PowderItem?.m_Type == powders[i].Type) totalInInv -= state.Subject.m_PowderItem.m_WeightKG;
 					if (totalToCheck > totalInInv) return false;
 					break;
 				}

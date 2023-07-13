@@ -829,8 +829,8 @@ namespace ExamineActionsAPI
 			var it = ExamineActionsAPI.Instance.CustomActionMenuItems[index];
 
 			int subs = act.GetSubActionCount(ExamineActionsAPI.Instance.State);
-            bool activeActionRequirementsMet = State.ActiveActionRequirementsMet ?? true; // If null, means the state is not yet fully loaded
-            bool canPerform = activeActionRequirementsMet && act.CanPerform(Instance.State);
+            bool reqsMet = ExamineActionState.CheckRequirements(State, act); // If null, means the state is not yet fully loaded
+            bool canPerform = reqsMet && act.CanPerform(Instance.State);
             it.SetDisabled(!canPerform);
 			if (subs == 1)
 			{
