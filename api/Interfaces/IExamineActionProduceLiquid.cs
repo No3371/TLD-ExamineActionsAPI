@@ -6,6 +6,5 @@ namespace ExamineActionsAPI
     public interface IExamineActionProduceLiquid
 	{
 		void GetProductLiquid (ExamineActionState state, List<MaterialOrProductLiquidConf> liquids);
-		/// <summary>
 	}
 }

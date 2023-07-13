@@ -829,18 +829,17 @@ namespace ExamineActionsAPI
 			var it = ExamineActionsAPI.Instance.CustomActionMenuItems[index];
 
 			int subs = act.GetSubActionCount(ExamineActionsAPI.Instance.State);
-			VeryVerboseLog($"+RefreshCustomActionMenuItemState {index}");
             bool activeActionRequirementsMet = State.ActiveActionRequirementsMet ?? true; // If null, means the state is not yet fully loaded
             bool canPerform = activeActionRequirementsMet && act.CanPerform(Instance.State);
             it.SetDisabled(!canPerform);
 			if (subs == 1)
 			{
-				VeryVerboseLog($"+RefreshCustomActionMenuItemState {index}");
-				CustomActionMenuItemSubLabels[index].gameObject.SetActive(false);
+				VeryVerboseLog($"+RefreshCustomActionMenuItemState {index} {canPerform} {subs}");
+				CustomActionMenuItemSubLabels[index].gameObject.SetActive(false); // Hide subactions indicator 
 			}
 			else
 			{
-				VeryVerboseLog($"+RefreshCustomActionMenuItemState {index}");
+				VeryVerboseLog($"+RefreshCustomActionMenuItemState {index} {canPerform} {subs}");
 				CustomActionMenuItemSubLabels[index].text = $"{ExamineActionsAPI.Instance.State.SubActionId + 1}/{subs}";
 				var canPerf = 0;
 				var canPerfThis = false;

@@ -1,3 +1,4 @@
+// #define VERY_VERBOSE
 using Il2Cpp;
 using Il2CppTLD.Gear;
 using MelonLoader;
@@ -140,6 +141,7 @@ namespace ExamineActionsAPI
 
 			AllMaterialsReady = CheckMaterials(Action);
 			if (!AllMaterialsReady.Value) ActiveActionRequirementsMet = false;
+            ExamineActionsAPI.VeryVerboseLog($"  Materials ready? {AllMaterialsReady}");
 
             if (Action is IExamineActionRequireTool eat)
             {
@@ -185,9 +187,11 @@ namespace ExamineActionsAPI
 					for (int g = 0; g < gears.Count; g++)
 					{
 						GearItem gearItem = gears[g];
-						if (gearItem == Subject) continue;
+						if (gearItem == Subject) continue; // Exclude the subject
 
-						totalOfTheGearTypeToCheck -= gearItem.m_StackableItem?.m_Units ?? 1;
+                        int units = gearItem.m_StackableItem?.m_Units ?? 1;
+						totalOfTheGearTypeToCheck -= units;
+                        ExamineActionsAPI.VeryVerboseLog($"  Found in inv: {gearItem.name} x{units} (...{totalOfTheGearTypeToCheck})");
 						if (totalOfTheGearTypeToCheck <= 0) break;
 					}
 					if (totalOfTheGearTypeToCheck > 0) return false;
@@ -239,7 +243,7 @@ namespace ExamineActionsAPI
 					break;
 				}
             }
-
+            ExamineActionsAPI.VeryVerboseLog($"  Materials Ready!");
 			return true;
 		}
 
