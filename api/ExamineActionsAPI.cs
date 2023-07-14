@@ -86,6 +86,7 @@ namespace ExamineActionsAPI
 			State.Action.OnActionSelected(State);
 
 			State.Recalculate();
+			RefreshCustomActionMenuItemState(SelectedCustomMenuItemIndex);
 			if (State.Action.CustomPanel != null)
 			{
 				if (State.Action.CustomPanel.IsExtension) State.PanelExtension = State.Action.CustomPanel;
