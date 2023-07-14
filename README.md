@@ -26,6 +26,8 @@ There are 9 actions availabe in the demo mod:
     - Available on acorns.
 - Unload Storm Lanterns: Unload fuel from storm lanterns.
     - Available on storm lanterns.
+- Field Repair: Quickly restore clothing items to 20% condition with a gut and a cloth.
+    - Avaialbe on repairable clothing items.
 - (ItemPile compat) Pile sticks/coals/charcoals/cattails/stones without crafting.
     - Only availabe when stickpile item is found registered.
 - (ItemPile compat) unpile multiple piles of sticks/coals/charcoals/cattails/stones at once.
