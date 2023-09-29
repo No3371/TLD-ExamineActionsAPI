@@ -230,8 +230,7 @@ namespace ExamineActionsAPI
 					var totalInInv = GameManager.GetInventoryComponent().GetTotalLiquidVolume(liquids[i].Type);
                     
 					if (state.Subject.m_LiquidItem != null
-                    && state.Subject.m_LiquidItem.m_LiquidType == liquids[i].Type.LegacyLiquidType
-                    && (int) state.Subject.m_LiquidItem.m_LiquidQuality == (int)liquids[i].Type.Quality)
+                    && state.Subject.m_LiquidItem.m_LiquidType == liquids[i].Type)
                         totalInInv -= state.Subject.m_LiquidItem.m_LiquidLiters;
 					if (totalToCheck > totalInInv) return false;
 					break;

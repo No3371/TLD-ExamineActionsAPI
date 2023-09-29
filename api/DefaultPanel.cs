@@ -362,8 +362,7 @@ namespace ExamineActionsAPI
                     float owned = GameManager.m_Inventory.GetTotalLiquidVolume(conf.Type);
                     LiquidItem? subjectLiquidItem = state.Subject?.m_LiquidItem;
                     if (subjectLiquidItem != null
-                     && subjectLiquidItem.m_LiquidType == conf.Type.LegacyLiquidType
-                     && (int)subjectLiquidItem.m_LiquidQuality == (int)conf.Type.Quality)
+                     && subjectLiquidItem.m_LiquidType == conf.Type)
                         owned -= subjectLiquidItem.m_LiquidLiters;
                     ExamineActionsAPI.VeryVerboseLog($"Found {conf.Type.name} {owned}l (+{subjectLiquidItem?.m_LiquidLiters ?? 0})");
                     float required = conf.Liters;

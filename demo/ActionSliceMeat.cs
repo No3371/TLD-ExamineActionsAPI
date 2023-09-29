@@ -1,4 +1,5 @@
 using ExamineActionsAPI;
+using HarmonyLib;
 using Il2Cpp;
 using MelonLoader;
 using UnityEngine;
@@ -107,5 +108,31 @@ namespace ExamineActionsAPIDemo
             );
         }
         void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
+    }
+    [HarmonyPatch(typeof(CookingPotItem), nameof(CookingPotItem.SetCookedGearProperties))]
+    internal class PatchSetCookedGearProperties
+    {
+        private static void Postfix(CookingPotItem __instance, GearItem rawItem, GearItem cookedItem)
+        {
+            MelonLogger.Msg($"CookingPotItem.SetCookedGearProperties {rawItem.SerializeToString()} {cookedItem.SerializeToString()}");
+        }
+    }
+    [HarmonyPatch(typeof(GearItem), nameof(GearItem.Serialize))]
+    internal class PatchSerialize
+    {
+        private static void Postfix(GearItem __instance, bool useStaticProxy, GearItemSaveDataProxy __result)
+        {
+            if (!__instance.name.Contains("MeatDeer")) return;
+            MelonLogger.Msg($"MeatDeer.Serialize static? {useStaticProxy} {__result.m_InstanceIDProxy} foodItem: {__result.m_FoodItemSerialized}");
+        }
+    }
+    [HarmonyPatch(typeof(GearItem), nameof(GearItem.Deserialize))]
+    internal class PatchDeserialize
+    {
+        private static void Postfix(GearItem __instance, GearItemSaveDataProxy proxy)
+        {
+            if (!__instance.name.Contains("MeatDeer")) return;
+            MelonLogger.Msg($"MeatDeer.Deserialize {proxy.m_InstanceIDProxy} foodItem: {proxy.m_FoodItemSerialized}");
+        }
     }
 }

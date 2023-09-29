@@ -599,7 +599,7 @@ namespace ExamineActionsAPI
 				{
 					var gi = inv.m_Items[i]?.m_GearItem;
 					var pi = gi?.m_LiquidItem;
-					if (gi == State.Subject || pi == null || pi.m_LiquidType != type.LegacyLiquidType || (int) pi.m_LiquidQuality != (int) type.Quality) continue;
+					if (gi == State.Subject || pi == null || pi.m_LiquidType != type) continue;
 
                     float taking = Mathf.Min(liters, pi.m_LiquidLiters);
 					pi.m_LiquidLiters -= taking;
@@ -729,8 +729,7 @@ namespace ExamineActionsAPI
 					var gi = inv.m_Items[i]?.m_GearItem;
 					var li = gi?.m_LiquidItem;
 					if (li == null
-					 || li.m_LiquidType != type.LegacyLiquidType
-					 || (int)li.m_LiquidQuality != (int)type.Quality ) continue;
+					 || li.m_LiquidType != type) continue;
 
 
                     float adding = Mathf.Min(liters, li.m_LiquidCapacityLiters - li.m_LiquidLiters);

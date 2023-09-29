@@ -25,7 +25,7 @@ namespace ExamineActionsAPIDemo
 
         bool IExamineAction.IsActionAvailable(GearItem item)
         {
-            return item.m_ResearchItem != null;
+            return item.m_ResearchItem != null || item.name == "GEAR_Book";
         }
 
         bool IExamineAction.CanPerform(ExamineActionState state)
