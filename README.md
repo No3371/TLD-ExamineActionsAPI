@@ -12,9 +12,9 @@ The API provides a easy way to add new examine actions (like harvest/repair/shar
 
 It's a very flexible framework, a lot of options can be combined to design custom actions that have totally dynamic behaviors according to what is being examined, what tools is selected... etc.
 
-## Demo
+## Things To Do (Demo Mod)
 
-There are 9 actions availabe in the demo mod:
+Things To Do is a mod developed to showcase the capability of Examine Actions API, but some of the custom actions could be useful for normal gameplay.
 
 - Paper From Books: Tear books into paper stacks.
     - Available on any researchable items.
