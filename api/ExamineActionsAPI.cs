@@ -22,6 +22,7 @@ namespace ExamineActionsAPI
 			const bool DEBUG = false;
 			if (DEBUG)
 			{
+				Register(new DebugAction_Wear());
 				Register(new DebugAction_Cancel());
 				Register(new DebugAction_Materials());
 				Register(new DebugAction_Salt());
