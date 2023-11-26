@@ -58,7 +58,7 @@ namespace ExamineActionsAPIDemo
 
         bool IExamineAction.IsActionAvailable(GearItem item)
         {
-            if (item.m_ClothingItem == null || item.m_Repairable == null) return false;
+            if (item.m_ClothingItem == null || item.m_Repairable == null || item.CurrentHP == 0) return false;
             if (item.GetNormalizedCondition() >= item.m_Repairable.m_RepairConditionCap / 5) return false;
             return true;
         }
