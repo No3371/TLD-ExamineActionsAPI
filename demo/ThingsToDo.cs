@@ -19,6 +19,7 @@ namespace ExamineActionsAPIDemo
 			ExamineActionsAPI.ExamineActionsAPI.Register(new ActionDisposingRuined());
 			ExamineActionsAPI.ExamineActionsAPI.Register(new ActionUnloadingFuel());
 			ExamineActionsAPI.ExamineActionsAPI.Register(new ActionFieldRepair());
+			ExamineActionsAPI.ExamineActionsAPI.Register(new ActionHammerCan());
 			
 			// To add actions that depend on other mods
 			// We need to check if other mods are loaded
