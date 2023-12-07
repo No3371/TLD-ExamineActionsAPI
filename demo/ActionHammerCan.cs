@@ -23,7 +23,7 @@ namespace ExamineActionsAPIDemo
 
         bool IExamineAction.IsActionAvailable(GearItem item)
         {
-            return item.name == "GEAR_RecycledCan" || (item.m_FoodItem != null && (item.m_FoodItem.m_GearPrefabHarvestAfterFinishEatingNormal.name == "GEAR_RecycledCan" || item.m_FoodItem.m_GearPrefabHarvestAfterFinishEatingSmashed.name == "GEAR_RecycledCan"));
+            return item.name == "GEAR_RecycledCan" || (item.m_FoodItem != null && (item.m_FoodItem.m_GearPrefabHarvestAfterFinishEatingNormal?.name == "GEAR_RecycledCan" || item.m_FoodItem.m_GearPrefabHarvestAfterFinishEatingSmashed?.name == "GEAR_RecycledCan"));
         }
 
         bool IExamineAction.CanPerform(ExamineActionState state) => true;
