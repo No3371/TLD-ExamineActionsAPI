@@ -231,8 +231,8 @@ namespace ExamineActionsAPI
                     
 					if (state.Subject.m_LiquidItem != null
                     && state.Subject.m_LiquidItem.m_LiquidType == liquids[i].Type)
-                        totalInInv -= state.Subject.m_LiquidItem.m_LiquidLiters;
-					if (totalToCheck > totalInInv) return false;
+                        totalInInv -= state.Subject.m_LiquidItem.m_Liquid;
+					if (totalToCheck > totalInInv.ToQuantity(liquids[i].Type.Density)) return false;
 					break;
 				}
             }
@@ -252,8 +252,8 @@ namespace ExamineActionsAPI
 					Il2CppSystem.Collections.Generic.List<GearItem> gears = new (1);
 					var totalInInv = GameManager.GetInventoryComponent().GetTotalPowderWeight(powders[i].Type);
 					ExamineActionsAPI.VeryVerboseLog($"Checking for powder: {powders[i].Type} x{totalToCheck} (x{powders[i].Kgs}) (has: {totalInInv})");
-					if (state.Subject.m_PowderItem?.m_Type == powders[i].Type) totalInInv -= state.Subject.m_PowderItem.m_WeightKG;
-					if (totalToCheck > totalInInv) return false;
+					if (state.Subject.m_PowderItem?.m_Type == powders[i].Type) totalInInv -= state.Subject.m_PowderItem.m_Weight;
+					if (totalToCheck > totalInInv.ToQuantity(1f)) return false;
 					break;
 				}
             }

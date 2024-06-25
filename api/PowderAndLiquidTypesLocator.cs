@@ -1,8 +1,6 @@
-using Il2CppSystem.IO;
 using Il2CppTLD.Gear;
 using MelonLoader;
 using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.ResourceLocations;
 
 namespace ExamineActionsAPI
 {
@@ -12,9 +10,6 @@ namespace ExamineActionsAPI
         public static void PreLoad ()
         {
             MelonLogger.Msg($"Preloading official powder: { GunPowderType?.name}");
-            MelonLogger.Msg($"Preloading official powder: { FlourType?.name}");
-            MelonLogger.Msg($"Preloading official powder: { OatsTinType?.name}");
-            MelonLogger.Msg($"Preloading official powder: { SaltType?.name}");
             MelonLogger.Msg($"Preloading official liquid: { WaterPottableType?.name}");
             MelonLogger.Msg($"Preloading official liquid: { WaterNonPottableType?.name}");
             MelonLogger.Msg($"Preloading official liquid: { AntisepticType?.name}");
@@ -29,7 +24,7 @@ namespace ExamineActionsAPI
             {
                 if (gunPowderType == null)
                 {
-                    gunPowderType = Addressables.LoadAsset<PowderType>("POWDER_GunPowder").Result;
+                    gunPowderType = Addressables.LoadAsset<PowderType>("POWDER_Gunpowder").Result;
                     if (gunPowderType == null) MelonLogger.Error("Failed to retrieve POWDER_GunPowder (It's ok this happens on game start)");
                 }
                 return gunPowderType;
@@ -48,49 +43,6 @@ namespace ExamineActionsAPI
                     if (waterPottableType == null) MelonLogger.Error("Failed to retrieve LIQUID_WaterPotable (It's ok this happens on game start)");
                 }
                 return waterPottableType;
-            }
-        }
-
-        private static PowderType? flourType;
-        public static PowderType? FlourType
-        {
-            get
-            {
-                if (flourType == null)
-                {
-                    flourType = Addressables.LoadAsset<PowderType>("POWDER_Flour").Result;
-                    if (flourType == null) MelonLogger.Error("Failed to retrieve POWDER_Flour (It's ok this happens on game start)");
-                }
-                return flourType;
-            }
-        }
-
-
-        private static PowderType? saltType;
-        public static PowderType? SaltType
-        {
-            get
-            {
-                if (saltType == null)
-                {
-                    saltType = Addressables.LoadAsset<PowderType>("POWDER_Salt").Result;
-                    if (saltType == null) MelonLogger.Error("Failed to retrieve POWDER_Salt (It's ok this happens on game start)");
-                }
-                return saltType;
-            }
-        }
-
-        private static PowderType? oatsTinType;
-        public static PowderType? OatsTinType
-        {
-            get
-            {
-                if (oatsTinType == null)
-                {
-                    oatsTinType = Addressables.LoadAsset<PowderType>("POWDER_OatsTin").Result;
-                    if (oatsTinType == null) MelonLogger.Error("Failed to retrieve POWDER_OatsTin (It's ok this happens on game start)");
-                }
-                return oatsTinType;
             }
         }
 

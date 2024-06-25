@@ -7,6 +7,7 @@ using UnityEngine.Playables;
 using UnityEngine.AddressableAssets;
 using Il2CppAK.Wwise;
 using System.Diagnostics;
+using Il2CppTLD.IntBackedUnit;
 
 namespace ExamineActionsAPI
 {
@@ -599,11 +600,11 @@ namespace ExamineActionsAPI
 				for (int i = 0 ; i < inv.m_Items.Count; i++)
 				{
 					var gi = inv.m_Items[i]?.m_GearItem;
-					var pi = gi?.m_LiquidItem;
-					if (gi == State.Subject || pi == null || pi.m_LiquidType != type) continue;
+					var li = gi?.m_LiquidItem;
+					if (gi == State.Subject || li == null || li.m_LiquidType != type) continue;
 
-                    float taking = Mathf.Min(liters, pi.m_LiquidLiters);
-					pi.m_LiquidLiters -= taking;
+                    float taking = Mathf.Min(liters, li.m_Liquid.ToQuantity(li.LiquidType.Density));
+					li.RemoveLiquid(Il2CppTLD.IntBackedUnit.ItemLiquidVolume.FromLiters(taking), out _);
                     liters -= taking;
 					if (liters <= 0) break;
 				}
@@ -654,9 +655,9 @@ namespace ExamineActionsAPI
 					var pi = gi?.m_PowderItem;
 					if (gi == State.Subject || pi == null || pi.m_Type != type) continue;
 
-
-                    float taking = Mathf.Min(units, pi.m_WeightKG);
-					pi.m_WeightKG -= taking;
+					
+                    float taking = Mathf.Min(units, pi.m_Weight.m_Units);
+					pi.m_Weight = Il2CppTLD.IntBackedUnit.ItemWeight.FromKilograms(pi.m_Weight.m_Units - taking);
                     units -= taking;
 					if (units <= 0) break;
 				}
@@ -733,8 +734,8 @@ namespace ExamineActionsAPI
 					 || li.m_LiquidType != type) continue;
 
 
-                    float adding = Mathf.Min(liters, li.m_LiquidCapacityLiters - li.m_LiquidLiters);
-					li.m_LiquidLiters += adding;
+                    float adding = Mathf.Min(liters, (li.GetCapacityLitres() - li.GetVolumeLitres()).ToQuantity(type.Density));
+					li.m_Liquid = li.m_Liquid + Il2CppTLD.IntBackedUnit.ItemLiquidVolume.FromLiters(adding);
                     liters -= adding;
 					if (liters <= 0) break;
 				}
@@ -742,8 +743,8 @@ namespace ExamineActionsAPI
 				while (liters > 0)
 				{
 					var p = pm.InstantiateItemInPlayerInventory(type.DefaultContainer.m_PrefabReference.GetOrLoadTypedAsset(), 1, 1, PlayerManager.InventoryInstantiateFlags.EnableNotificationFlag);
-                    float adding = Mathf.Min(liters, p.m_LiquidItem.m_LiquidCapacityLiters);
-					p.m_LiquidItem.m_LiquidLiters = adding;
+                    float adding = Mathf.Min(liters, p.m_LiquidItem.GetCapacityLitres().ToQuantity(type.Density));
+					p.m_LiquidItem.m_Liquid = p.m_LiquidItem.m_Liquid + ItemLiquidVolume.FromLiters(adding);
 					liters -= adding;
 				}
 			}
@@ -764,13 +765,13 @@ namespace ExamineActionsAPI
 				{
 					if (UnityEngine.Random.Range(0, 100) <= chance)
 					{
-						var p = pm.AddPowderToInventory(conf.Kgs, conf.Type);
+						var p = pm.AddPowderToInventory(ItemWeight.FromKilograms(conf.Kgs), conf.Type);
                         VeryVerboseLog($"{conf.Type.name} {conf.Kgs}kg is yielded because the {conf.Chance} roll passed.");
 					}
 				}
 				else
 				{
-					var p = pm.AddPowderToInventory(conf.Kgs, conf.Type);
+					var p = pm.AddPowderToInventory(ItemWeight.FromKilograms(conf.Kgs), conf.Type);
 					VeryVerboseLog($"{conf.Type.name} x{conf.Kgs}kg is yielded.");
 				}
 			}

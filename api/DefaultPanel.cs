@@ -2,6 +2,7 @@
 using Il2Cpp;
 using Il2CppAK.Wwise;
 using Il2CppTLD.Gear;
+using Il2CppTLD.IntBackedUnit;
 using MelonLoader;
 using UnityEngine;
 
@@ -318,17 +319,17 @@ namespace ExamineActionsAPI
                     }
                     else this.materialChances[configured].gameObject.SetActive(false);
 
-                    slot.ShowPowder(conf.Type, conf.Kgs);
+                    slot.ShowPowder(conf.Type, ItemWeight.FromKilograms(conf.Kgs));
 
-                    float owned = GameManager.m_Inventory.GetTotalPowderWeight(conf.Type);
+                    ItemWeight owned = GameManager.m_Inventory.GetTotalPowderWeight(conf.Type);
                     PowderItem? subjectPowderItem = state.Subject?.m_PowderItem;
-                    if (subjectPowderItem != null && subjectPowderItem.m_Type == conf.Type) owned -= subjectPowderItem.m_WeightKG;
-                    ExamineActionsAPI.VeryVerboseLog($"Found {conf.Type.name} {owned}kg (+{state.Subject?.m_PowderItem?.m_WeightKG ?? 0})");
+                    if (subjectPowderItem != null && subjectPowderItem.m_Type == conf.Type) owned -= subjectPowderItem.m_Weight;
+                    ExamineActionsAPI.VeryVerboseLog($"Found {conf.Type.name} {owned}kg (+{state.Subject?.m_PowderItem?.m_Weight.ToQuantity(1f) ?? 0})");
                     float required = conf.Kgs;
                     for (int j = 0; j < pIdx; j++)
                         if (conf.Type == powders[j].Type) required += powders[j].Kgs;
                     ExamineActionsAPI.VeryVerboseLog($"Requires {conf.Type.name} {required}/{owned}kg");
-                    slot.m_GearLabel.color = owned >= required ? new Color(1, 1, 1) : slot.m_RedColorToUse;
+                    slot.m_GearLabel.color = owned.ToQuantity(1f) >= required ? new Color(1, 1, 1) : slot.m_RedColorToUse;
                 }
                 else if (configured >= matCount) // Liquid
                 {
@@ -359,17 +360,17 @@ namespace ExamineActionsAPI
                     slot.m_StackLabel.gameObject.SetActive(true);
 
                     ExamineActionsAPI.VeryVerboseLog($"Showing {conf.Type.name} {conf.Liters}L");
-                    float owned = GameManager.m_Inventory.GetTotalLiquidVolume(conf.Type);
+                    ItemLiquidVolume owned = GameManager.m_Inventory.GetTotalLiquidVolume(conf.Type);
                     LiquidItem? subjectLiquidItem = state.Subject?.m_LiquidItem;
                     if (subjectLiquidItem != null
                      && subjectLiquidItem.m_LiquidType == conf.Type)
-                        owned -= subjectLiquidItem.m_LiquidLiters;
-                    ExamineActionsAPI.VeryVerboseLog($"Found {conf.Type.name} {owned}l (+{subjectLiquidItem?.m_LiquidLiters ?? 0})");
+                        owned -= subjectLiquidItem.m_Liquid;
+                    ExamineActionsAPI.VeryVerboseLog($"Found {conf.Type.name} {owned}l (+{subjectLiquidItem?.m_Liquid.ToQuantity(ItemLiquidVolume.Liter.m_Units) ?? 0})");
                     float required = conf.Liters;
                     for (int j = 0; j < idx; j++)
                         if (conf.Type == liquids[j].Type) required += liquids[j].Liters;
                     ExamineActionsAPI.VeryVerboseLog($"Requires {conf.Type.name} {required}/{owned}L");
-                    slot.m_GearLabel.color = owned >= required ? new Color(1, 1, 1) : slot.m_RedColorToUse;
+                    slot.m_GearLabel.color = owned.ToQuantity(ItemLiquidVolume.Liter.m_Units) >= required ? new Color(1, 1, 1) : slot.m_RedColorToUse;
                 }
                 else
                 {
@@ -438,7 +439,7 @@ namespace ExamineActionsAPI
                     }
                     else this.productChances[configured].gameObject.SetActive(false);
 
-                    slot.ShowPowder(conf.Type, conf.Kgs);
+                    slot.ShowPowder(conf.Type, ItemWeight.FromKilograms(conf.Kgs));
                 }
                 else if (configured >= matCount) // Liquid
                 {

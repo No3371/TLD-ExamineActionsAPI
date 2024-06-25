@@ -1,5 +1,7 @@
 using ExamineActionsAPI;
 using Il2Cpp;
+using Il2CppTLD.Gear;
+using Il2CppTLD.IntBackedUnit;
 
 namespace ExamineActionsAPIDemo
 {
@@ -25,7 +27,7 @@ namespace ExamineActionsAPIDemo
 
         public bool CanPerform(ExamineActionState state)
         {
-            return state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters > 0;
+            return state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters.m_Units > 0;
         }
         public void OnPerform(ExamineActionState state)
         {
@@ -40,7 +42,7 @@ namespace ExamineActionsAPIDemo
         public float CalculateProgressSeconds(ExamineActionState state) => 2;
         public void OnSuccess(ExamineActionState state)
         {
-            state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters = 0;
+            state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters = ItemLiquidVolume.FromLiters(0);
         }
 
         public bool ConsumeOnSuccess(ExamineActionState state) => false;
@@ -49,7 +51,6 @@ namespace ExamineActionsAPIDemo
         // {
         //     products.Add(new ("GEAR_LampFuel", 1, 100));
         // }
-
         // void IExamineActionProduceItems.PostProcessProduct(ExamineActionState state, int index, Il2Cpp.GearItem product)
         // {
         //     product.m_LiquidItem.m_LiquidLiters = (float) state.Temp[0];
@@ -61,7 +62,7 @@ namespace ExamineActionsAPIDemo
 
         void IExamineActionProduceLiquid.GetProductLiquid(ExamineActionState state, List<MaterialOrProductLiquidConf> liquids)
         {
-            liquids.Add(new (ExamineActionsAPI.PowderAndLiquidTypesLocator.KeroseneType, state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters, 100));
+            liquids.Add(new (ExamineActionsAPI.PowderAndLiquidTypesLocator.KeroseneType, state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters.ToQuantity(LiquidType.m_Kerosene.Density), 100));
         }
     }
 }
