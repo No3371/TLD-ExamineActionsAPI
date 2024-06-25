@@ -100,7 +100,8 @@ namespace ExamineActionsAPI
 			State.Panel.Toggle(true);
 			State.PanelExtension?.Toggle(true);
 
-			if (pie.m_ReadPanel.active) pie.m_ReadPanel.SetActive(false);
+			if (pie.m_ReadPanel.active)
+				pie.m_ReadPanel.SetActive(false);
 			// VeryVerboseLog($"-OnCustomActionSelected {index}");
 		}
 		internal void DeselectActiveCustomAction ()

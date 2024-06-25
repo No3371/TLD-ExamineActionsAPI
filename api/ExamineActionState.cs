@@ -244,7 +244,7 @@ namespace ExamineActionsAPI
 				for (int i = 0; i < powders.Count; i++)
 				{
                     if (powders[i].Type == null)
-                        MelonLogger.Error($"Liquid type provided by action {act.Id} is null, this is a severe error and you should avoid this action for now. Contact the mod author providing the action.");
+                        MelonLogger.Error($"Powder type provided by action {act.Id} is null, this is a severe error and you should avoid this action for now. Contact the mod author providing the action.");
 					float totalToCheck = powders[i].Kgs;
 					for (int j = 0; j < i; j++)
 						if (powders[i].Type == powders[j].Type) totalToCheck += powders[j].Kgs;
