@@ -3,6 +3,7 @@ using Il2Cpp;
 using MelonLoader;
 using UnityEngine;
 using Il2CppTLD.Gear;
+using System.Collections;
 
 namespace ExamineActionsAPIDemo
 {
@@ -20,12 +21,19 @@ namespace ExamineActionsAPIDemo
 			ExamineActionsAPI.ExamineActionsAPI.Register(new ActionUnloadingFuel());
 			ExamineActionsAPI.ExamineActionsAPI.Register(new ActionFieldRepair());
 			ExamineActionsAPI.ExamineActionsAPI.Register(new ActionHammerCan());
-			
-			// To add actions that depend on other mods
-			// We need to check if other mods are loaded
-			// (Note: this demo mod has its MelonPriority set to 2000 in AssemblyInfo.cs, this makes it be loaded after other mods)
 
-			// Pure ModComponent mods does not contains code and can only be checked by trying to load their items
+		}
+
+        public override void OnLateInitializeMelon()
+        {
+            base.OnLateInitializeMelon();
+			MelonLoader.MelonCoroutines.Start(DelayedRegistration());
+        }
+
+        IEnumerator DelayedRegistration ()
+		{
+			yield return new WaitForSeconds(30f);
+			this.LoggerInstance.Msg("Delayed regsitration for ItemPiles and Bountiful Foraging.");
 			if (GearItem.LoadGearItemPrefab("GEAR_StickPile010") != null)
 			{
 				this.LoggerInstance.Msg("Found Item Pile mod...");
