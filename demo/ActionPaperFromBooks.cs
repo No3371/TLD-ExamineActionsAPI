@@ -56,6 +56,7 @@ namespace ExamineActionsAPIDemo
         {
             products.Add(new ("GEAR_PaperStack", 1, 100));
             products.Add(new ("GEAR_PaperStack", 1, 25));
+            products.Add(new ("GEAR_Newsprint", 1, 25));
         }
 
         void IExamineActionRequireTool.GetToolOptions(ExamineActionState state, Il2CppSystem.Collections.Generic.List<GameObject> tools)
