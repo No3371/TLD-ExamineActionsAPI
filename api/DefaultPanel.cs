@@ -61,25 +61,47 @@ namespace ExamineActionsAPI
             // skillClone.transform.FindChild("ProgressBar").gameObject.SetActive(false);
 
             materialsClone = FindChildWrapper(repairPanelClone.transform, "GameObject/RequiredMaterials").gameObject;
+            FindChildWrapper(materialsClone.transform, "Label_RequiredMaterials").localPosition = new Vector3(0, 72, 0);
 			Materials = new (5);
-            Materials.AddRange(materialsClone.GetComponentsInChildren<HarvestRepairMaterial>(true));
-			Materials.Add(GameObject.Instantiate(Materials[0], Materials[0].transform.parent).GetComponent<HarvestRepairMaterial>());
-            Materials[2].gameObject.name = "Item3";
-			Materials.Add(GameObject.Instantiate(Materials[0], Materials[0].transform.parent).GetComponent<HarvestRepairMaterial>());
-            Materials[3].gameObject.name = "Item4";
-			Materials.Add(GameObject.Instantiate(Materials[0], Materials[0].transform.parent).GetComponent<HarvestRepairMaterial>());
-            Materials[4].gameObject.name = "Item5";
+            foreach (var m in materialsClone.GetComponentsInChildren<HarvestRepairMaterial>(true))
+            {
+                if (m.gameObject.name == "Item1")
+                    Materials.Add(m);
+                else
+                    GameObject.Destroy(m.gameObject);
+            }
+			Materials.Add(GameObject.Instantiate(Materials[0], Materials[0].transform.parent));
+			Materials.Add(GameObject.Instantiate(Materials[0], Materials[0].transform.parent));
+			Materials.Add(GameObject.Instantiate(Materials[0], Materials[0].transform.parent));
+			Materials.Add(GameObject.Instantiate(Materials[0], Materials[0].transform.parent));
+
+            for (int i = 0; i < Materials.Count; i++)
+            {
+                Materials[i].gameObject.name = $"Item{i+1}";
+            }
 					// MelonLogger.Msg($"2: {__instance.m_HarvestYieldRoot}");
 
-			yieldsClone = GameObject.Instantiate(pie.m_HarvestYieldRoot, gameobjects);
+			yieldsClone = GameObject.Instantiate(materialsClone, gameobjects);
+            yieldsClone.name = "Yield";
+            FindChildWrapper(yieldsClone.transform, "Label_RequiredMaterials").localPosition = new Vector3(0, 72, 0);
+            FindChildWrapper(yieldsClone.transform, "Label_RequiredMaterials").GetComponent<UILocalize>().key = "GAMEPLAY_Yield";
 			Products = new (5);
-            Products.AddRange(yieldsClone.GetComponentsInChildren<HarvestRepairMaterial>(true));
-			Products.Add(GameObject.Instantiate(Products[0], Products[0].transform.parent).GetComponent<HarvestRepairMaterial>());
-            Products[2].gameObject.name = "Item3";
-			Products.Add(GameObject.Instantiate(Products[0], Products[0].transform.parent).GetComponent<HarvestRepairMaterial>());
-            Products[3].gameObject.name = "Item4";
-			Products.Add(GameObject.Instantiate(Products[0], Products[0].transform.parent).GetComponent<HarvestRepairMaterial>());
-            Products[4].gameObject.name = "Item5";
+            // ! This is required for yields too because Destroy is not immediate
+            foreach (var m in yieldsClone.GetComponentsInChildren<HarvestRepairMaterial>(true))
+            {
+                if (m.gameObject.name == "Item1")
+                    Products.Add(m);
+                else
+                    GameObject.Destroy(m.gameObject);
+            }
+			Products.Add(GameObject.Instantiate(Products[0], Products[0].transform.parent));
+			Products.Add(GameObject.Instantiate(Products[0], Products[0].transform.parent));
+			Products.Add(GameObject.Instantiate(Products[0], Products[0].transform.parent));
+			Products.Add(GameObject.Instantiate(Products[0], Products[0].transform.parent));
+            for (int i = 0; i < Products.Count; i++)
+            {
+                Products[i].gameObject.name = $"Item{i+1}";
+            }
 
 			materialChances = new (Materials.Count);
 			for (int i = 0; i < Materials.Count; i++)
@@ -97,7 +119,14 @@ namespace ExamineActionsAPI
 				productChances[i].transform.localPosition = new Vector2(40, -26);
 				productChances[i].color = new Color(0.9044f, 0.6985f, 0.3059f);
 				Products[i].m_StackLabel.transform.localPosition = new Vector2(40, -40);
+                Products[i].m_StackLabel.color = Color.white;
 			}
+
+            
+			for (int i = 0; i < Materials.Count; i++)
+                Materials[i].transform.localPosition = Vector3.zero;
+			for (int i = 0; i < Products.Count; i++)
+                Products[i].transform.localPosition = Vector3.zero;
 
             // pie.m_ToolScrollList.CreateFromList
             GameObject.Destroy(origAmountLabel.gameObject);
@@ -195,8 +224,8 @@ namespace ExamineActionsAPI
             
             bool displayingMats = state.GetAllMaterialCount() > 0;
             bool displayingProducts = state.GetAllProductCount() > 0;
-            int upperY = infoBlockExtended ? -30 : 0;
-            int lowerY = infoBlockExtended ? -134 : -112;
+            int upperY = infoBlockExtended ? -60 : -24;
+            int lowerY = infoBlockExtended ? -200 : -184;
             if (displayingMats && displayingProducts)
             {
                 materialsClone.transform.localPosition = new Vector3(materialsClone.transform.localPosition.x, upperY, materialsClone.transform.localPosition.z);
@@ -204,11 +233,11 @@ namespace ExamineActionsAPI
             }
             else if (displayingMats)
             {
-                materialsClone.transform.localPosition = new Vector3(materialsClone.transform.localPosition.x, infoBlockExtended ? -96 : -30, materialsClone.transform.localPosition.z);
+                materialsClone.transform.localPosition = new Vector3(materialsClone.transform.localPosition.x, infoBlockExtended ? -120 : -96, materialsClone.transform.localPosition.z);
             }
             else if (displayingProducts)
             {
-                yieldsClone.transform.localPosition = new Vector3(yieldsClone.transform.localPosition.x, infoBlockExtended ? -52 : -30, yieldsClone.transform.localPosition.z);
+                yieldsClone.transform.localPosition = new Vector3(yieldsClone.transform.localPosition.x, infoBlockExtended ? -120 : -96, yieldsClone.transform.localPosition.z);
             }
 
 
@@ -290,7 +319,7 @@ namespace ExamineActionsAPI
             ExamineActionsAPI.VeryVerboseLog($"Materials: {matCount} items / {liqCount} liquid / {powCount} powders");
             if (total == 0) return;
 
-            for (int configured = 0; configured < 5; configured++)
+            for (int configured = 0; configured < this.Materials.Count; configured++)
             {
                 var slot = this.Materials[configured];
                 if (configured >= total)
@@ -413,7 +442,7 @@ namespace ExamineActionsAPI
             int total = matCount + liqCount + powCount;
             if (total == 0) return;
 
-            for (int configured = 0; configured < 5; configured++)
+            for (int configured = 0; configured < this.Products.Count; configured++)
             {
                 var slot = this.Products[configured];
                 if (configured >= total)
@@ -657,7 +686,7 @@ namespace ExamineActionsAPI
             bottomWarningLabel.gameObject.SetActive(true);
             bottomWarningLabel.text = reason switch
             {
-                PerformingBlockedReased.Interruption => Localization.Get("Action will be interrupted") ?? null,
+                PerformingBlockedReased.Interruption => Localization.Get("Action will be interrupted (Sick/Hurt/Cold/Hungry...)") ?? null,
                 PerformingBlockedReased.Action => Localization.Get("Action can not be performed") ?? null,
                 PerformingBlockedReased.Requirements => Localization.Get("Action requirements not satisfied") ?? null,
             };
