@@ -24,9 +24,20 @@ namespace ExamineActionsAPI
 				// MelonLogger.Msg($"+UpdateActionProgressBar");
 				// UpdateActionProgressBar early returns if official actions are not in progress
 				// Must replciate the statements ↓
-				if (selected is IExamineActionCancellable cancellable && InputManager.GetEscapePressed(__instance))
+				if (selected is IExamineActionCancellable cancellable)
 				{
-					ExamineActionsAPI.Instance.OnActionCancelled();
+					if (!Cursor.visible || Cursor.lockState == CursorLockMode.Locked)
+					{
+						Cursor.visible = true;
+						Cursor.lockState = CursorLockMode.Confined;
+					}
+					if (InputManager.GetEscapePressed(__instance))
+						ExamineActionsAPI.Instance.OnActionCancelled();
+				}
+				else
+				{
+					Cursor.visible = false;
+					Cursor.lockState = CursorLockMode.Locked;
 				}
 
 				if (selected is IExamineActionInterruptable interruptable && ExamineActionsAPI.Instance.ShouldInterrupt(interruptable))
