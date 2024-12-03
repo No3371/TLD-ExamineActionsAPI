@@ -22,7 +22,7 @@ namespace ExamineActionsAPI
             // }
 
 			if (state.Action is IExamineActionRequireTool
-             && __instance.m_ActionToolSelect.activeInHierarchy)
+             && __instance.GetActionToolSelect().activeInHierarchy)
 			{
 				__instance.SelectWindow(__instance.m_MainWindow);
 				ExamineActionsAPI.VeryVerboseLog($"OnBack_Redirect {__instance.m_SelectedButtonIndex}");

@@ -181,7 +181,7 @@ namespace ExamineActionsAPI
 			{
 				if (State.SelectingTool)
 				{
-					VeryVerboseLog($"GetSelectedTool {pie.GetSelectedTool()?.name}");
+					VeryVerboseLog($"GetSelectedTool {pie.m_RepairToolsList.GetSelectedTool()?.name}");
 					State.SelectingTool = false;
 					State.Panel.OnToolSelected(State);
 					State.PanelExtension?.OnToolSelected(State);
@@ -193,7 +193,7 @@ namespace ExamineActionsAPI
 					State.SelectingTool = true;
 					State.Panel.OnSelectingTool(State);
 					State.PanelExtension?.OnSelectingTool(State);
-					pie.SelectWindow(pie.m_ActionToolSelect);
+					pie.SelectWindow(pie.GetActionToolSelect());
 				}
 			}
 			else
@@ -298,7 +298,7 @@ namespace ExamineActionsAPI
 
 			if (State.Action is IExamineActionRequireTool toolUser)
 			{
-				GameObject selectedTool = pie.GetSelectedTool();
+				GameObject selectedTool = pie.m_RepairToolsList.GetSelectedTool();
 				var degrade = selectedTool?.GetComponent<GearItem>()?.m_DegradeOnUse;
 				if (degrade)
 				{
