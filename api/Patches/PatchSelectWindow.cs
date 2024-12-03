@@ -14,7 +14,7 @@ namespace ExamineActionsAPI
         {
             ExamineActionsAPI.VeryVerboseLog($"++++++++POST SelectWindow {window?.name}");
             if (ExamineActionsAPI.Instance.State.Action == null) return;
-			if (window == __instance.m_ActionToolSelect) 
+			if (window == __instance.GetActionToolSelect()) 
             {
                 if (__instance.m_GearItem.m_Harvest) __instance.m_HarvestWindow.SetActive(false);
                 if (__instance.m_GearItem.m_Repairable) __instance.m_RepairPanel.SetActive(false);

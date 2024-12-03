@@ -145,11 +145,11 @@ namespace ExamineActionsAPI
             if (Action is IExamineActionRequireTool eat)
             {
                 var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
-                pie.m_Tools.Clear();
-                eat.GetToolOptions(this, pie.m_Tools);
-                // for (int i = 0; i < pie.m_Tools.Count; i++)
-                // 	ExamineActionsAPI.VeryVerboseLog($"{pie.m_Tools[i]?.name} ({pie.m_Tools[i].GetInstanceID()})");
-                if (pie.m_Tools.Count == 0) // No tool
+                pie.m_RepairToolsList.m_Tools.Clear();
+                eat.GetToolOptions(this, pie.m_RepairToolsList.m_Tools);
+                // for (int i = 0; i < pie.m_RepairToolsList.m_Tools.Count; i++)
+                // 	ExamineActionsAPI.VeryVerboseLog($"{pie.m_RepairToolsList.m_Tools[i]?.name} ({pie.m_RepairToolsList.m_Tools[i].GetInstanceID()})");
+                if (pie.m_RepairToolsList.m_Tools.Count == 0) // No tool
                 {
                     ActiveActionRequirementsMet = false;
                 }

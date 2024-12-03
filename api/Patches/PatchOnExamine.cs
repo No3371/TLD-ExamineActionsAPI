@@ -38,7 +38,7 @@ namespace ExamineActionsAPI
         internal static float lastExamine;
         private static void Prefix(Panel_Inventory __instance)
         {
-            LastTriedToExamine = __instance.GetCurrentlySelectedGearItem();
+            LastTriedToExamine = __instance.GetCurrentlySelectedItem().m_GearItem;
             lastExamine = Time.realtimeSinceStartup;
             ExamineActionsAPI.Instance.LastTriedToPerformedCache = null;
         }
@@ -62,8 +62,8 @@ namespace ExamineActionsAPI
         internal static float lastUse;
         private static void Prefix(Panel_Inventory __instance)
         {
-            LastTriedToUse = __instance.GetCurrentlySelectedGearItem();
-            lastUse = Time.realtimeSinceStartup;
+            LastTriedToUse = __instance.GetCurrentlySelectedItem().m_GearItem;
+			lastUse = Time.realtimeSinceStartup;
         }
     }
 }

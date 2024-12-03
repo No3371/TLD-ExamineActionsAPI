@@ -5,14 +5,14 @@ using MelonLoader;
 namespace ExamineActionsAPI
 {
     // Grab selected tool (using official tool selection window)
-    [HarmonyPatch(typeof(Panel_Inventory_Examine), nameof(Panel_Inventory_Examine.RefreshSelectedActionTool))]
+    [HarmonyPatch(typeof(ToolsList), nameof(ToolsList.RefreshSelectedActionTool))]
     internal class PatchRefreshSelectedActionTool
     {
-        private static void Prefix(Panel_Inventory_Examine __instance)
+        private static void Prefix(ToolsList __instance)
         {
 			// MelonLogger.Msg($"PRE RefreshSelectedActionTool ({__instance.m_ActionToolSelect.gameObject.activeInHierarchy} / { __instance.m_ToolScrollList.m_TargetIndex } / { __instance.m_ToolScrollList.m_SelectedIndex })");
         }
-        private static void Postfix(Panel_Inventory_Examine __instance)
+        private static void Postfix(ToolsList __instance)
         {
 			// MelonLogger.Msg($"POST RefreshSelectedActionTool ({__instance.m_ActionToolSelect.gameObject.activeInHierarchy} / { __instance.m_ToolScrollList.m_TargetIndex } / { __instance.m_ToolScrollList.m_SelectedIndex })");
             GearItem? gearItem = __instance.GetSelectedTool()?.GetComponent<GearItem>();

@@ -1,4 +1,4 @@
-// #define VERY_VERBOSE
+#define VERY_VERBOSE
 using Il2Cpp;
 using Il2CppAK.Wwise;
 using Il2CppTLD.Gear;
@@ -19,11 +19,12 @@ namespace ExamineActionsAPI
 		Vector2 info1Pos, info2Pos;
 		internal UIButton buttonContinue, buttonSubLeft, buttonSubRight;
 		internal UILabel buttonLabel, materiaslLabel, bottomWarningLabel, consumeLabel, stopLabel;
-        public Panel_Inventory_Examine PIE { get; }
-        public bool IsExtension => false;
+		public Panel_Inventory_Examine PIE { get; }
+		public Panel_Repair PR { get; set; }
+		public bool IsExtension => false;
         bool infoBlockExtended;
 
-        public DefaultPanel(Panel_Inventory_Examine pie)
+        public DefaultPanel(Panel_Inventory_Examine pie, Panel_Repair pr)
         {
 			repairPanelClone = GameObject.Instantiate(pie.m_RepairPanel, pie.m_RepairPanel.transform.parent);
             Transform gameobjects = FindChildWrapper(repairPanelClone.transform, "GameObject");
@@ -128,7 +129,7 @@ namespace ExamineActionsAPI
 			for (int i = 0; i < Products.Count; i++)
                 Products[i].transform.localPosition = Vector3.zero;
 
-            // pie.m_ToolScrollList.CreateFromList
+            // pie.m_RepairToolsList.m_ToolscrollList.CreateFromList
             GameObject.Destroy(origAmountLabel.gameObject);
             GameObject.Destroy(origSkillLabel.gameObject);
             // MelonLogger.Msg($"3");
@@ -152,8 +153,8 @@ namespace ExamineActionsAPI
 			bottomWarningLabel = FindChildWrapper(repairPanelClone.transform, "RequiresToolLabel").GetComponent<UILabel>();
 			materiaslLabel = FindChildWrapper(materialsClone.transform, "Label_RequiredMaterials").GetComponent<UILabel>();
 
-            buttonSubLeft = GameObject.Instantiate(pie.m_Button_ToolDecrease, buttonClone.transform.parent).GetComponent<UIButton>();
-            buttonSubRight = GameObject.Instantiate(pie.m_Button_ToolIncrease, buttonClone.transform.parent).GetComponent<UIButton>();
+            buttonSubLeft = GameObject.Instantiate(pie.m_RepairToolsList.m_Button_ToolDecrease, buttonClone.transform.parent).GetComponent<UIButton>();
+            buttonSubRight = GameObject.Instantiate(pie.m_RepairToolsList.m_Button_ToolIncrease, buttonClone.transform.parent).GetComponent<UIButton>();
             buttonSubLeft.transform.localPosition = buttonClone.transform.localPosition + new Vector3(-160, 0);
             buttonSubRight.transform.localPosition = buttonClone.transform.localPosition + new Vector3(160, 0);
             buttonSubLeft.onClick[0] = new EventDelegate(new System.Action(ExamineActionsAPI.Instance.OnPreviousSubAction));
@@ -171,7 +172,10 @@ namespace ExamineActionsAPI
 
 			Toggle(false);
             PIE = pie;
-        }
+			ExamineActionsAPI.VeryVerboseLog($"Set PIE {PIE.name} {PIE.GetInstanceID()}");
+			PR = pr;
+			ExamineActionsAPI.VeryVerboseLog($"Set PR {PR.name} {PR.GetInstanceID()}");
+		}
 
         Transform FindChildWrapper (Transform transform, string childPath)
         {
@@ -206,7 +210,7 @@ namespace ExamineActionsAPI
         {
             materialsClone.SetActive(false);
             yieldsClone.SetActive(false);
-            PIE.m_ActionToolSelect.SetActive(false);
+            PIE.GetActionToolSelect().SetActive(false);
             bg2.gameObject.SetActive(false);
             bottomWarningLabel.gameObject.SetActive(false);
             int subs = state.Action.GetSubActionCount(state);
@@ -330,14 +334,22 @@ namespace ExamineActionsAPI
                 ExamineActionsAPI.VeryVerboseLog($"Configuring material#{configured+1}/{total}");
     
                 Vector3 localPosition = slot.transform.localPosition;
-                localPosition.x = PIE.m_RequiredMaterialCenteredX;
-                localPosition.x += PIE.m_RequiredMaterialSpacing * ((float)configured - (total / 2f - 0.5f)) / (total >=4? 2f: 1.2f);
-                slot.transform.localPosition = localPosition;
-                slot.transform.localScale = total >= 4 ? new Vector3(0.8f, 0.8f, 1) : new Vector3(1f, 1f, 1);
+				ExamineActionsAPI.VeryVerboseLog($"- localPosition {localPosition.ToString()}");
+				ExamineActionsAPI.VeryVerboseLog($"- PR.m_RequiredMaterialCenteredX {PR?.m_RequiredMaterialCenteredX}");
+				localPosition.x = PR.m_RequiredMaterialCenteredX;
+				ExamineActionsAPI.VeryVerboseLog($"- localPosition.x");
+				localPosition.x += PR.m_RequiredMaterialSpacing * ((float)configured - (total / 2f - 0.5f)) / (total >=4? 2f: 1.2f);
+				ExamineActionsAPI.VeryVerboseLog($"- localPosition.x +=");
+				slot.transform.localPosition = localPosition;
+				ExamineActionsAPI.VeryVerboseLog($"- slot localPosition");
+				slot.transform.localScale = total >= 4 ? new Vector3(0.8f, 0.8f, 1) : new Vector3(1f, 1f, 1);
+				ExamineActionsAPI.VeryVerboseLog($"- slot localScale");
 
-                if (configured >= matCount + liqCount) // Powder
+
+				if (configured >= matCount + liqCount) // Powder
                 {
-                    int pIdx = configured - (matCount + liqCount);
+					ExamineActionsAPI.VeryVerboseLog($"- Powder");
+					int pIdx = configured - (matCount + liqCount);
                     var conf = powders[pIdx];
                     ExamineActionsAPI.VeryVerboseLog($"Showing {conf.Type.name} {conf.Kgs}kg");
                     
@@ -362,7 +374,8 @@ namespace ExamineActionsAPI
                 }
                 else if (configured >= matCount) // Liquid
                 {
-                    int idx = configured - matCount;
+					ExamineActionsAPI.VeryVerboseLog($"- Liquid");
+					int idx = configured - matCount;
                     var conf = liquids[idx];
                     ExamineActionsAPI.VeryVerboseLog($"Showing {conf.Type.name} {conf.Liters}l");
                     
@@ -403,7 +416,8 @@ namespace ExamineActionsAPI
                 }
                 else
                 {
-                    var conf = materials[configured];
+					ExamineActionsAPI.VeryVerboseLog($"- Other ?");
+					var conf = materials[configured];
                     int stackNum = conf.Units;
                     int checkingStackNum = conf.Units;
                     if (state.Subject.name == conf.GearName) checkingStackNum += state.Subject.m_StackableItem?.m_Units?? 1;
@@ -423,7 +437,7 @@ namespace ExamineActionsAPI
                     slot.ShowItem(prefab, conf.Units, invItem != null);
                 }
             }
-            if (state.AllMaterialsReady ?? false) materiaslLabel.color = PIE.m_RequiredMaterialsLabelDefaultColor;
+            if (state.AllMaterialsReady ?? false) materiaslLabel.color = PIE.m_RepairMaterialsTable.m_RequiredMaterialsLabelDefaultColor;
             else materiaslLabel.color = PIE.m_RepairLabelColorDisabled;
             materialsClone.SetActive(true);
             if (!bg2.gameObject.activeSelf) bg2.gameObject.SetActive(true);
@@ -452,8 +466,8 @@ namespace ExamineActionsAPI
                 }
 
                 Vector3 localPosition = slot.transform.localPosition;
-                localPosition.x = PIE.m_RequiredMaterialCenteredX;
-                localPosition.x += PIE.m_RequiredMaterialSpacing * ((float)configured - (total / 2f - 0.5f)) / (total >= 4 ? 2f : 1.2f);
+                localPosition.x = PR.m_RequiredMaterialCenteredX;
+                localPosition.x += PR.m_RequiredMaterialSpacing * ((float)configured - (total / 2f - 0.5f)) / (total >= 4 ? 2f : 1.2f);
                 slot.transform.localPosition = localPosition;
                 slot.transform.localScale = total >= 4 ? new Vector3(0.8f, 0.8f, 1) : new Vector3(1f, 1f, 1);
 
@@ -558,20 +572,20 @@ namespace ExamineActionsAPI
         {
             if (state.Action is IExamineActionRequireTool eat)
             {
-                if (PIE.m_Tools.Count == 0)
+                if (PIE.m_RepairToolsList.m_Tools.Count == 0)
                 {
                     bottomWarningLabel.gameObject.SetActive(true);
                     bottomWarningLabel.text = Localization.Get("GAMEPLAY_ToolRequired");
                 }
 
-                PIE.m_ToolScrollList.CleanUp();
-                PIE.m_ToolScrollList.CreateList(PIE.m_Tools.Count);
-                for (int k = 0; k < PIE.m_Tools.Count; k++)
+				PIE.m_ToolScrollList.CleanUp();
+				PIE.m_ToolScrollList.CreateList(PIE.m_RepairToolsList.m_Tools.Count);
+                for (int k = 0; k < PIE.m_RepairToolsList.m_Tools.Count; k++)
                 {
                     UITexture componentInChildren = Utils.GetComponentInChildren<UITexture>(PIE.m_ToolScrollList.m_ScrollObjects[k]);
-                    if (PIE.m_Tools[k] != null)
+                    if (PIE.m_RepairToolsList.m_Tools[k] != null)
                     {
-                        GearItem component7 = PIE.m_Tools[k].GetComponent<GearItem>();
+                        GearItem component7 = PIE.m_RepairToolsList.m_Tools[k].GetComponent<GearItem>();
                         if (component7)
                         {
                             componentInChildren.mainTexture = Utils.GetInventoryIconTexture(component7);
@@ -579,12 +593,12 @@ namespace ExamineActionsAPI
                     }
                     else
                     {
-                        componentInChildren.mainTexture = Utils.GetInventoryGridIconTexture(PIE.m_NoToolSpriteName);
-                        componentInChildren.color = PIE.m_NoToolSpriteColor;
-                        componentInChildren.transform.localScale = PIE.m_NoToolSpriteSizeModifier;
+                        componentInChildren.mainTexture = Utils.GetInventoryGridIconTexture(PIE.m_RepairToolsList.m_NoToolSpriteName);
+                        componentInChildren.color = PIE.m_RepairToolsList.m_NoToolSpriteColor;
+                        componentInChildren.transform.localScale = PIE.m_RepairToolsList.m_NoToolSpriteSizeModifier;
                     }
                 }
-                PIE.RefreshSelectedActionTool();
+                PIE.m_RepairToolsList.RefreshSelectedActionTool();
             }
             else bottomWarningLabel.gameObject.SetActive(false);
         }
