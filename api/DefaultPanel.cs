@@ -342,7 +342,7 @@ namespace ExamineActionsAPI
     
                 Vector3 localPosition = slot.transform.localPosition;
 				localPosition.x = 0;
-				localPosition.x += PR.m_RequiredMaterialSpacing * ((float)configured - (total / 2f - 0.5f)) / (total >=4? 2f: 1.2f);
+				localPosition.x += PR.m_RequiredMaterialSpacing * 1.25f * ((float)configured - (total / 2f - 0.5f)) / (total >=4? 2f: 1.2f);
 				slot.transform.localPosition = localPosition;
 				slot.transform.localScale = total >= 4 ? new Vector3(0.7f, 0.7f, 1) : new Vector3(1f, 1f, 1);
 
@@ -468,7 +468,7 @@ namespace ExamineActionsAPI
 
                 Vector3 localPosition = slot.transform.localPosition;
                 localPosition.x = 0;
-                localPosition.x += PR.m_RequiredMaterialSpacing * ((float)configured - (total / 2f - 0.5f)) / (total >= 4 ? 2f : 1.2f);
+                localPosition.x += PR.m_RequiredMaterialSpacing * 1.25f * ((float)configured - (total / 2f - 0.5f)) / (total >= 4 ? 2f : 1.2f);
                 slot.transform.localPosition = localPosition;
                 slot.transform.localScale = total >= 4 ? new Vector3(0.7f, 0.7f, 1) : new Vector3(1f, 1f, 1);
 
