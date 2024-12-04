@@ -42,7 +42,7 @@ namespace ExamineActionsAPIDemo
 
         bool IExamineAction.CanPerform(ExamineActionState state)
         {
-            return state.Subject.CurrentHP < state.Subject.GearItemData.MaxHP * state.Subject.m_Repairable.m_RepairConditionCap / 100f / 5f;
+            return state.Subject.GetNormalizedCondition() < state.Subject.m_Repairable.m_RepairConditionCap / 100f / 5f;
         }
 
         bool IExamineActionCancellable.ConsumeOnCancel(ExamineActionState state)
@@ -58,7 +58,6 @@ namespace ExamineActionsAPIDemo
         bool IExamineAction.IsActionAvailable(GearItem item)
         {
             if (item.m_ClothingItem == null || item.m_Repairable == null || item.CurrentHP == 0) return false;
-            if (item.GetNormalizedCondition() >= item.m_Repairable.m_RepairConditionCap / 100f / 5f) return false;
             return true;
         }
 
@@ -95,7 +94,7 @@ namespace ExamineActionsAPIDemo
                 conf.LabelColor = ExamineActionsAPI.ExamineActionsAPI.DISABLED_COLOR;
                 conf.ContentColor = ExamineActionsAPI.ExamineActionsAPI.DISABLED_COLOR;
             }
-            return null;
+            return conf;
         }
         void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
 
