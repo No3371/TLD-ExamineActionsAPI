@@ -740,7 +740,7 @@ namespace ExamineActionsAPI
 					 || li.m_LiquidType != type) continue;
 
 
-                    float adding = Mathf.Min(liters, (li.GetCapacityLitres() - li.GetVolumeLitres()).ToQuantity(type.Density));
+                    float adding = Mathf.Min(liters, (li.GetCapacityLitres() - li.GetVolumeLitres()).ToQuantity(1));
 					li.m_Liquid = li.m_Liquid + Il2CppTLD.IntBackedUnit.ItemLiquidVolume.FromLiters(adding);
                     liters -= adding;
 					if (liters <= 0) break;
@@ -748,9 +748,9 @@ namespace ExamineActionsAPI
 
 				while (liters > 0)
 				{
-					var p = pm.InstantiateItemInPlayerInventory(type.DefaultContainer.m_PrefabReference.GetOrLoadTypedAsset(), 1, 1, PlayerManager.InventoryInstantiateFlags.EnableNotificationFlag);
-                    float adding = Mathf.Min(liters, p.m_LiquidItem.GetCapacityLitres().ToQuantity(type.Density));
-					p.m_LiquidItem.m_Liquid = p.m_LiquidItem.m_Liquid + ItemLiquidVolume.FromLiters(adding);
+					var newLiquid = pm.InstantiateItemInPlayerInventory(type.DefaultContainer.m_PrefabReference.GetOrLoadTypedAsset(), 1, 1, PlayerManager.InventoryInstantiateFlags.EnableNotificationFlag);
+                    float adding = Mathf.Min(liters, newLiquid.m_LiquidItem.GetCapacityLitres().ToQuantity(1));
+					newLiquid.m_LiquidItem.m_Liquid = ItemLiquidVolume.FromLiters(adding);
 					liters -= adding;
 				}
 			}

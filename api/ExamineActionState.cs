@@ -225,18 +225,18 @@ namespace ExamineActionsAPI
 				{
                     if (liquids[i].Type == null)
                         MelonLogger.Error($"Liquid type provided by action {act.Id} is null, this is a severe error and you should avoid this action for now. Contact the mod author providing the action.");
-					float totalToCheck = liquids[i].Liters;
+					float totalLiters = liquids[i].Liters;
 					for (int j = 0; j < liquids.Count; j++)
-						if (i != j && liquids[i].Type == liquids[j].Type) totalToCheck += liquids[j].Liters;
+						if (i != j && liquids[i].Type == liquids[j].Type) totalLiters += liquids[j].Liters;
 					
-					ExamineActionsAPI.VeryVerboseLog($"Checking for liquid: {liquids[i].Type} x{totalToCheck} (x{liquids[i].Liters})");
+					ExamineActionsAPI.VeryVerboseLog($"Checking for liquid: {liquids[i].Type} x{totalLiters} (x{liquids[i].Liters})");
 					Il2CppSystem.Collections.Generic.List<GearItem> gears = new (1);
 					var totalInInv = GameManager.GetInventoryComponent().GetTotalLiquidVolume(liquids[i].Type);
                     
 					if (state.Subject.m_LiquidItem != null
                     && state.Subject.m_LiquidItem.m_LiquidType == liquids[i].Type)
                         totalInInv -= state.Subject.m_LiquidItem.m_Liquid;
-					if (totalToCheck > totalInInv.ToQuantity(liquids[i].Type.Density)) return false;
+					if (totalLiters > totalInInv.ToQuantity(1)) return false;
 					break;
 				}
             }

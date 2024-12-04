@@ -62,7 +62,8 @@ namespace ExamineActionsAPIDemo
 
         void IExamineActionProduceLiquid.GetProductLiquid(ExamineActionState state, List<MaterialOrProductLiquidConf> liquids)
         {
-            liquids.Add(new (ExamineActionsAPI.PowderAndLiquidTypesLocator.KeroseneType, state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters.ToQuantity(LiquidType.m_Kerosene.Density), 100));
+            liquids.Add(new (ExamineActionsAPI.PowderAndLiquidTypesLocator.KeroseneType, state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters.ToQuantity(1) * 0.95f, 100));
+            liquids.Add(new (ExamineActionsAPI.PowderAndLiquidTypesLocator.KeroseneType, state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters.ToQuantity(1) * 0.05f, 50));
         }
     }
 }

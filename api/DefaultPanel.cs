@@ -399,7 +399,7 @@ namespace ExamineActionsAPI
                         MelonLogger.Error($"Failed to load prefab for container of liquid {conf.Type.name}, contact the author of EAAPI.");
                     }
                     slot.ShowItem(containerPrefab, 1, true);
-                    slot.m_StackLabel.text = $"{conf.Liters}L";
+                    slot.m_StackLabel.text = $"{conf.Liters:0.00}L";
                     slot.m_StackLabel.gameObject.SetActive(true);
 
                     ExamineActionsAPI.VeryVerboseLog($"Showing {conf.Type.name} {conf.Liters}L");
@@ -408,12 +408,12 @@ namespace ExamineActionsAPI
                     if (subjectLiquidItem != null
                      && subjectLiquidItem.m_LiquidType == conf.Type)
                         owned -= subjectLiquidItem.m_Liquid;
-                    ExamineActionsAPI.VeryVerboseLog($"Found {conf.Type.name} {owned}l (+{subjectLiquidItem?.m_Liquid.ToQuantity(ItemLiquidVolume.Liter.m_Units) ?? 0})");
-                    float required = conf.Liters;
+                    ExamineActionsAPI.VeryVerboseLog($"Found {conf.Type.name} {owned}l (+{subjectLiquidItem?.m_Liquid.ToQuantity(1) ?? 0})");
+                    float reqLiters = conf.Liters;
                     for (int j = 0; j < idx; j++)
-                        if (conf.Type == liquids[j].Type) required += liquids[j].Liters;
-                    ExamineActionsAPI.VeryVerboseLog($"Requires {conf.Type.name} {required}/{owned}L");
-                    slot.m_GearLabel.color = owned.ToQuantity(ItemLiquidVolume.Liter.m_Units) >= required ? new Color(1, 1, 1) : slot.m_RedColorToUse;
+                        if (conf.Type == liquids[j].Type) reqLiters += liquids[j].Liters;
+                    ExamineActionsAPI.VeryVerboseLog($"Requires {conf.Type.name} {reqLiters}/{owned}L");
+                    slot.m_GearLabel.color = owned.ToQuantity(1) >= reqLiters ? new Color(1, 1, 1) : slot.m_RedColorToUse;
                 }
                 else
                 {
@@ -501,7 +501,7 @@ namespace ExamineActionsAPI
                     if (containerPrefab == null)
                         containerPrefab = conf.Type?.DefaultContainer?.PrefabReference?.GetOrLoadTypedAsset();
                     slot.ShowItem(containerPrefab, 1, true);
-                    slot.m_StackLabel.text = $"{conf.Liters} L";
+                    slot.m_StackLabel.text = $"{conf.Liters:0.00} L";
                     slot.m_StackLabel.gameObject.SetActive(true);
                     ExamineActionsAPI.VeryVerboseLog($"Showing {conf.Type.name} {conf.Liters}L");
                 }
