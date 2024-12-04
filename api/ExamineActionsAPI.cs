@@ -152,6 +152,14 @@ namespace ExamineActionsAPI
 			// VeryVerboseLog($"-OnPreviousSubAction {State.SubActionId}");
 		}
 
+		public void TryPerformSelectedAction ()
+		{
+			if (State?.Action != null)
+			{
+				OnPerformSelectedAction();
+			}
+		}
+
 		public void OnPerformSelectedAction ()
 		{
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
