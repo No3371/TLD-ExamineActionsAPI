@@ -338,16 +338,10 @@ namespace ExamineActionsAPI
                 ExamineActionsAPI.VeryVerboseLog($"Configuring material#{configured+1}/{total}");
     
                 Vector3 localPosition = slot.transform.localPosition;
-				ExamineActionsAPI.VeryVerboseLog($"- localPosition {localPosition.ToString()}");
-				ExamineActionsAPI.VeryVerboseLog($"- PR.m_RequiredMaterialCenteredX {PR?.m_RequiredMaterialCenteredX}");
-				localPosition.x = PR.m_RequiredMaterialCenteredX;
-				ExamineActionsAPI.VeryVerboseLog($"- localPosition.x");
+				localPosition.x = 0;
 				localPosition.x += PR.m_RequiredMaterialSpacing * ((float)configured - (total / 2f - 0.5f)) / (total >=4? 2f: 1.2f);
-				ExamineActionsAPI.VeryVerboseLog($"- localPosition.x +=");
 				slot.transform.localPosition = localPosition;
-				ExamineActionsAPI.VeryVerboseLog($"- slot localPosition");
-				slot.transform.localScale = total >= 4 ? new Vector3(0.8f, 0.8f, 1) : new Vector3(1f, 1f, 1);
-				ExamineActionsAPI.VeryVerboseLog($"- slot localScale");
+				slot.transform.localScale = total >= 4 ? new Vector3(0.7f, 0.7f, 1) : new Vector3(1f, 1f, 1);
 
 
 				if (configured >= matCount + liqCount) // Powder
@@ -470,10 +464,10 @@ namespace ExamineActionsAPI
                 }
 
                 Vector3 localPosition = slot.transform.localPosition;
-                localPosition.x = PR.m_RequiredMaterialCenteredX;
+                localPosition.x = 0;
                 localPosition.x += PR.m_RequiredMaterialSpacing * ((float)configured - (total / 2f - 0.5f)) / (total >= 4 ? 2f : 1.2f);
                 slot.transform.localPosition = localPosition;
-                slot.transform.localScale = total >= 4 ? new Vector3(0.8f, 0.8f, 1) : new Vector3(1f, 1f, 1);
+                slot.transform.localScale = total >= 4 ? new Vector3(0.7f, 0.7f, 1) : new Vector3(1f, 1f, 1);
 
                 if (configured >= matCount + liqCount) // Powder
                 {
