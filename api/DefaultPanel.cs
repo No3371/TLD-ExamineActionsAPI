@@ -109,7 +109,7 @@ namespace ExamineActionsAPI
 				materialChances.Add(GameObject.Instantiate(Materials[0].m_StackLabel, Materials[i].transform));
                 materialChances[i].name = "ChanceLabel";
 				materialChances[i].transform.localPosition = new Vector2(0, -40);
-				materialChances[i].color = new Color(0.9044f, 0.6985f, 0.3059f);
+				materialChances[i].color = ExamineActionsAPI.WARNING_COLOR;
 				Materials[i].m_StackLabel.transform.localPosition = new Vector2(40, -40);
 			}
 
@@ -117,9 +117,9 @@ namespace ExamineActionsAPI
 			for (int i = 0; i < Products.Count; i++)
 			{
 				productChances.Add(GameObject.Instantiate(Products[0].m_StackLabel, Products[i].transform));
-                materialChances[i].name = "ChanceLabel";
+                productChances[i].name = "ChanceLabel";
 				productChances[i].transform.localPosition = new Vector2(0, -40);
-				productChances[i].color = new Color(0.9044f, 0.6985f, 0.3059f);
+				productChances[i].color = ExamineActionsAPI.WARNING_COLOR;
 				Products[i].m_StackLabel.transform.localPosition = new Vector2(40, -40);
                 Products[i].m_StackLabel.color = Color.white;
 			}
