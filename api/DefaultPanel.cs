@@ -108,7 +108,8 @@ namespace ExamineActionsAPI
 			for (int i = 0; i < Materials.Count; i++)
 			{
 				materialChances.Add(GameObject.Instantiate(Materials[0].m_StackLabel, Materials[i].transform));
-				materialChances[i].transform.localPosition = new Vector2(40, -26);
+                materialChances[i].name = "ChanceLabel";
+				materialChances[i].transform.localPosition = new Vector2(0, -40);
 				materialChances[i].color = new Color(0.9044f, 0.6985f, 0.3059f);
 				Materials[i].m_StackLabel.transform.localPosition = new Vector2(40, -40);
 			}
@@ -117,7 +118,8 @@ namespace ExamineActionsAPI
 			for (int i = 0; i < Products.Count; i++)
 			{
 				productChances.Add(GameObject.Instantiate(Products[0].m_StackLabel, Products[i].transform));
-				productChances[i].transform.localPosition = new Vector2(40, -26);
+                materialChances[i].name = "ChanceLabel";
+				productChances[i].transform.localPosition = new Vector2(0, -40);
 				productChances[i].color = new Color(0.9044f, 0.6985f, 0.3059f);
 				Products[i].m_StackLabel.transform.localPosition = new Vector2(40, -40);
                 Products[i].m_StackLabel.color = Color.white;
@@ -708,7 +710,11 @@ namespace ExamineActionsAPI
             {
                 PerformingBlockedReased.Interruption => Localization.Get("Action will be interrupted (Sick/Hurt/Cold/Hungry...)") ?? null,
                 PerformingBlockedReased.Action => Localization.Get("Action can not be performed") ?? null,
-                PerformingBlockedReased.Requirements => Localization.Get("Action requirements not satisfied") ?? null,
+                PerformingBlockedReased.Requirements => state.ActiveActionRequirementsMetTool switch
+                {
+                    true => Localization.Get("Action requirements not satisfied") ?? null,
+                    false => Localization.Get("GAMEPLAY_ToolRequired") ?? null
+                },
             };
         }
 

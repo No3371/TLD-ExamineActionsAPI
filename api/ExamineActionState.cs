@@ -66,6 +66,7 @@ namespace ExamineActionsAPI
 		internal float? ActiveSuccessChance { get; set; }
 		internal ActionResult? ActiveResult { get; set; }
 		internal bool? ActiveActionRequirementsMet { get; set; }
+		internal bool? ActiveActionRequirementsMetTool { get; set; }
 		internal bool? AllMaterialsReady { get; set; }
 		internal bool InterruptionFlag { get; set; }
 		internal bool InterruptionSystemFlag { get; set; }
@@ -137,10 +138,11 @@ namespace ExamineActionsAPI
 		public void Recalculate ()
         {
             MaybeUpdateSuccessChance();
-            ActiveActionRequirementsMet = true;
+            ActiveActionRequirementsMet = ActiveActionRequirementsMetTool = true;
 
             AllMaterialsReady = CheckMaterials(this, Action);
-			if (!AllMaterialsReady.Value) ActiveActionRequirementsMet = false;;
+			if (!AllMaterialsReady.Value)
+                ActiveActionRequirementsMet = false;
 
             if (Action is IExamineActionRequireTool eat)
             {
@@ -152,6 +154,7 @@ namespace ExamineActionsAPI
                 if (pie.m_RepairToolsList.m_Tools.Count == 0) // No tool
                 {
                     ActiveActionRequirementsMet = false;
+                    ActiveActionRequirementsMetTool = false;
                 }
             }
             ActiveActionDurationMinutes = this.Action.CalculateDurationMinutes(this);
