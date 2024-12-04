@@ -16,7 +16,9 @@ namespace ExamineActionsAPI
 		public static ExamineActionsAPI Instance { get; private set; }
 		internal List<IExamineAction> RegisteredActions = new List<IExamineAction>();
 		public const bool DISABLE_CUSTOM_INFO = false; // Custom info can be simply disabled because it's pure UI thing (in case it's broken by updates)
+		public static readonly  Color BRIGHT_NORMAL_COLOR = new Color(1f, 1f, 1f, 1f);
 		public static readonly  Color NORMAL_COLOR = new Color(1f, 1f, 1f, 0.6275f);
+		public static readonly  Color WARNING_COLOR = new Color(0.9044f, 0.6985f, 0.3059f);
 		public static readonly  Color DISABLED_COLOR = new Color(0.4632f, 0.1465f, 0.1672f);
         public override void OnInitializeMelon()
 		{

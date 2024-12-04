@@ -257,12 +257,14 @@ namespace ExamineActionsAPI
             bool showingChance = false;
             if (state.Action is IExamineActionFailable eaf)
             {
+                infoChance.label2.color = state.ActiveSuccessChance < 0.7f? ExamineActionsAPI.DISABLED_COLOR : state.ActiveSuccessChance < 0.9f ? ExamineActionsAPI.WARNING_COLOR : ExamineActionsAPI.BRIGHT_NORMAL_COLOR;
                 infoChance.label2.text = string.Format("{0:0.0}%", state.ActiveSuccessChance);
                 infoChance.go.SetActive(true);
                 showingChance = true;
             }
             else
             {
+                infoChance.label2.color = ExamineActionsAPI.BRIGHT_NORMAL_COLOR;
                 infoChance.go.SetActive(false);
             }
 
