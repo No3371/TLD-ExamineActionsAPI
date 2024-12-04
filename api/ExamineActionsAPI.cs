@@ -65,9 +65,9 @@ namespace ExamineActionsAPI
 		}
 
 		[Conditional("VERY_VERBOSE")]
-		internal static void VeryVerboseLog (string msg)
+		internal static void VeryVerboseLog (string msg, params object[] args)
 		{
-			Instance.LoggerInstance.Msg(msg);
+			Instance.LoggerInstance.Msg(msg, args);
 		}
 
 		internal ExamineActionState State { get; private set; }
@@ -78,6 +78,7 @@ namespace ExamineActionsAPI
 		internal List<UILabel> CustomActionMenuItemSubLabels = new List<UILabel>();
 		internal List<IExamineAction> AvailableCustomActions = new List<IExamineAction>();
 		internal IExamineActionPanel DefaultPanel;
+
 
 		public void OnCustomActionSelected (int index)
 		{

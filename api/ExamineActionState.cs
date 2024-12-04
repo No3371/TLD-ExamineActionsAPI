@@ -163,7 +163,8 @@ namespace ExamineActionsAPI
         public static bool CheckRequirements (ExamineActionState state, IExamineAction act)
         {
             var mats = CheckMaterials(state, act);
-			if (!mats) return false;
+			if (!mats)
+                return false;
 
             if (act is IExamineActionRequireTool eat)
             {

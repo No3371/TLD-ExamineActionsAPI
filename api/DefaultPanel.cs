@@ -1,4 +1,4 @@
-#define VERY_VERBOSE
+// #define VERY_VERBOSE
 using Il2Cpp;
 using Il2CppAK.Wwise;
 using Il2CppTLD.Gear;
@@ -10,7 +10,6 @@ namespace ExamineActionsAPI
 {
     public class DefaultPanel : IExamineActionPanel
     {
-        
 		internal GameObject repairPanelClone/*, toolSelectionClone*/, materialsClone, yieldsClone, chanceClone, durationClone, buttonClone, buttonRoot;
 		internal List<HarvestRepairMaterial> Materials, Products;
 		internal List<UILabel> materialChances, productChances;

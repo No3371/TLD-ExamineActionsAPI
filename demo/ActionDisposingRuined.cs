@@ -19,7 +19,7 @@ namespace ExamineActionsAPIDemo
 
         bool IExamineAction.IsActionAvailable(GearItem item)
         {
-            return item.CurrentHP <= 0;
+            return item.IsWornOut();
             
         }
 
