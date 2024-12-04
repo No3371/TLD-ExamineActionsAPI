@@ -265,6 +265,10 @@ namespace ExamineActionsAPI
                 infoChance.go.SetActive(false);
             }
 
+            info1.label1.color = ExamineActionsAPI.NORMAL_COLOR;
+            info1.label2.color = ExamineActionsAPI.NORMAL_COLOR;
+            info2.label1.color = ExamineActionsAPI.NORMAL_COLOR;
+            info2.label2.color = ExamineActionsAPI.NORMAL_COLOR;
             if (!ExamineActionsAPI.DISABLE_CUSTOM_INFO
              && state.Action is IExamineActionCustomInfo eaci)
             {
@@ -546,23 +550,31 @@ namespace ExamineActionsAPI
 			if (conf1 != null && conf2 != null)
 			{
 				this.info1.label1.text = conf1.Title.Text();
+                this.info1.label1.color = conf1.LabelColor;
 				this.info1.label2.text = conf1.Content;
+                this.info1.label2.color = conf1.ContentColor;
 				this.info2.label1.text = conf2.Title.Text();
+                this.info2.label1.color = conf2.LabelColor;
 				this.info2.label2.text = conf2.Content;
+                this.info2.label2.color = conf2.ContentColor;
 				this.info1.go.SetActive(true);
 				this.info2.go.SetActive(true);
 			}
 			else if (conf1 != null && conf2 == null)
 			{
 				this.info1.label1.text = conf1.Title.Text();
+                this.info1.label1.color = conf1.LabelColor;
 				this.info1.label2.text = conf1.Content;
+                this.info1.label2.color = conf1.ContentColor;
 				this.info1.go.SetActive(true);
 				this.info2.go.SetActive(false);
 			}
 			else if (conf1 == null && conf2 != null)
 			{
 				this.info1.label1.text = conf2.Title.Text();
+                this.info2.label1.color = conf2.LabelColor;
 				this.info1.label2.text = conf2.Content;
+                this.info2.label2.color = conf2.ContentColor;
 				this.info1.go.SetActive(true);
 				this.info2.go.SetActive(false);
 			}

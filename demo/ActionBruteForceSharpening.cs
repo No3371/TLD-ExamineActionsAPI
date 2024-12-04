@@ -97,7 +97,13 @@ namespace ExamineActionsAPIDemo
         // Display the 75% limit
         InfoItemConfig? IExamineActionCustomInfo.GetInfo1(ExamineActionState state)
         {
-            return new InfoItemConfig(new LocalizedString() { m_LocalizationID = "Max Condition" } , "75%");
+            var conf = new InfoItemConfig(new LocalizedString() { m_LocalizationID = "Max Condition" } , "75%");
+            if (state.Subject.GetNormalizedCondition() > 0.75f)
+            {
+                conf.LabelColor = ExamineActionsAPI.ExamineActionsAPI.DISABLED_COLOR;
+                conf.ContentColor = ExamineActionsAPI.ExamineActionsAPI.DISABLED_COLOR;
+            }
+            return conf;
         }
 
         // Display how much will the condition will be improved

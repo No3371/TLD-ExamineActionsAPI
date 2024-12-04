@@ -12,5 +12,7 @@ namespace ExamineActionsAPI
 
         public LocalizedString Title { get; set; }
 		public string Content { get; set; }
+        public UnityEngine.Color LabelColor { get; set; }
+        public UnityEngine.Color ContentColor { get; set; }
 	}
 }

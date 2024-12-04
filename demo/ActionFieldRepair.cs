@@ -40,10 +40,9 @@ namespace ExamineActionsAPIDemo
             return 3;
         }
 
-        // This action cost nothing but time so to balance it we limit it to sharpen stuff up to 75%
         bool IExamineAction.CanPerform(ExamineActionState state)
         {
-            return state.Subject.CurrentHP < state.Subject.GearItemData.MaxHP * state.Subject.m_Repairable?.m_RepairConditionCap / 500f;
+            return state.Subject.CurrentHP < state.Subject.GearItemData.MaxHP * state.Subject.m_Repairable.m_RepairConditionCap / 100f / 5f;
         }
 
         bool IExamineActionCancellable.ConsumeOnCancel(ExamineActionState state)
@@ -59,7 +58,7 @@ namespace ExamineActionsAPIDemo
         bool IExamineAction.IsActionAvailable(GearItem item)
         {
             if (item.m_ClothingItem == null || item.m_Repairable == null || item.CurrentHP == 0) return false;
-            if (item.GetNormalizedCondition() >= item.m_Repairable.m_RepairConditionCap / 5) return false;
+            if (item.GetNormalizedCondition() >= item.m_Repairable.m_RepairConditionCap / 100f / 5f) return false;
             return true;
         }
 
@@ -75,16 +74,27 @@ namespace ExamineActionsAPIDemo
 
         void IExamineAction.OnSuccess(ExamineActionState state)
         {
-            state.Subject.SetNormalizedHP(state.Subject.m_Repairable.m_RepairConditionCap/1000f);
+            state.Subject.SetNormalizedHP(state.Subject.m_Repairable.m_RepairConditionCap / 100f / 5f);
         }
 
         InfoItemConfig? IExamineActionCustomInfo.GetInfo1(ExamineActionState state)
         {
-            return new InfoItemConfig(new LocalizedString() { m_LocalizationID = "Repair Result" } , $"{state.Subject.m_Repairable.m_RepairConditionCap/5f:0.0}%");
+            var conf = new InfoItemConfig(new LocalizedString() { m_LocalizationID = "Repair Result" } , $"{state.Subject.m_Repairable.m_RepairConditionCap/10f:0.0}%");
+            if (state.Subject.GetNormalizedCondition() > state.Subject.m_Repairable.m_RepairConditionCap / 100f / 5f)
+            {
+                conf.Content = "N/A";
+            }
+            return conf;
         }
 
         InfoItemConfig? IExamineActionCustomInfo.GetInfo2(ExamineActionState state) 
         {
+            var conf = new InfoItemConfig(new LocalizedString() { m_LocalizationID = "Condition Cap" }, $"{state.Subject.m_Repairable.m_RepairConditionCap/10f:0.0}%");
+            if (state.Subject.GetNormalizedCondition() > state.Subject.m_Repairable.m_RepairConditionCap / 100f / 5f)
+            {
+                conf.LabelColor = ExamineActionsAPI.ExamineActionsAPI.DISABLED_COLOR;
+                conf.ContentColor = ExamineActionsAPI.ExamineActionsAPI.DISABLED_COLOR;
+            }
             return null;
         }
         void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
