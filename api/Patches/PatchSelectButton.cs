@@ -26,13 +26,13 @@ namespace ExamineActionsAPI
 				
 				ExamineActionsAPI.Instance.OnCustomActionSelected(index - ExamineActionsAPI.Instance.OfficialActionMenuItems.Count);
 
-				__instance.GetActionToolSelect().transform.FindChild("Mouse").gameObject.SetActive(false);
+				// __instance.GetActionToolSelect().gameObject.SetActive(false);sw
 				// __instance.m_Tool_ConfirmButtonLabel.parent.gameObject.SetActive(false);
 
 			}
 			else
 			{
-				__instance.GetActionToolSelect().transform.FindChild("Mouse").gameObject.SetActive(true);
+				// __instance.GetActionToolSelect().gameObject.SetActive(true);
 				// __instance.m_Tool_ConfirmButtonLabel.parent.gameObject.SetActive(true);
 			}
         }
