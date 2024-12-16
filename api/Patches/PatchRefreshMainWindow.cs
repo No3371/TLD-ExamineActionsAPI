@@ -12,9 +12,15 @@ namespace ExamineActionsAPI
         {
 			ExamineActionsAPI.Instance.State.Subject = __instance.m_GearItem;
 			ExamineActionsAPI.Instance.AvailableCustomActions.Clear();
-			foreach (var mi in ExamineActionsAPI.Instance.CustomActionMenuItems) mi.gameObject.SetActive(false);
+			foreach (var mi in ExamineActionsAPI.Instance.CustomActionMenuItems)
+				mi.gameObject.SetActive(false);
 			if (PatchOnEquip.lastUse > PatchOnExamine.lastExamine)
 			{
+				return;
+			}
+			if (ExamineActionsAPI.Instance.State.Subject == null)
+			{
+				ExamineActionsAPI.VeryVerboseLog($"Null subject");
 				return;
 			}
 	
