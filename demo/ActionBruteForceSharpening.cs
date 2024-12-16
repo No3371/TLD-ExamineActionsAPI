@@ -33,10 +33,11 @@ namespace ExamineActionsAPIDemo
         bool IExamineActionInterruptable.InterruptOnNonRiskAffliction => true;
 
         float IExamineActionInterruptable.MinimumCondition => 0.5f;
+        const float MAX_CONDITION = 0.5f;
 
         // For this action, we are using SubActions as a scaling factor of how much condition to sharpen
         // I picked 5 because players don't really spend more hours at once
-        int IExamineAction.GetSubActionCount(ExamineActionState state) => 5;
+        int IExamineAction.GetSubActionCount(ExamineActionState state) => Math.Clamp((int) (0.75f - state.Subject.GetNormalizedCondition() / 0.01f), 0, 5);
         // The base ingame time to sharpen is 2 hours, and we scale it by SubActionId
         // SubActionid is 0 based so we add 1 to it
         int IExamineAction.CalculateDurationMinutes(ExamineActionState state)
@@ -53,10 +54,10 @@ namespace ExamineActionsAPIDemo
             return Mathf.Min(12, 4 * (state.SubActionId + 1));
         }
 
-        // This action cost nothing but time so to balance it we limit it to sharpen stuff up to 75%
+        // This action cost nothing but time so to balance it we limit it to sharpen stuff up to 50%
         bool IExamineAction.CanPerform(ExamineActionState state)
         {
-            return state.Subject.CurrentHP < state.Subject.GearItemData.MaxHP * 0.745f;
+            return state.Subject.GetNormalizedCondition() < MAX_CONDITION;
         }
 
         bool IExamineActionCancellable.ConsumeOnCancel(ExamineActionState state)
@@ -89,16 +90,16 @@ namespace ExamineActionsAPIDemo
         // Normalized means 0.0 ~ 1.0 (0% ~ 100%)
         void IExamineAction.OnSuccess(ExamineActionState state)
         {
-            float normalizedNewCondition = state.Subject.GetNormalizedCondition() + 0.005f * (state.SubActionId + 1);
-            if (normalizedNewCondition > 0.75f) normalizedNewCondition = 0.75f;
+            float normalizedNewCondition = state.Subject.GetNormalizedCondition() + 0.01f * (state.SubActionId + 1);
+            if (normalizedNewCondition > MAX_CONDITION) normalizedNewCondition = MAX_CONDITION;
             state.Subject.SetNormalizedHP(normalizedNewCondition);
         }
 
         // Display the 75% limit
         InfoItemConfig? IExamineActionCustomInfo.GetInfo1(ExamineActionState state)
         {
-            var conf = new InfoItemConfig(new LocalizedString() { m_LocalizationID = "Max Condition" } , "75%");
-            if (state.Subject.GetNormalizedCondition() > 0.75f)
+            var conf = new InfoItemConfig(new LocalizedString() { m_LocalizationID = "Max Condition" } , $"{MAX_CONDITION*100f:0.0}%");
+            if (state.Subject.GetNormalizedCondition() > MAX_CONDITION)
             {
                 conf.LabelColor = ExamineActionsAPI.ExamineActionsAPI.DISABLED_COLOR;
                 conf.ContentColor = ExamineActionsAPI.ExamineActionsAPI.DISABLED_COLOR;
@@ -109,7 +110,7 @@ namespace ExamineActionsAPIDemo
         // Display how much will the condition will be improved
         InfoItemConfig? IExamineActionCustomInfo.GetInfo2(ExamineActionState state) 
         {
-            return new InfoItemConfig(new LocalizedString() { m_LocalizationID = "Improvement" } , $"{0.5f * (state.SubActionId + 1):0.00}%");
+            return new InfoItemConfig(new LocalizedString() { m_LocalizationID = "Improvement" } , $"{(state.SubActionId + 1):0.00}%");
         }
         void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
     }

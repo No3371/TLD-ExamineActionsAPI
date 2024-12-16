@@ -94,10 +94,15 @@ namespace ExamineActionsAPIDemo
 
         InfoItemConfig? IExamineActionCustomInfo.GetInfo1(ExamineActionState state)
         {
-            return new InfoItemConfig(
+            var conf = new InfoItemConfig(
                 new LocalizedString() { m_LocalizationID = "Min Weight" },
                 "0.1kg"
             );
+
+            if (state.Subject.WeightKG.ToQuantity(1) < 0.1f)
+                conf.ContentColor = conf.LabelColor = ExamineActionsAPI.ExamineActionsAPI.DISABLED_COLOR;
+
+            return conf;
         }
 
         InfoItemConfig? IExamineActionCustomInfo.GetInfo2(ExamineActionState state)

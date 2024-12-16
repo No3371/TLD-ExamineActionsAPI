@@ -5,7 +5,7 @@ using Il2CppTLD.IntBackedUnit;
 
 namespace ExamineActionsAPIDemo
 {
-    class ActionUnloadingFuel : IExamineAction, IExamineActionProduceLiquid
+    class ActionUnloadingFuel : IExamineAction, IExamineActionProduceLiquid, IExamineActionCustomInfo
     {
         public ActionUnloadingFuel() {}
 
@@ -65,5 +65,15 @@ namespace ExamineActionsAPIDemo
             liquids.Add(new (ExamineActionsAPI.PowderAndLiquidTypesLocator.KeroseneType, state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters.ToQuantity(1) * 0.95f, 100));
             liquids.Add(new (ExamineActionsAPI.PowderAndLiquidTypesLocator.KeroseneType, state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters.ToQuantity(1) * 0.05f, 50));
         }
+
+        public InfoItemConfig? GetInfo1(ExamineActionState state)
+        {
+            return new InfoItemConfig(
+                new LocalizedString() { m_LocalizationID = "Loaded" },
+                $"{state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters}L"
+            );
+        }
+
+        public InfoItemConfig? GetInfo2(ExamineActionState state) => null;
     }
 }

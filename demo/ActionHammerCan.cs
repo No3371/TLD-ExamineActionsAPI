@@ -35,7 +35,7 @@ namespace ExamineActionsAPIDemo
 
         float IExamineAction.CalculateProgressSeconds(ExamineActionState state)
         {
-            return 2;
+            return 3;
         }
         void IExamineAction.OnSuccess(ExamineActionState state) {}
 

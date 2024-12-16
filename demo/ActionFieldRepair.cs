@@ -32,7 +32,7 @@ namespace ExamineActionsAPIDemo
 
         int IExamineAction.CalculateDurationMinutes(ExamineActionState state)
         {
-            return Mathf.Max(5, state.Subject.m_Repairable?.m_DurationMinutes/10 ?? 5);
+            return Mathf.Max(5, state.Subject.m_Repairable.m_DurationMinutes/10);
         }
 
         float IExamineAction.CalculateProgressSeconds(ExamineActionState state)
@@ -42,7 +42,7 @@ namespace ExamineActionsAPIDemo
 
         bool IExamineAction.CanPerform(ExamineActionState state)
         {
-            return state.Subject.GetNormalizedCondition() < state.Subject.m_Repairable.m_RepairConditionCap / 100f / 5f;
+            return state.Subject.GetNormalizedCondition() < GetNormalizedConditionCap(state);
         }
 
         bool IExamineActionCancellable.ConsumeOnCancel(ExamineActionState state)
@@ -73,13 +73,16 @@ namespace ExamineActionsAPIDemo
 
         void IExamineAction.OnSuccess(ExamineActionState state)
         {
-            state.Subject.SetNormalizedHP(state.Subject.m_Repairable.m_RepairConditionCap / 100f / 5f);
+            state.Subject.SetNormalizedHP(UnityEngine.Random.Range(state.Subject.GetNormalizedCondition(), GetNormalizedConditionCap(state)));
         }
 
         InfoItemConfig? IExamineActionCustomInfo.GetInfo1(ExamineActionState state)
         {
-            var conf = new InfoItemConfig(new LocalizedString() { m_LocalizationID = "Repair Result" } , $"{state.Subject.m_Repairable.m_RepairConditionCap/10f:0.0}%");
-            if (state.Subject.GetNormalizedCondition() > state.Subject.m_Repairable.m_RepairConditionCap / 100f / 5f)
+            var conf = new InfoItemConfig(
+                new LocalizedString() { m_LocalizationID = "Repair Result" },
+                $"{state.Subject.GetNormalizedCondition()*100f:0.0}% ~ {GetNormalizedConditionCap(state)*100f:0.0}%"
+            );
+            if (state.Subject.GetNormalizedCondition() > GetNormalizedConditionCap(state))
             {
                 conf.Content = "N/A";
             }
@@ -88,8 +91,10 @@ namespace ExamineActionsAPIDemo
 
         InfoItemConfig? IExamineActionCustomInfo.GetInfo2(ExamineActionState state) 
         {
-            var conf = new InfoItemConfig(new LocalizedString() { m_LocalizationID = "Condition Cap" }, $"{state.Subject.m_Repairable.m_RepairConditionCap/10f:0.0}%");
-            if (state.Subject.GetNormalizedCondition() > state.Subject.m_Repairable.m_RepairConditionCap / 100f / 5f)
+            var conf = new InfoItemConfig(
+                new LocalizedString() { m_LocalizationID = "Condition Cap" },
+                $"{GetNormalizedConditionCap(state)*100f:0.0}%"
+            );if (state.Subject.GetNormalizedCondition() > GetNormalizedConditionCap(state))
             {
                 conf.LabelColor = ExamineActionsAPI.ExamineActionsAPI.DISABLED_COLOR;
                 conf.ContentColor = ExamineActionsAPI.ExamineActionsAPI.DISABLED_COLOR;
@@ -116,5 +121,7 @@ namespace ExamineActionsAPIDemo
         {
             return false;
         }
+
+        float GetNormalizedConditionCap (ExamineActionState state) => state.Subject.m_Repairable.m_RepairConditionCap / 100f / 5f;
     }
 }
