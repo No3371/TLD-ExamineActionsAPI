@@ -12,7 +12,9 @@ namespace ExamineActionsAPI
             ExamineActionState state = ExamineActionsAPI.Instance.State;
             if (state.ActionInProgress)
 			{
-                if (ExamineActionsAPI.Instance is IExamineActionCancellable cancellable) ExamineActionsAPI.Instance.OnActionCancelled();
+                if (ExamineActionsAPI.Instance is IExamineActionCancellable cancellable
+                 && cancellable.CanBeCanceled(state))
+                    ExamineActionsAPI.Instance.OnActionCancelled();
 			}
         }
     }

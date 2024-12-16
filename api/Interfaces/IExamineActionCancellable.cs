@@ -6,6 +6,10 @@ namespace ExamineActionsAPI
     public interface IExamineActionCancellable
 	{
         /// <summary>
+        /// This is not supposed to change during the action
+        /// </summary>
+		bool CanBeCanceled (ExamineActionState state) => true;
+        /// <summary>
         /// Called on cancellation
         /// </summary>
         /// <param name="state"></param>

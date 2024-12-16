@@ -32,7 +32,7 @@ namespace ExamineActionsAPI
             {
                 return true;
             }
-            return state.Action is IExamineActionCancellable;
+            return (state.Action is IExamineActionCancellable examineActionCancellable && examineActionCancellable.CanBeCanceled(state));
         }
     }
     // Prevent actions cancelled by clicking the cancel button
@@ -46,7 +46,7 @@ namespace ExamineActionsAPI
             {
                 return true;
             }
-            return state.Action is IExamineActionCancellable;
+            return (state.Action is IExamineActionCancellable examineActionCancellable && examineActionCancellable.CanBeCanceled(state));
         }
     }
 }
