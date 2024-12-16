@@ -848,7 +848,7 @@ namespace ExamineActionsAPI
             bool reqsMet = ExamineActionState.CheckRequirements(State, act); // If null, means the state is not yet fully loaded
             bool canPerform = reqsMet && act.CanPerform(Instance.State);
             it.SetDisabled(!canPerform);
-			if (subs == 1)
+			if (subs <= 1)
 			{
 				VeryVerboseLog($"+RefreshCustomActionMenuItemState {index} {canPerform} {subs}");
 				CustomActionMenuItemSubLabels[index].gameObject.SetActive(false); // Hide subactions indicator 
