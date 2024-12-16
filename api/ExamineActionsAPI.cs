@@ -1,4 +1,4 @@
-﻿// #define VERY_VERBOSE
+// #define VERY_VERBOSE
 using Il2Cpp;
 using MelonLoader;
 using UnityEngine;
@@ -320,7 +320,6 @@ namespace ExamineActionsAPI
 					pie.DegradeToolUsedForAction();
 					degrade.m_DegradeHP = cache;
 				}
-				else pie.DegradeToolUsedForAction();
 			}
 			
 
