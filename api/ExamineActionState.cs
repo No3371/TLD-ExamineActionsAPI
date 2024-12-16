@@ -1,6 +1,7 @@
 // #define VERY_VERBOSE
 using Il2Cpp;
 using Il2CppTLD.Gear;
+using Il2CppTLD.Interactions;
 using MelonLoader;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace ExamineActionsAPI
     public class ExamineActionState
 	{
         private GearItem? subject;
+        private BaseInteraction? subjectInteraction;
         private IExamineAction? action;
         private GearItem? selectedTool;
         private bool actionInProgress;
@@ -20,8 +22,21 @@ namespace ExamineActionsAPI
             {
 				var cache = subject;
                 subject = value;
+                subjectInteraction = null;
 				ResetActionMeta();
 				if (cache != value) ExamineActionsAPI.VeryVerboseLog($"Subject changed: {value?.name}");
+            }
+        }
+        public BaseInteraction? SubjectInteraction
+        {
+            get => subjectInteraction;
+			internal set
+            {
+				var cache = subjectInteraction;
+                subjectInteraction = value;
+                subject = null;
+				ResetActionMeta();
+				if (cache != value) ExamineActionsAPI.VeryVerboseLog($"SubjectInteraction changed: {value?.name}");
             }
         }
         public IExamineAction? Action
