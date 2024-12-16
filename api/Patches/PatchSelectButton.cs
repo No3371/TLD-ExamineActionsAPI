@@ -23,6 +23,7 @@ namespace ExamineActionsAPI
 				__instance.m_RifleUnloadPanel.SetActive(false);
 				__instance.m_ReadPanel.SetActive(false);
 				__instance.m_RefuelPanel.SetActive(false);
+				__instance.m_SafehouseCustomizationRepairPanel.SetActive(false);
 				
 				ExamineActionsAPI.Instance.OnCustomActionSelected(index - ExamineActionsAPI.Instance.OfficialActionMenuItems.Count);
 
