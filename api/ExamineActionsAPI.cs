@@ -172,6 +172,18 @@ namespace ExamineActionsAPI
 				State.PanelExtension?.OnBlockedPerformingAction(State, PerformingBlockedReased.Action);
 				return;
 			}
+
+			if (State.SelectingTool && State.SelectedTool != null)
+			{
+				if (State.SelectedTool.GetNormalizedCondition() <= 0)
+				{
+					GameAudioManager.PlayGUIError();
+					State.Panel.OnBlockedPerformingAction(State, PerformingBlockedReased.Requirements);
+					State.PanelExtension?.OnBlockedPerformingAction(State, PerformingBlockedReased.Requirements);
+					return;
+				}
+		
+			}
 	
 			if (State.Action is IExamineActionInterruptable interruptable && ExamineActionsAPI.Instance.ShouldInterrupt(interruptable))
 			{
