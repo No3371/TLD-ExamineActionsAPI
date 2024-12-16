@@ -8,17 +8,17 @@ namespace ExamineActionsAPI
         /// <summary>
         /// This is not supposed to change during the action
         /// </summary>
-		bool CanBeCanceled (ExamineActionState state) => true;
+		bool CanBeCancelled (ExamineActionState state) => true;
         /// <summary>
         /// Called on cancellation
         /// </summary>
         /// <param name="state"></param>
-		void OnActionCanceled (ExamineActionState state);
+		void OnActionCancelled (ExamineActionState state);
         /// <summary>
         /// Will the gear still be consumed on cancellation
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>
-		bool ConsumeOnCancel (ExamineActionState state);
+		bool ConsumeOnCancellation (ExamineActionState state);
 	}
 }

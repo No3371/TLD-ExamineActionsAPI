@@ -136,12 +136,12 @@ namespace ExamineActionsAPI
             return true;
         }
 
-        void IExamineActionCancellable.OnActionCanceled(ExamineActionState state)
+        void IExamineActionCancellable.OnActionCancelled(ExamineActionState state)
         {
             
         }
 
-        bool IExamineActionCancellable.ConsumeOnCancel(ExamineActionState state)
+        bool IExamineActionCancellable.ConsumeOnCancellation(ExamineActionState state)
         {
             return false;
         }

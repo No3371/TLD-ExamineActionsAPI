@@ -57,8 +57,8 @@ namespace ExamineActionsAPI
             return false;
         }
 
-        void IExamineActionCancellable.OnActionCanceled(ExamineActionState state) {}
-        bool IExamineActionCancellable.ConsumeOnCancel(ExamineActionState state) => false;
+        void IExamineActionCancellable.OnActionCancelled(ExamineActionState state) {}
+        bool IExamineActionCancellable.ConsumeOnCancellation(ExamineActionState state) => false;
 
         void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
 

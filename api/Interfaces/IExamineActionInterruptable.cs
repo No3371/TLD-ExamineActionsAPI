@@ -25,12 +25,15 @@ namespace ExamineActionsAPI
 		/// Will (non-risk) afflictions interrupt the action. (Non-Risk means not something like Infection Risk)
 		/// </summary>
 		bool InterruptOnNonRiskAffliction { get; }
-		float MinimumCondition { get; }
+		/// <summary>
+		/// When the player's condition is below this value, the action will be interrupted
+		/// </summary>
+		float ConditionThresholdToInterrupt { get; }
 		/// <summary>
 		/// Define custom conditions to trigger interruption. It is recommended to show HUDMessage to explain to player on returning true.
 		/// </summary>
 		/// <param name="state"></param>
 		/// <returns></returns>
-		bool ShouldInterruptCustomConditions (ExamineActionState state) => false;
+		bool CustomShouldInterrupt (ExamineActionState state) => false;
 	}
 }

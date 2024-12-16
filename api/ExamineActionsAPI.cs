@@ -470,12 +470,12 @@ namespace ExamineActionsAPI
             IExamineActionCancellable? cancellable = State.Action as IExamineActionCancellable;
 			var consumed = false;
 			var destroyed = false;
-			if (cancellable.ConsumeOnCancel(State))
+			if (cancellable.ConsumeOnCancellation(State))
 			{
 				consumed = true;
 				destroyed = ConsumeSubject(State.Action.OverrideConsumingUnits(State));
 			}
-            cancellable.OnActionCanceled(State);
+            cancellable.OnActionCancelled(State);
 			State.Panel.OnActionCancelled(State);
 			State.PanelExtension?.OnActionCancelled(State);
 			PostActionFinished();
@@ -819,7 +819,7 @@ namespace ExamineActionsAPI
 				HUDMessage.AddMessage(Localization.Get("GAMEPLAY_TooThirstyToRead"), false, false);
 				return true;
 			}
-			if (GameManager.GetConditionComponent().GetNormalizedCondition() < act.MinimumCondition)
+			if (GameManager.GetConditionComponent().GetNormalizedCondition() < act.ConditionThresholdToInterrupt)
 			{
 				HUDMessage.AddMessage(Localization.Get("GAMEPLAY_TooWoundedToRead"), false, false);
 				return true;
@@ -829,7 +829,7 @@ namespace ExamineActionsAPI
 				HUDMessage.AddMessage(Localization.Get("GAMEPLAY_CannotReadWithAfflictions"), false, false);
 				return true;
 			}
-			if (act.ShouldInterruptCustomConditions(State))
+			if (act.CustomShouldInterrupt(State))
 			{
 				return true;
 			}

@@ -14,7 +14,7 @@ namespace ExamineActionsAPI
             if (state.ActionInProgress && state.Action != null)
 			{
                 if (state.Action is not IExamineActionCancellable
-                 || (state.Action is IExamineActionCancellable examineActionCancellable && !examineActionCancellable.CanBeCanceled(state)))
+                 || (state.Action is IExamineActionCancellable examineActionCancellable && !examineActionCancellable.CanBeCancelled(state)))
                 __result = false;
 			}
         }

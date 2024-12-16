@@ -13,7 +13,7 @@ namespace ExamineActionsAPI
             if (state.ActionInProgress)
 			{
                 if (ExamineActionsAPI.Instance is IExamineActionCancellable cancellable
-                 && cancellable.CanBeCanceled(state))
+                 && cancellable.CanBeCancelled(state))
                     ExamineActionsAPI.Instance.OnActionCancelled();
 			}
         }

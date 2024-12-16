@@ -614,7 +614,7 @@ namespace ExamineActionsAPI
 
         void UpdateStopLabel (ExamineActionState state)
         {
-            var cancellable = state.Action is IExamineActionCancellable examineActionCancellable && examineActionCancellable.CanBeCanceled(state);
+            var cancellable = state.Action is IExamineActionCancellable examineActionCancellable && examineActionCancellable.CanBeCancelled(state);
             var interruptable = state.Action is IExamineActionInterruptable;
             stopLabel.gameObject.SetActive(true);
 
@@ -633,7 +633,7 @@ namespace ExamineActionsAPI
         {
             var consumeS = state.Action.ConsumeOnSuccess(state);
             var consumeF = (state.Action as IExamineActionFailable)?.ConsumeOnFailure(state) ?? false; // null means anyway not possible to happens
-            var consumeC = (state.Action as IExamineActionCancellable)?.ConsumeOnCancel(state) ?? false;
+            var consumeC = (state.Action as IExamineActionCancellable)?.ConsumeOnCancellation(state) ?? false;
             var consumeI = (state.Action as IExamineActionInterruptable)?.ConsumeOnInterruption(state) ?? false;
             
             if (!consumeS && !consumeF && !consumeC && !consumeI)
