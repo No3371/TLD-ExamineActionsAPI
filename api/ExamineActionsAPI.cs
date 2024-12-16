@@ -14,7 +14,7 @@ namespace ExamineActionsAPI
     public class ExamineActionsAPI : MelonMod
     {
 		public static ExamineActionsAPI Instance { get; private set; }
-		internal List<IExamineAction> RegisteredActions = new List<IExamineAction>();
+		internal List<IExamineAction> RegisteredExamineActions = new List<IExamineAction>();
 		public const bool DISABLE_CUSTOM_INFO = false; // Custom info can be simply disabled because it's pure UI thing (in case it's broken by updates)
 		public static readonly  Color BRIGHT_NORMAL_COLOR = new Color(1f, 1f, 1f, 1f);
 		public static readonly  Color NORMAL_COLOR = new Color(1f, 1f, 1f, 0.6275f);
@@ -63,7 +63,7 @@ namespace ExamineActionsAPI
 				return;
 			}
 
-			Instance.RegisteredActions.Add(action);
+			Instance.RegisteredExamineActions.Add(action);
 		}
 
 		[Conditional("VERY_VERBOSE")]

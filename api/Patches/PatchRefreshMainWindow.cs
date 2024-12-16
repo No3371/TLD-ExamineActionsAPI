@@ -21,7 +21,7 @@ namespace ExamineActionsAPI
 			ExamineActionsAPI.VeryVerboseLog($"+=======+++PRE RefreshMainWindow");
 
 
-			foreach (var a in ExamineActionsAPI.Instance.RegisteredActions)
+			foreach (var a in ExamineActionsAPI.Instance.RegisteredExamineActions)
 			{
 				if (!a.IsActionAvailable(ExamineActionsAPI.Instance.State.Subject)) continue;
 				ExamineActionsAPI.Instance.AvailableCustomActions.Add(a);

@@ -11,7 +11,7 @@ namespace ExamineActionsAPI
         {
 			if (__result) return;
 			if (gi == null) return;
-			foreach (var a in ExamineActionsAPI.Instance.RegisteredActions)
+			foreach (var a in ExamineActionsAPI.Instance.RegisteredExamineActions)
 			{
 				if (!a.IsActionAvailable(gi)) continue;
 				__result = true;
