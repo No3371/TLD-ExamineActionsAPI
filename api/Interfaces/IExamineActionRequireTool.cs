@@ -1,11 +1,10 @@
-using Il2Cpp;
 using UnityEngine;
 
 namespace ExamineActionsAPI
 {
-	/// <summary>
-	/// Actions implementing this will requires a specified tool to perform
-	/// </summary>
+    /// <summary>
+    /// Actions implementing this will requires a specified tool to perform
+    /// </summary>
     public interface IExamineActionRequireTool
 	{
 		/// <summary>

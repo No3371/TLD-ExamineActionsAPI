@@ -13,6 +13,9 @@ namespace ExamineActionsAPI
 
         public LiquidType Type { get; set; }
 		public float Liters { get; set; }
+        /// <summary>
+        /// 0-100% chance to consume/yield
+        /// </summary>
 		public byte Chance { get; set; }
 	}
 }

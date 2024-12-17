@@ -33,8 +33,6 @@ namespace ExamineActionsAPIDemo
         {
             Il2CppTLD.Gear.KeroseneLampItem lamp = state.Subject.m_KeroseneLampItem;
             if (lamp.IsOn()) lamp.TurnOff(true);
-
-            state.Temp[0] = state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters;
         }
 
         public int CalculateDurationMinutes(ExamineActionState state) => 3;
@@ -46,16 +44,6 @@ namespace ExamineActionsAPIDemo
         }
 
         public bool ConsumeOnSuccess(ExamineActionState state) => false;
-
-        // void IExamineActionProduceItems.GetProducts(ExamineActionsAPI.ExamineActionState state, System.Collections.Generic.List<MaterialOrProductItemConf> products)
-        // {
-        //     products.Add(new ("GEAR_LampFuel", 1, 100));
-        // }
-        // void IExamineActionProduceItems.PostProcessProduct(ExamineActionState state, int index, Il2Cpp.GearItem product)
-        // {
-        //     product.m_LiquidItem.m_LiquidLiters = (float) state.Temp[0];
-        // }
-
         void IExamineAction.OnActionSelected(ExamineActionState state) {}
         void IExamineAction.OnActionDeselected(ExamineActionState state) {}
         void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}

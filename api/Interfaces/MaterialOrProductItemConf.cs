@@ -17,7 +17,9 @@ namespace ExamineActionsAPI
         /// <value>GEAR_NNN</value>
         public string GearName { get; set; }
 		public int Units { get; set; }
-        /// <value>0 ~ 100</value>
+        /// <summary>
+        /// 0-100% chance to consume/yield
+        /// </summary>
 		public byte Chance { get; set; }
 	}
 }
