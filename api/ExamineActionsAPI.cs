@@ -172,13 +172,17 @@ namespace ExamineActionsAPI
 				return;
 			}
 
-			if (State.SelectingTool && State.SelectedTool != null)
+			if (State.Action is IExamineActionHasExternalConstraints constraints)
 			{
-				if (State.SelectedTool.GetNormalizedCondition() <= 0)
+				var indoorStateConstraints = constraints.GetRequiredIndoorState(State);
+				if (indoorStateConstraints != Weather.IndoorState.NotSet && indoorStateConstraints != GameManager.GetWeatherComponent().m_IsIndoors
+				 || !constraints.IsValidTime(State, new (GameManager.m_TimeOfDay.GetDayNumber(), GameManager.m_TimeOfDay.GetHour(), GameManager.m_TimeOfDay.GetMinutes()))
+				 || !constraints.IsValidWeather(State, GameManager.GetWeatherComponent())
+				 || !constraints.IsPointingToValidObject(State, GameManager.GetPlayerManagerComponent().GetInteractiveObjectUnderCrosshairs(2)))
 				{
 					GameAudioManager.PlayGUIError();
-					State.Panel.OnBlockedPerformingAction(State, PerformingBlockedReased.Requirements);
-					State.PanelExtension?.OnBlockedPerformingAction(State, PerformingBlockedReased.Requirements);
+					State.Panel.OnBlockedPerformingAction(State, PerformingBlockedReased.WeatherConstraint);
+					State.PanelExtension?.OnBlockedPerformingAction(State, PerformingBlockedReased.WeatherConstraint);
 					return;
 				}
 			}

@@ -188,6 +188,19 @@ namespace ExamineActionsAPI
                     return false;
             }
 
+            if (act is IExamineActionHasExternalConstraints constraints)
+            {
+                var indoorStateConstraints = constraints.GetRequiredIndoorState(this);
+                var constraintsSatisfied =
+                    (indoorStateConstraints == Weather.IndoorState.NotSet || indoorStateConstraints == GameManager.GetWeatherComponent().m_IsIndoors)
+                    && constraints.IsValidTime(this, new (GameManager.m_TimeOfDay.GetDayNumber(), GameManager.m_TimeOfDay.GetHour(), GameManager.m_TimeOfDay.GetMinutes()))
+                    && constraints.IsValidWeather(this, GameManager.GetWeatherComponent())
+                    && constraints.IsPointingToValidObject(this, GameManager.GetPlayerManagerComponent().GetInteractiveObjectUnderCrosshairs(2.5f));
+
+                if (!constraintsSatisfied)
+                    return false;
+            }
+
             return true;
         }
 
@@ -338,6 +351,10 @@ namespace ExamineActionsAPI
 
 		public Dictionary<int, object> Temp { get; } = new Dictionary<int, object>();
 
+        public GameObject GetObjectPointedAt ()
+        {
+            return GameManager.GetPlayerManagerComponent().GetInteractiveObjectUnderCrosshairs(2);
+        }
         public void SetBottomWarningMessage (string message) => Panel.SetBottomWarning(message);
 	}
 }
