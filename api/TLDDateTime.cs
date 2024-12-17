@@ -71,6 +71,7 @@ namespace ExamineActionsAPI
 
         public int TotalHours => Day * 24 + Hour;
         public int TotalMinutes => TotalHours * 60 + Minute;
+        public float NormalizedDayHours => Hour + Minute / 60f;
 
         public override string ToString()
         {

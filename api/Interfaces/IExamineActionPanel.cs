@@ -18,13 +18,19 @@ namespace ExamineActionsAPI
 		void OnActionInterrupted(ExamineActionState state, bool force);
 		void OnSelectingTool (ExamineActionState state);
 		void OnSelectingToolChanged (ExamineActionState state);
-		void OnToolSelected (ExamineActionState state); 
+		void OnToolSelected (ExamineActionState state);
+		void SetBottomWarning (string message);
 	}
 
 	public enum PerformingBlockedReased
 	{
 		Action,
-		Requirements,
+		MaterialRequirement,
+		ToolRequirement,
+		WeatherConstraint,
+		PointedObjectConstraint,
+		TimeConstraint,
+		IndoorStateConstraint,
 		Interruption
 	}
 }

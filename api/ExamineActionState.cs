@@ -80,8 +80,8 @@ namespace ExamineActionsAPI
         internal int? ActiveActionDurationMinutes { get; set; }
 		internal float? ActiveSuccessChance { get; set; }
 		internal ActionResult? ActiveResult { get; set; }
-		internal bool? ActiveActionRequirementsMet { get; set; }
-		internal bool? ActiveActionRequirementsMetTool { get; set; }
+		internal bool? ActiveActionMaterialRequirementsMet { get; set; }
+		internal bool? ActiveActionToolRequirementsMet { get; set; }
 		internal bool? AllMaterialsReady { get; set; }
 		internal bool InterruptionFlag { get; set; }
 		internal bool InterruptionSystemFlag { get; set; }
@@ -131,7 +131,7 @@ namespace ExamineActionsAPI
 			SelectedTool = null;
 			InterruptionFlag = false;
 			InterruptionSystemFlag = false;
-			ActiveActionRequirementsMet = null;
+			ActiveActionMaterialRequirementsMet = null;
 			SelectingTool = false;
 			Panel?.Toggle(false);
 			Panel = null;
@@ -153,11 +153,11 @@ namespace ExamineActionsAPI
 		public void Recalculate ()
         {
             MaybeUpdateSuccessChance();
-            ActiveActionRequirementsMet = ActiveActionRequirementsMetTool = true;
+            ActiveActionMaterialRequirementsMet = ActiveActionToolRequirementsMet = true;
 
             AllMaterialsReady = CheckMaterials(this, Action);
 			if (!AllMaterialsReady.Value)
-                ActiveActionRequirementsMet = false;
+                ActiveActionMaterialRequirementsMet = false;
 
             if (Action is IExamineActionRequireTool eat)
             {
@@ -168,8 +168,7 @@ namespace ExamineActionsAPI
                 // 	ExamineActionsAPI.VeryVerboseLog($"{pie.m_RepairToolsList.m_Tools[i]?.name} ({pie.m_RepairToolsList.m_Tools[i].GetInstanceID()})");
                 if (pie.m_RepairToolsList.m_Tools.Count == 0) // No tool
                 {
-                    ActiveActionRequirementsMet = false;
-                    ActiveActionRequirementsMetTool = false;
+                    ActiveActionToolRequirementsMet = false;
                 }
             }
             ActiveActionDurationMinutes = this.Action.CalculateDurationMinutes(this);
@@ -338,5 +337,7 @@ namespace ExamineActionsAPI
         }
 
 		public Dictionary<int, object> Temp { get; } = new Dictionary<int, object>();
+
+        public void SetBottomWarningMessage (string message) => Panel.SetBottomWarning(message);
 	}
 }

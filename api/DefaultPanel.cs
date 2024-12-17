@@ -709,14 +709,21 @@ namespace ExamineActionsAPI
             bottomWarningLabel.gameObject.SetActive(true);
             bottomWarningLabel.text = reason switch
             {
-                PerformingBlockedReased.Interruption => Localization.Get("Action will be interrupted (Sick/Hurt/Cold/Hungry...)") ?? null,
-                PerformingBlockedReased.Action => Localization.Get("Action can not be performed") ?? null,
-                PerformingBlockedReased.Requirements => state.ActiveActionRequirementsMetTool switch
-                {
-                    true => Localization.Get("Action requirements not satisfied") ?? null,
-                    false => Localization.Get("GAMEPLAY_ToolRequired") ?? null
-                },
+                PerformingBlockedReased.Interruption => Localization.Get("Action will be interrupted (Sick/Hurt/Cold/Hungry...)"),
+                PerformingBlockedReased.Action => Localization.Get("Action blocked by design"),
+                PerformingBlockedReased.MaterialRequirement => Localization.Get("Action requirements not satisfied"),
+                PerformingBlockedReased.ToolRequirement => Localization.Get("GAMEPLAY_ToolRequired"),
+                PerformingBlockedReased.WeatherConstraint => Localization.Get("Action requires specific weather"),
+                PerformingBlockedReased.PointedObjectConstraint => Localization.Get("Action requires looking at some specific object"),
+                PerformingBlockedReased.TimeConstraint => Localization.Get("Action requires specific time"),
+                PerformingBlockedReased.IndoorStateConstraint => GameManager.GetWeatherComponent().m_IsIndoors == Weather.IndoorState.Indoors? Localization.Get("Action requires outdoor") : Localization.Get("Action requires indoor"),
             };
+        }
+
+        public void SetBottomWarning(string message)
+        {
+            bottomWarningLabel.gameObject.SetActive(true);
+            bottomWarningLabel.text = message;
         }
 
         public class InfoBlock

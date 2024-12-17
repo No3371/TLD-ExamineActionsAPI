@@ -79,7 +79,7 @@ namespace ExamineActionsAPI
 		internal List<Panel_Inventory_Examine_MenuItem> CustomActionMenuItems = new List<Panel_Inventory_Examine_MenuItem>();
 		internal List<UILabel> CustomActionMenuItemSubLabels = new List<UILabel>();
 		internal List<IExamineAction> AvailableCustomActions = new List<IExamineAction>();
-		internal IExamineActionPanel DefaultPanel;
+		internal IExamineActionPanel DefaultPanel { get; set; }
 
 
 		public void OnCustomActionSelected (int index)
@@ -163,7 +163,6 @@ namespace ExamineActionsAPI
 		public void OnPerformSelectedAction ()
 		{
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
-			VeryVerboseLog($"+OnPerformSelectedAction");
 			
 			if (!State.Action.CanPerform(State))
 			{
@@ -182,7 +181,6 @@ namespace ExamineActionsAPI
 					State.PanelExtension?.OnBlockedPerformingAction(State, PerformingBlockedReased.Requirements);
 					return;
 				}
-		
 			}
 	
 			if (State.Action is IExamineActionInterruptable interruptable && ExamineActionsAPI.Instance.ShouldInterrupt(interruptable))
@@ -193,25 +191,22 @@ namespace ExamineActionsAPI
 				return;
 			}
 
-			if (!State.ActiveActionRequirementsMet.Value)
+			if (!State.ActiveActionMaterialRequirementsMet.Value)
 			{
 				GameAudioManager.PlayGUIError();
-				State.Panel.OnBlockedPerformingAction(State, PerformingBlockedReased.Requirements);
-				State.PanelExtension?.OnBlockedPerformingAction(State, PerformingBlockedReased.Requirements);
+				State.Panel.OnBlockedPerformingAction(State, PerformingBlockedReased.MaterialRequirement);
+				State.PanelExtension?.OnBlockedPerformingAction(State, PerformingBlockedReased.MaterialRequirement);
 				return;
 			}
 	
-			LastTriedToPerformedCache = State.Action;
 			if (State.Action is IExamineActionRequireTool)
 			{
-				if (State.SelectingTool)
+				if (State.SelectingTool && State.SelectedTool != null && State.SelectedTool.GetNormalizedCondition() <= 0)
 				{
-					VeryVerboseLog($"GetSelectedTool {pie.m_RepairToolsList.GetSelectedTool()?.name}");
-					State.SelectingTool = false;
-					State.Panel.OnToolSelected(State);
-					State.PanelExtension?.OnToolSelected(State);
-					PerformAction();
-					pie.SelectWindow(pie.m_ActionInProgressWindow);
+					GameAudioManager.PlayGUIError();
+					State.Panel.OnBlockedPerformingAction(State, PerformingBlockedReased.ToolRequirement);
+					State.PanelExtension?.OnBlockedPerformingAction(State, PerformingBlockedReased.ToolRequirement);
+					return;
 				}
 				else
 				{
@@ -219,7 +214,19 @@ namespace ExamineActionsAPI
 					State.Panel.OnSelectingTool(State);
 					State.PanelExtension?.OnSelectingTool(State);
 					pie.SelectWindow(pie.GetActionToolSelect());
+					return;
 				}
+			}
+
+			LastTriedToPerformedCache = State.Action;
+			if (State.Action is IExamineActionRequireTool && State.SelectingTool)
+			{
+				VeryVerboseLog($"GetSelectedTool {pie.m_RepairToolsList.GetSelectedTool()?.name}");
+				State.SelectingTool = false;
+				State.Panel.OnToolSelected(State);
+				State.PanelExtension?.OnToolSelected(State);
+				PerformAction();
+				pie.SelectWindow(pie.m_ActionInProgressWindow);
 			}
 			else
 			{
@@ -227,7 +234,6 @@ namespace ExamineActionsAPI
 				PerformAction();
 				pie.SelectWindow(pie.m_ActionInProgressWindow);
 			}
-			VeryVerboseLog($"-OnPerformSelectedAction");
 		}
 
 		internal void PerformAction ()
