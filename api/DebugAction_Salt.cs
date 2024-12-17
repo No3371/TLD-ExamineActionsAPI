@@ -121,7 +121,7 @@ namespace ExamineActionsAPI
             return 6f;
         }
 
-        public bool ConsumeOnCancel(ExamineActionState state)
+        public bool ConsumeOnCancellation(ExamineActionState state)
         {
             return false;
         }
