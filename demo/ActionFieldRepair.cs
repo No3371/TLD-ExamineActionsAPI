@@ -28,7 +28,7 @@ namespace ExamineActionsAPIDemo
 
         bool IExamineActionInterruptable.InterruptOnNonRiskAffliction => true;
 
-        float IExamineActionInterruptable.MinimumCondition => 0.5f;
+        float IExamineActionInterruptable.NormalizedConditionInterruptThreshold => 0.5f;
 
         int IExamineAction.CalculateDurationMinutes(ExamineActionState state)
         {

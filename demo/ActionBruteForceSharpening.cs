@@ -32,7 +32,7 @@ namespace ExamineActionsAPIDemo
 
         bool IExamineActionInterruptable.InterruptOnNonRiskAffliction => true;
 
-        float IExamineActionInterruptable.MinimumCondition => 0.5f;
+        float IExamineActionInterruptable.NormalizedConditionInterruptThreshold => 0.5f;
         const float MAX_CONDITION = 0.5f;
 
         // For this action, we are using SubActions as a scaling factor of how much condition to sharpen

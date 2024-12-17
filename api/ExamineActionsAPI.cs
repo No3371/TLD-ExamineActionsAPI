@@ -836,7 +836,7 @@ namespace ExamineActionsAPI
 				HUDMessage.AddMessage(Localization.Get("GAMEPLAY_TooThirstyToRead"), false, false);
 				return true;
 			}
-			if (GameManager.GetConditionComponent().GetNormalizedCondition() < act.ConditionThresholdToInterrupt)
+			if (GameManager.GetConditionComponent().GetNormalizedCondition() < act.NormalizedConditionInterruptThreshold)
 			{
 				HUDMessage.AddMessage(Localization.Get("GAMEPLAY_TooWoundedToRead"), false, false);
 				return true;

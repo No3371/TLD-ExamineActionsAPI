@@ -28,7 +28,8 @@ namespace ExamineActionsAPI
 		/// <summary>
 		/// When the player's condition is below this value, the action will be interrupted
 		/// </summary>
-		float ConditionThresholdToInterrupt { get; }
+		/// <value>0-1</value>
+		float NormalizedConditionInterruptThreshold { get; }
 		/// <summary>
 		/// Define custom conditions to trigger interruption. It is recommended to show HUDMessage to explain to player on returning true.
 		/// </summary>

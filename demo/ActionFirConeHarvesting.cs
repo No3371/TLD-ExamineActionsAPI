@@ -31,7 +31,7 @@ namespace ExamineActionsAPIDemo
 
         bool IExamineActionInterruptable.InterruptOnNonRiskAffliction => false;
 
-        float IExamineActionInterruptable.MinimumCondition => 0f;
+        float IExamineActionInterruptable.NormalizedConditionInterruptThreshold => 0f;
 
         bool IExamineAction.IsActionAvailable(GearItem item)
         {
