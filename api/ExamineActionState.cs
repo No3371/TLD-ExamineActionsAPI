@@ -364,6 +364,5 @@ namespace ExamineActionsAPI
         {
             return GameManager.GetPlayerManagerComponent().GetInteractiveObjectUnderCrosshairs(2);
         }
-        public void SetBottomWarningMessage (string message) => Panel.SetBottomWarning(message);
 	}
 }
