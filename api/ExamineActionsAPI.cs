@@ -165,12 +165,10 @@ namespace ExamineActionsAPI
 		{
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 			
+			PerformingBlockedReased? reason = null;
 			if (!State.Action.CanPerform(State))
 			{
-				GameAudioManager.PlayGUIError();
-				State.Panel.OnBlockedPerformingAction(State, PerformingBlockedReased.Action);
-				State.PanelExtension?.OnBlockedPerformingAction(State, PerformingBlockedReased.Action);
-				return;
+				reason = PerformingBlockedReased.Action;
 			}
 
             if (State.Action.ConsumeOnSuccess(State) && State.Action.GetConsumingUnits(State) > (State.Subject.m_StackableItem?.m_Units ?? 1))
@@ -181,41 +179,35 @@ namespace ExamineActionsAPI
 			if (State.Action is IExamineActionHasExternalConstraints constraints)
 			{
 				var indoorStateConstraints = constraints.GetRequiredIndoorState(State);
-				if (indoorStateConstraints != Weather.IndoorState.NotSet && indoorStateConstraints != GameManager.GetWeatherComponent().m_IsIndoors
-				 || !constraints.IsValidTime(State, new (GameManager.m_TimeOfDay.GetDayNumber(), GameManager.m_TimeOfDay.GetHour(), GameManager.m_TimeOfDay.GetMinutes()))
-				 || !constraints.IsValidWeather(State, GameManager.GetWeatherComponent())
-				 || !constraints.IsPointingToValidObject(State, GameManager.GetPlayerManagerComponent().GetInteractiveObjectUnderCrosshairs(2)))
-				{
-					GameAudioManager.PlayGUIError();
-					State.Panel.OnBlockedPerformingAction(State, PerformingBlockedReased.WeatherConstraint);
-					State.PanelExtension?.OnBlockedPerformingAction(State, PerformingBlockedReased.WeatherConstraint);
-					return;
-				}
+				if (indoorStateConstraints != Weather.IndoorState.NotSet && indoorStateConstraints != GameManager.GetWeatherComponent().m_IsIndoors)
+					reason = PerformingBlockedReased.IndoorStateConstraint;
+				if (!constraints.IsValidTime(State, new (GameManager.m_TimeOfDay.GetDayNumber(), GameManager.m_TimeOfDay.GetHour(), GameManager.m_TimeOfDay.GetMinutes())))
+				    reason = PerformingBlockedReased.TimeConstraint;
+				if (!constraints.IsValidWeather(State, GameManager.GetWeatherComponent()))
+					reason = PerformingBlockedReased.WeatherConstraint;
+				if (!constraints.IsPointingToValidObject(State, GameManager.GetPlayerManagerComponent().GetInteractiveObjectUnderCrosshairs(2)))
+					reason = PerformingBlockedReased.PointedObjectConstraint;
 			}
 	
 			if (State.Action is IExamineActionInterruptable interruptable && ExamineActionsAPI.Instance.ShouldInterrupt(interruptable))
 			{
-				GameAudioManager.PlayGUIError();
-				State.Panel.OnBlockedPerformingAction(State, PerformingBlockedReased.Interruption);
-				State.PanelExtension?.OnBlockedPerformingAction(State, PerformingBlockedReased.Interruption);
-				return;
+				reason = PerformingBlockedReased.Interruption;
 			}
 
 			if (!State.ActiveActionMaterialRequirementsMet.Value)
 			{
-				GameAudioManager.PlayGUIError();
-				State.Panel.OnBlockedPerformingAction(State, PerformingBlockedReased.MaterialRequirement);
-				State.PanelExtension?.OnBlockedPerformingAction(State, PerformingBlockedReased.MaterialRequirement);
-				return;
+				reason = PerformingBlockedReased.MaterialRequirement;
+			}
+			if (!State.ActiveActionToolRequirementsMet.Value)
+			{
+				reason = PerformingBlockedReased.ToolRequirement;
 			}
 	
 			if (State.Action is IExamineActionRequireTool)
 			{
 				if (State.SelectingTool && State.SelectedTool != null && State.SelectedTool.GetNormalizedCondition() <= 0)
 				{
-					GameAudioManager.PlayGUIError();
-					State.Panel.OnBlockedPerformingAction(State, PerformingBlockedReased.ToolRequirement);
-					State.PanelExtension?.OnBlockedPerformingAction(State, PerformingBlockedReased.ToolRequirement);
+					reason = PerformingBlockedReased.ToolRequirement;
 					return;
 				}
 				else
@@ -226,6 +218,14 @@ namespace ExamineActionsAPI
 					pie.SelectWindow(pie.GetActionToolSelect());
 					return;
 				}
+			}
+			
+			if (reason != null)
+			{
+				GameAudioManager.PlayGUIError();
+				State.Panel.OnBlockedPerformingAction(State, reason.Value);
+				State.PanelExtension?.OnBlockedPerformingAction(State, reason.Value);
+				return;
 			}
 
 			LastTriedToPerformedCache = State.Action;
