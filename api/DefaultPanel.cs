@@ -234,20 +234,18 @@ namespace ExamineActionsAPI
             
             bool displayingMats = state.GetAllMaterialCount() > 0;
             bool displayingProducts = state.GetAllProductCount() > 0;
-            int upperY = infoBlockExtended ? -60 : -24;
-            int lowerY = infoBlockExtended ? -200 : -184;
             if (displayingMats && displayingProducts)
             {
-                materialsClone.transform.localPosition = new Vector3(materialsClone.transform.localPosition.x, upperY, materialsClone.transform.localPosition.z);
-                yieldsClone.transform.localPosition = new Vector3(yieldsClone.transform.localPosition.x, lowerY, yieldsClone.transform.localPosition.z);
+                materialsClone.transform.localPosition = new Vector3(materialsClone.transform.localPosition.x, infoBlockExtended ? -36 : 16, materialsClone.transform.localPosition.z);
+                yieldsClone.transform.localPosition = new Vector3(yieldsClone.transform.localPosition.x, infoBlockExtended ? -176 : -160, yieldsClone.transform.localPosition.z);
             }
             else if (displayingMats)
             {
-                materialsClone.transform.localPosition = new Vector3(materialsClone.transform.localPosition.x, infoBlockExtended ? -120 : -96, materialsClone.transform.localPosition.z);
+                materialsClone.transform.localPosition = new Vector3(materialsClone.transform.localPosition.x, infoBlockExtended ? -96 : -72, materialsClone.transform.localPosition.z);
             }
             else if (displayingProducts)
             {
-                yieldsClone.transform.localPosition = new Vector3(yieldsClone.transform.localPosition.x, infoBlockExtended ? -120 : -96, yieldsClone.transform.localPosition.z);
+                yieldsClone.transform.localPosition = new Vector3(yieldsClone.transform.localPosition.x, infoBlockExtended ? -96 : -72, yieldsClone.transform.localPosition.z);
             }
 
 
