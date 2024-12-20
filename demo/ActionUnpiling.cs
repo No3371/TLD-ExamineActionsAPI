@@ -59,7 +59,7 @@ namespace ExamineActionsAPIDemo
         void IExamineAction.OnActionDeselected(ExamineActionState state) {}
 
         bool IExamineAction.ConsumeOnSuccess(ExamineActionState state) => true;
-        int IExamineAction.OverrideConsumingUnits(ExamineActionState state)
+        int IExamineAction.GetConsumingUnits(ExamineActionState state)
         {
             return state.SubActionId + 1;
         }

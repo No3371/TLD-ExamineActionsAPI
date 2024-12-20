@@ -51,7 +51,7 @@ namespace ExamineActionsAPIDemo
         // So the SubAction#0 would be "prepare 1 acorn"
         // which will consume 1 acorn
         // SubActionId is 0-based so we add 1 to it
-        int IExamineAction.OverrideConsumingUnits(ExamineActionState state) => state.SubActionId + 1;
+        int IExamineAction.GetConsumingUnits(ExamineActionState state) => state.SubActionId + 1;
         
         // For this action, we are using the sub action feature as "how many acorn to prepare"
         // So it's important to tell the API how many SubActions are availabe based on how many acorns in the stack the player is examining

@@ -67,7 +67,7 @@ namespace ExamineActionsAPI
 		/// <summary>
 		/// If the action should consume the subject more than 1 unit, override it with this.
 		/// </summary>
-		int OverrideConsumingUnits (ExamineActionState state) => 1;
+		int GetConsumingUnits (ExamineActionState state) => 1;
 		int GetSubActionCount (ExamineActionState state) => 1;
 		/// <summary>
 		/// In situations like wolf attacks, Exmaine UI will be closed.

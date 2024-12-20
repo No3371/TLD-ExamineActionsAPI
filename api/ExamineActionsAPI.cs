@@ -382,7 +382,7 @@ namespace ExamineActionsAPI
 			if (State.Action.ConsumeOnSuccess(State))
 			{
 				consumed = true;
-				destroyed = ConsumeSubject(State.Action.OverrideConsumingUnits(State));
+				destroyed = ConsumeSubject(State.Action.GetConsumingUnits(State));
 			}
 			State.Action.OnSuccess(State);
 			State.Panel.OnActionSucceed(State);
@@ -415,7 +415,7 @@ namespace ExamineActionsAPI
 			if (eaf.ConsumeOnFailure(State))
 			{
 				consumed = true;
-				destroyed = ConsumeSubject(State.Action.OverrideConsumingUnits(State));
+				destroyed = ConsumeSubject(State.Action.GetConsumingUnits(State));
 			}
             eaf.OnActionFailed(State);
 			State.Panel.OnActionFailed(State);
@@ -460,7 +460,7 @@ namespace ExamineActionsAPI
 			if (interruptable.ConsumeOnInterruption(State))
 			{
 				consumed = true;
-				destroyed = ConsumeSubject(State.Action.OverrideConsumingUnits(State));
+				destroyed = ConsumeSubject(State.Action.GetConsumingUnits(State));
 			}
 			interruptable.OnInterrupted(State);
 			State.Panel.OnActionInterrupted(State, system);
@@ -494,7 +494,7 @@ namespace ExamineActionsAPI
 			if (cancellable.ConsumeOnCancellation(State))
 			{
 				consumed = true;
-				destroyed = ConsumeSubject(State.Action.OverrideConsumingUnits(State));
+				destroyed = ConsumeSubject(State.Action.GetConsumingUnits(State));
 			}
             cancellable.OnActionCancelled(State);
 			State.Panel.OnActionCancelled(State);

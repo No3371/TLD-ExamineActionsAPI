@@ -22,7 +22,7 @@ namespace ExamineActionsAPIDemo
         public bool CanPerform(ExamineActionState state) => state.Subject.m_StackableItem.m_Units >= 5;
 
         public bool ConsumeOnSuccess(ExamineActionState state) => true;
-        public int OverrideConsumingUnits (ExamineActionState state) => (state.SubActionId + 1) * 5;
+        public int GetConsumingUnits (ExamineActionState state) => (state.SubActionId + 1) * 5;
         int IExamineAction.GetSubActionCount (ExamineActionState state) => state.Subject.m_StackableItem.m_Units / 5;
 
         public bool IsActionAvailable(GearItem item)

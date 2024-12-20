@@ -669,7 +669,7 @@ namespace ExamineActionsAPI
             else if (consumeI)
                 consumeLabel.text = "Consume on: Interruption";
 
-            int consuming = state.Action.OverrideConsumingUnits(state);
+            int consuming = state.Action.GetConsumingUnits(state);
             if (consuming > 1)
                 consumeLabel.text += $" (x{consuming})";
         }
