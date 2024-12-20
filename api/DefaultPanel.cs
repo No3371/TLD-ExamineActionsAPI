@@ -344,9 +344,14 @@ namespace ExamineActionsAPI
     
                 Vector3 localPosition = slot.transform.localPosition;
 				localPosition.x = 0;
-				localPosition.x += PR.m_RequiredMaterialSpacing * 3.2f * ((float)configured - (total / 2f - 0.5f)) / total;
+				localPosition.x += PR.m_RequiredMaterialSpacing * 3.75f * ((float)configured - (total / 2f - 0.5f)) / total;
 				slot.transform.localPosition = localPosition;
 				slot.transform.localScale = total >= 4 ? new Vector3(0.7f, 0.7f, 1) : new Vector3(1f, 1f, 1);
+
+                bool displayingMats = state.GetAllMaterialCount() > 0;
+                bool displayingProducts = state.GetAllProductCount() > 0;
+                if (infoBlockExtended && displayingMats && displayingProducts)
+				    slot.transform.localScale = new Vector3(0.7f, 0.7f, 1);
 
 
 				if (configured >= matCount + liqCount) // Powder
@@ -470,9 +475,14 @@ namespace ExamineActionsAPI
 
                 Vector3 localPosition = slot.transform.localPosition;
                 localPosition.x = 0;
-                localPosition.x += PR.m_RequiredMaterialSpacing * 3.2f * ((float)configured - (total / 2f - 0.5f)) / total;
+                localPosition.x += PR.m_RequiredMaterialSpacing * 3.75f * ((float)configured - (total / 2f - 0.5f)) / total;
                 slot.transform.localPosition = localPosition;
                 slot.transform.localScale = total >= 4 ? new Vector3(0.7f, 0.7f, 1) : new Vector3(1f, 1f, 1);
+
+                bool displayingMats = state.GetAllMaterialCount() > 0;
+                bool displayingProducts = state.GetAllProductCount() > 0;
+                if (infoBlockExtended && displayingMats && displayingProducts)
+				    slot.transform.localScale = new Vector3(0.7f, 0.7f, 1);
 
                 if (configured >= matCount + liqCount) // Powder
                 {
