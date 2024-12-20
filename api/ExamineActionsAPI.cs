@@ -125,6 +125,8 @@ namespace ExamineActionsAPI
 
 		public void OnNextSubAction ()
 		{
+			if (State.Action == null)
+				return;
 			// VeryVerboseLog($"+OnNextSubAction {State.SubActionId}");
             int max = State.Action.GetSubActionCount(State);
             if (State.SubActionId + 1 < max)
@@ -140,6 +142,8 @@ namespace ExamineActionsAPI
 		}
 		public void OnPreviousSubAction ()
 		{
+			if (State.Action == null)
+				return;
 			// VeryVerboseLog($"+OnPreviousSubAction {State.SubActionId}");
             if (State.SubActionId - 1 >= 0)
 			{

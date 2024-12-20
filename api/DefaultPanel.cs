@@ -27,6 +27,7 @@ namespace ExamineActionsAPI
         public DefaultPanel(Panel_Inventory_Examine pie, Panel_Repair pr)
         {
 			repairPanelClone = GameObject.Instantiate(pie.m_RepairPanel, pie.m_RepairPanel.transform.parent);
+            repairPanelClone.gameObject.name = "EAAPI Default Panel";
             Transform gameobjects = FindChildWrapper(repairPanelClone.transform, "GameObject");
 			// toolSelectionClone = GameObject.Instantiate(pie.m_ActionToolSelect, pie.m_ActionToolSelect.transform.parent);
 			chanceClone = FindChildWrapper(repairPanelClone.transform, "GameObject/ChanceLabels").gameObject;
@@ -723,6 +724,7 @@ namespace ExamineActionsAPI
                 PerformingBlockedReased.PointedObjectConstraint => Localization.Get("Action requires looking at some specific object"),
                 PerformingBlockedReased.TimeConstraint => Localization.Get("Action requires specific time"),
                 PerformingBlockedReased.IndoorStateConstraint => GameManager.GetWeatherComponent().m_IsIndoors == Weather.IndoorState.Indoors? Localization.Get("Action requires outdoor") : Localization.Get("Action requires indoor"),
+                _ => reason.ToString()
             };
         }
 

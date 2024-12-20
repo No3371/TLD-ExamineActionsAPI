@@ -9,7 +9,8 @@ namespace ExamineActionsAPI
         private static bool Prefix(Panel_Inventory_Examine __instance)
         {
             // To prevent official actions being disabled/enabled due to tools list changed
-			if (ExamineActionsAPI.Instance.State.Action != null) return false;
+			if (ExamineActionsAPI.Instance.State.Action != null
+             && ExamineActionsAPI.Instance.State.SelectingTool) return false;
 			return true;
         }
     }
