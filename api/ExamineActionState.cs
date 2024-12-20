@@ -171,19 +171,23 @@ namespace ExamineActionsAPI
                     ActiveActionToolRequirementsMet = false;
                 }
             }
+
             ActiveActionDurationMinutes = this.Action.CalculateDurationMinutes(this);
         }
         static Il2CppSystem.Collections.Generic.List<GameObject> temp = new ();
-        public static bool CheckRequirements (ExamineActionState state, IExamineAction act)
+        public bool CheckCanPerformSelectedAction (IExamineAction act)
         {
-            var mats = CheckMaterials(state, act);
+            var mats = CheckMaterials(this, act);
 			if (!mats)
+                return false;
+            
+            if (!act.CanPerform(this))
                 return false;
 
             if (act is IExamineActionRequireTool eat)
             {
                 temp.Clear();
-                eat.GetToolOptions(state, temp);
+                eat.GetToolOptions(this, temp);
                 if (temp.Count == 0) // No tool
                     return false;
             }
