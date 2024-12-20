@@ -13,9 +13,10 @@ namespace ExamineActionsAPI
 		internal GameObject repairPanelClone/*, toolSelectionClone*/, materialsClone, yieldsClone, chanceClone, durationClone, buttonClone, buttonRoot;
 		internal List<HarvestRepairMaterial> Materials, Products;
 		internal List<UILabel> materialChances, productChances;
-		internal InfoBlock info1, info2, infoChance, infoDuration;
+		internal List<InfoItemConfig> infoCache;
+		internal InfoBlock info1, info2, info3, infoChance, infoDuration;
 		internal UISprite bg1, bg2;
-		Vector2 info1Pos, info2Pos;
+		Vector2 info1Pos, info2Pos, info3Pos;
 		internal UIButton buttonContinue, buttonSubLeft, buttonSubRight;
 		internal UILabel buttonLabel, materiaslLabel, bottomWarningLabel, consumeLabel, stopLabel;
 		public Panel_Inventory_Examine PIE { get; }
@@ -37,8 +38,12 @@ namespace ExamineActionsAPI
 			info1.go.transform.localPosition = info1Pos = durationClone.transform.localPosition + new Vector3(0, 24);
 			info2 = new InfoBlock(GameObject.Instantiate(origAmountLabel.gameObject, gameobjects));
 			info2.go.transform.localPosition = info2Pos = chanceClone.transform.localPosition + new Vector3(0, 24);
+			info3 = new InfoBlock(GameObject.Instantiate(origAmountLabel.gameObject, gameobjects));
+			info3.go.transform.localPosition = info3Pos = new Vector3(durationClone.transform.localPosition.x, chanceClone.transform.localPosition.y, durationClone.transform.localPosition.z);
 			info1.go.SetActive(false);
 			info2.go.SetActive(false);
+			info3.go.SetActive(false);
+            infoCache = new();
 
 			bg1 = gameobjects.transform.FindChild("BG (1)").GetComponent<UISprite>();
 			bg2 = gameobjects.transform.FindChild("BG (2)").GetComponent<UISprite>();
@@ -271,9 +276,9 @@ namespace ExamineActionsAPI
             if (!ExamineActionsAPI.DISABLE_CUSTOM_INFO
              && state.Action is IExamineActionCustomInfo eaci)
             {
-                var conf1 = eaci.GetInfo1(state);
-                var conf2 = eaci.GetInfo2(state);
-                if ((showingChance && conf1 != null) || (showingChance && conf2 != null) || (conf1 != null && conf2 != null))
+                infoCache.Clear();
+                eaci.GetInfoConfigs(state, infoCache);
+                if (infoCache.Count > 1 || (infoCache.Count > 0 && showingChance))
                     SetInfoBlock2Rows();
                 else SetInfoBlock1Row();
 
@@ -288,12 +293,13 @@ namespace ExamineActionsAPI
                     info2.go.transform.localPosition = info1Pos;
                 }
 
-                SetupCustomInfos(eaci, state, conf1, conf2);
+                SetupCustomInfos(eaci, state);
             }
             else
             {
                 info1.go.SetActive(false);
                 info2.go.SetActive(false);
+                info3.go.SetActive(false);
                 SetInfoBlock1Row();
             }
         }
@@ -538,39 +544,35 @@ namespace ExamineActionsAPI
 		{
 			repairPanelClone.SetActive(toggle);
 		}
-		public void SetupCustomInfos (IExamineActionCustomInfo act, ExamineActionState state, InfoItemConfig? conf1, InfoItemConfig? conf2)
+		public void SetupCustomInfos (IExamineActionCustomInfo act, ExamineActionState state)
 		{
-			if (conf1 != null && conf2 != null)
-			{
+            var conf1 = infoCache.Count > 0? infoCache[0] : null;
+            var conf2 = infoCache.Count > 1? infoCache[1] : null;
+            var conf3 = infoCache.Count > 2? infoCache[2] : null;
+            if (conf1 != null)
+            {
 				this.info1.label1.text = conf1.Title.Text();
-                this.info1.label1.color = conf1.LabelColor?? ExamineActionsAPI.NORMAL_COLOR;
+                this.info1.label1.color = conf1.LabelColor?? ExamineActionsAPI.SECONDARY_COLOR;
 				this.info1.label2.text = conf1.Content;
-                this.info1.label2.color = conf1.ContentColor?? ExamineActionsAPI.BRIGHT_NORMAL_COLOR;
+                this.info1.label2.color = conf1.ContentColor?? ExamineActionsAPI.BRIGHT_WHITE;
+            }
+            this.info1.go.SetActive(conf1 != null);
+            if (conf2 != null)
+            {
 				this.info2.label1.text = conf2.Title.Text();
-                this.info2.label1.color = conf2.LabelColor?? ExamineActionsAPI.NORMAL_COLOR;
+                this.info2.label1.color = conf2.LabelColor?? ExamineActionsAPI.SECONDARY_COLOR;
 				this.info2.label2.text = conf2.Content;
-                this.info2.label2.color = conf2.ContentColor?? ExamineActionsAPI.BRIGHT_NORMAL_COLOR;
-				this.info1.go.SetActive(true);
-				this.info2.go.SetActive(true);
-			}
-			else if (conf1 != null && conf2 == null)
-			{
-				this.info1.label1.text = conf1.Title.Text();
-                this.info1.label1.color = conf1.LabelColor?? ExamineActionsAPI.NORMAL_COLOR;
-				this.info1.label2.text = conf1.Content;
-                this.info1.label2.color = conf1.ContentColor?? ExamineActionsAPI.BRIGHT_NORMAL_COLOR;
-				this.info1.go.SetActive(true);
-				this.info2.go.SetActive(false);
-			}
-			else if (conf1 == null && conf2 != null)
-			{
-				this.info1.label1.text = conf2.Title.Text();
-                this.info2.label1.color = conf2.LabelColor?? ExamineActionsAPI.NORMAL_COLOR;
-				this.info1.label2.text = conf2.Content;
-                this.info2.label2.color = conf2.ContentColor?? ExamineActionsAPI.BRIGHT_NORMAL_COLOR;
-				this.info1.go.SetActive(true);
-				this.info2.go.SetActive(false);
-			}
+                this.info2.label2.color = conf2.ContentColor?? ExamineActionsAPI.BRIGHT_WHITE;
+            }
+            this.info2.go.SetActive(conf2 != null);
+            if (conf3 != null)
+            {
+				this.info3.label1.text = conf3.Title.Text();
+                this.info3.label1.color = conf3.LabelColor?? ExamineActionsAPI.SECONDARY_COLOR;
+				this.info3.label2.text = conf3.Content;
+                this.info3.label2.color = conf3.ContentColor?? ExamineActionsAPI.BRIGHT_WHITE;
+            }
+            this.info3.go.SetActive(conf3 != null);
 		}
 
         private void MaybeSetupTools(ExamineActionState state)

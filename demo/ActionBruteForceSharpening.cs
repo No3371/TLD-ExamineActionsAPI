@@ -95,8 +95,8 @@ namespace ExamineActionsAPIDemo
             state.Subject.SetNormalizedHP(normalizedNewCondition);
         }
 
-        // Display the 75% limit
-        InfoItemConfig? IExamineActionCustomInfo.GetInfo1(ExamineActionState state)
+
+        public void GetInfoConfigs(ExamineActionState state, List<InfoItemConfig> configs)
         {
             var conf = new InfoItemConfig(new LocalizedString() { m_LocalizationID = "Max Condition" } , $"{MAX_CONDITION*100f:0.0}%");
             if (state.Subject.GetNormalizedCondition() > MAX_CONDITION)
@@ -104,13 +104,10 @@ namespace ExamineActionsAPIDemo
                 conf.LabelColor = ExamineActionsAPI.ExamineActionsAPI.DISABLED_COLOR;
                 conf.ContentColor = ExamineActionsAPI.ExamineActionsAPI.DISABLED_COLOR;
             }
-            return conf;
-        }
 
-        // Display how much will the condition will be improved
-        InfoItemConfig? IExamineActionCustomInfo.GetInfo2(ExamineActionState state) 
-        {
-            return new InfoItemConfig(new LocalizedString() { m_LocalizationID = "Improvement" } , $"{(state.SubActionId + 1):0.00}%");
+            configs.Add(conf);
+
+            configs.Add(new InfoItemConfig(new LocalizedString() { m_LocalizationID = "Improvement" } , $"{(state.SubActionId + 1):0.00}%"));
         }
         void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
     }

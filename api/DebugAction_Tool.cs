@@ -28,8 +28,6 @@ namespace ExamineActionsAPI
 
         public InfoItemConfig? Info1 { get; }
 
-        public InfoItemConfig? Info2 => null;
-
         public ActionsToBlock? LightRequirement => null;
 
         public bool ConsumeOnFailure => true;
@@ -97,10 +95,6 @@ namespace ExamineActionsAPI
         {
         }
 
-        public InfoItemConfig? GetInfo1(ExamineActionState state) => Info1;
-
-        public InfoItemConfig? GetInfo2(ExamineActionState state) => Info2;
-
         public void OnInterrupted(ExamineActionState state)
         {
 			MelonLogger.Msg($"TOOL interrupted");
@@ -145,6 +139,11 @@ namespace ExamineActionsAPI
         {
             liquids.Add(new (PowderAndLiquidTypesLocator.WaterPottableType, 0.10f, 100));
             liquids.Add(new (PowderAndLiquidTypesLocator.WaterPottableType, 0.05f, 50));
+        }
+
+        public void GetInfoConfigs(ExamineActionState state, List<InfoItemConfig> configs)
+        {
+            configs.Add(Info1);
         }
     }
 }

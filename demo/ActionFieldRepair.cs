@@ -76,7 +76,8 @@ namespace ExamineActionsAPIDemo
             state.Subject.SetNormalizedHP(UnityEngine.Random.Range(state.Subject.GetNormalizedCondition(), GetNormalizedConditionCap(state)));
         }
 
-        InfoItemConfig? IExamineActionCustomInfo.GetInfo1(ExamineActionState state)
+
+        public void GetInfoConfigs(ExamineActionState state, List<InfoItemConfig> configs)
         {
             var conf = new InfoItemConfig(
                 new LocalizedString() { m_LocalizationID = "Repair Result" },
@@ -86,12 +87,10 @@ namespace ExamineActionsAPIDemo
             {
                 conf.Content = "N/A";
             }
-            return conf;
-        }
 
-        InfoItemConfig? IExamineActionCustomInfo.GetInfo2(ExamineActionState state) 
-        {
-            var conf = new InfoItemConfig(
+            configs.Add(conf);
+            
+            conf = new InfoItemConfig(
                 new LocalizedString() { m_LocalizationID = "Condition Cap" },
                 $"{GetNormalizedConditionCap(state)*100f:0.0}%"
             );if (state.Subject.GetNormalizedCondition() > GetNormalizedConditionCap(state))
@@ -99,7 +98,7 @@ namespace ExamineActionsAPIDemo
                 conf.LabelColor = ExamineActionsAPI.ExamineActionsAPI.DISABLED_COLOR;
                 conf.ContentColor = ExamineActionsAPI.ExamineActionsAPI.DISABLED_COLOR;
             }
-            return conf;
+            configs.Add(conf);
         }
         void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
 

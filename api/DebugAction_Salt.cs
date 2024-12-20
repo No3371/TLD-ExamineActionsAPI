@@ -107,9 +107,12 @@ namespace ExamineActionsAPI
 			MelonLogger.Msg($"Salt deselected");
         }
 
-        public InfoItemConfig? GetInfo1(ExamineActionState state) => Info1;
 
-        public InfoItemConfig? GetInfo2(ExamineActionState state) => Info2;
+        public void GetInfoConfigs(ExamineActionState state, List<InfoItemConfig> configs)
+        {
+            configs.Add(Info1);
+            configs.Add(Info2);
+        }
 
         public void OnInterrupted(ExamineActionState state)
         {

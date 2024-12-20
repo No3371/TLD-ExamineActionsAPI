@@ -7,7 +7,13 @@ namespace ExamineActionsAPIDemo
 {
     class ActionUnloadingFuel : IExamineAction, IExamineActionProduceLiquid, IExamineActionCustomInfo
     {
-        public ActionUnloadingFuel() {}
+        public ActionUnloadingFuel()
+        {
+            info = new InfoItemConfig(
+                new LocalizedString() { m_LocalizationID = "Loaded" },
+                $"? L"
+            );
+        }
 
         public string Id => nameof(ActionUnloadingFuel);
 
@@ -18,6 +24,7 @@ namespace ExamineActionsAPIDemo
         public LocalizedString ActionButtonLocalizedString { get; } = new LocalizedString() { m_LocalizationID = "Unload" };
 
         IExamineActionPanel? IExamineAction.CustomPanel => null;
+        InfoItemConfig info;
 
         public bool IsActionAvailable(GearItem item)
         {
@@ -54,14 +61,11 @@ namespace ExamineActionsAPIDemo
             liquids.Add(new (ExamineActionsAPI.PowderAndLiquidTypesLocator.KeroseneType, state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters.ToQuantity(1) * 0.05f, 50));
         }
 
-        public InfoItemConfig? GetInfo1(ExamineActionState state)
-        {
-            return new InfoItemConfig(
-                new LocalizedString() { m_LocalizationID = "Loaded" },
-                $"{state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters}L"
-            );
-        }
 
-        public InfoItemConfig? GetInfo2(ExamineActionState state) => null;
+        public void GetInfoConfigs(ExamineActionState state, List<InfoItemConfig> configs)
+        {
+            info.Content = $"{state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters}L";
+            configs.Add(info);
+        }
     }
 }

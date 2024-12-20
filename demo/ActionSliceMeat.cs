@@ -92,7 +92,8 @@ namespace ExamineActionsAPIDemo
 
         float IExamineActionRequireTool.CalculateDegradingScale(ExamineActionState state) => 0.2f;
 
-        InfoItemConfig? IExamineActionCustomInfo.GetInfo1(ExamineActionState state)
+
+        public void GetInfoConfigs(ExamineActionState state, List<InfoItemConfig> configs)
         {
             var conf = new InfoItemConfig(
                 new LocalizedString() { m_LocalizationID = "Min Weight" },
@@ -102,15 +103,11 @@ namespace ExamineActionsAPIDemo
             if (state.Subject.WeightKG.ToQuantity(1) < 0.1f)
                 conf.ContentColor = conf.LabelColor = ExamineActionsAPI.ExamineActionsAPI.DISABLED_COLOR;
 
-            return conf;
-        }
-
-        InfoItemConfig? IExamineActionCustomInfo.GetInfo2(ExamineActionState state)
-        {
-            return new InfoItemConfig(
+            configs.Add(conf);
+            configs.Add(new InfoItemConfig(
                 new LocalizedString() { m_LocalizationID = "Slice Calories" },
                 "25~60"
-            );
+            ));
         }
         void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
     }

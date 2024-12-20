@@ -23,8 +23,6 @@ namespace ExamineActionsAPI
 
         public InfoItemConfig? Info1 { get; }
 
-        public InfoItemConfig? Info2 => null;
-
         public ActionsToBlock? LightRequirement => ActionsToBlock.Repair;
 
         public bool ConsumeOnFailure => false;
@@ -101,9 +99,11 @@ namespace ExamineActionsAPI
 			MelonLogger.Msg($"Salt deselected");
         }
 
-        public InfoItemConfig? GetInfo1(ExamineActionState state) => Info1;
 
-        public InfoItemConfig? GetInfo2(ExamineActionState state) => Info2;
+        public void GetInfoConfigs(ExamineActionState state, List<InfoItemConfig> configs)
+        {
+            configs.Add(Info1);
+        }
 
         public void OnInterrupted(ExamineActionState state)
         {

@@ -5,7 +5,6 @@ namespace ExamineActionsAPI
 	/// </summary>
     public interface IExamineActionCustomInfo
 	{
-		InfoItemConfig? GetInfo1(ExamineActionState state);
-		InfoItemConfig? GetInfo2(ExamineActionState state);
+		void GetInfoConfigs(ExamineActionState state, List<InfoItemConfig> configs);
 	}
 }
