@@ -173,6 +173,11 @@ namespace ExamineActionsAPI
 				return;
 			}
 
+            if (State.Action.ConsumeOnSuccess(State) && State.Action.GetConsumingUnits(State) > (State.Subject.m_StackableItem?.m_Units ?? 1))
+            {
+				reason = PerformingBlockedReased.SubjectShortage;
+            }
+
 			if (State.Action is IExamineActionHasExternalConstraints constraints)
 			{
 				var indoorStateConstraints = constraints.GetRequiredIndoorState(State);

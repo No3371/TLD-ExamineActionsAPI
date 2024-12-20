@@ -715,6 +715,7 @@ namespace ExamineActionsAPI
             bottomWarningLabel.text = reason switch
             {
                 PerformingBlockedReased.Interruption => Localization.Get("Action will be interrupted (Sick/Hurt/Cold/Hungry...)"),
+                PerformingBlockedReased.SubjectShortage => Localization.Get("Not enough in the stack"),
                 PerformingBlockedReased.Action => Localization.Get("Action blocked by design"),
                 PerformingBlockedReased.MaterialRequirement => Localization.Get("Action requirements not satisfied"),
                 PerformingBlockedReased.ToolRequirement => Localization.Get("GAMEPLAY_ToolRequired"),

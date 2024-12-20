@@ -184,6 +184,11 @@ namespace ExamineActionsAPI
             if (!act.CanPerform(this))
                 return false;
 
+            if (act.ConsumeOnSuccess(this) && act.GetConsumingUnits(this) > (Subject.m_StackableItem?.m_Units ?? 1))
+            {
+                return false;
+            }
+
             if (act is IExamineActionRequireTool eat)
             {
                 temp.Clear();

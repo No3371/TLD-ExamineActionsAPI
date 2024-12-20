@@ -25,6 +25,7 @@ namespace ExamineActionsAPI
 	public enum PerformingBlockedReased
 	{
 		Action,
+		SubjectShortage,
 		MaterialRequirement,
 		ToolRequirement,
 		WeatherConstraint,
