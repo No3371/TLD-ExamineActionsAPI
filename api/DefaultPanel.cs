@@ -88,7 +88,6 @@ namespace ExamineActionsAPI
 
 			yieldsClone = GameObject.Instantiate(materialsClone, gameobjects);
             yieldsClone.name = "Yield";
-            FindChildWrapper(yieldsClone.transform, "Label_RequiredMaterials").localPosition = new Vector3(0, 72, 0);
             FindChildWrapper(yieldsClone.transform, "Label_RequiredMaterials").GetComponent<UILocalize>().key = "GAMEPLAY_Yield";
 			Products = new (5);
             // ! This is required for yields too because Destroy is not immediate
