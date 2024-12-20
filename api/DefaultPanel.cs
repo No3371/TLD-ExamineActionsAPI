@@ -66,7 +66,7 @@ namespace ExamineActionsAPI
             // skillClone.transform.FindChild("ProgressBar").gameObject.SetActive(false);
 
             materialsClone = FindChildWrapper(repairPanelClone.transform, "GameObject/RequiredMaterials").gameObject;
-            FindChildWrapper(materialsClone.transform, "Label_RequiredMaterials").localPosition = new Vector3(0, 72, 0);
+            // FindChildWrapper(materialsClone.transform, "Label_RequiredMaterials").localPosition = new Vector3(0, 72, 0);
 			Materials = new (5);
             foreach (var m in materialsClone.GetComponentsInChildren<HarvestRepairMaterial>(true))
             {
