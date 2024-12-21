@@ -249,10 +249,13 @@ namespace ExamineActionsAPI
 				}
 				else
 				{
-					State.SelectingTool = true;
-					State.Panel.OnSelectingTool(State);
-					State.PanelExtension?.OnSelectingTool(State);
-					pie.SelectWindow(pie.GetActionToolSelect());
+					if (pie.m_RepairToolsList.m_Tools.Count > 0)
+					{
+						State.SelectingTool = true;
+						State.Panel.OnSelectingTool(State);
+						State.PanelExtension?.OnSelectingTool(State);
+						pie.SelectWindow(pie.GetActionToolSelect());
+					}
 					return;
 				}
 			}
