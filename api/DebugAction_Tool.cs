@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ExamineActionsAPI
 {
 
-    class DebugAction_Tool : IExamineAction, IExamineActionRequireTool, IExamineActionCustomInfo, IExamineActionProducePowder, IExamineActionRequirePowder, IExamineActionRequireLiquid, IExamineActionProduceLiquid
+    class DebugAction_Tool : IExamineAction, IExamineActionRequireTool, IExamineActionDisplayInfo, IExamineActionProducePowder, IExamineActionRequirePowder, IExamineActionRequireLiquid, IExamineActionProduceLiquid
     {
         public DebugAction_Tool()
         {

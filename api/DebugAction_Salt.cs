@@ -3,7 +3,7 @@ using MelonLoader;
 
 namespace ExamineActionsAPI
 {
-    class DebugAction_Salt : IExamineAction, IExamineActionRequireItems, IExamineActionProduceItems, IExamineActionFailable, IExamineActionCustomInfo, IExamineActionCancellable
+    class DebugAction_Salt : IExamineAction, IExamineActionRequireItems, IExamineActionProduceItems, IExamineActionFailable, IExamineActionDisplayInfo, IExamineActionCancellable
     {
         public DebugAction_Salt()
         {
@@ -151,7 +151,7 @@ namespace ExamineActionsAPI
 
         void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
     }
-    class DebugAction_Salt2 : IExamineAction, IExamineActionRequireItems, IExamineActionProduceItems, IExamineActionFailable, IExamineActionCustomInfo, IExamineActionCancellable
+    class DebugAction_Salt2 : IExamineAction, IExamineActionRequireItems, IExamineActionProduceItems, IExamineActionFailable, IExamineActionDisplayInfo, IExamineActionCancellable
     {
         public DebugAction_Salt2()
         {

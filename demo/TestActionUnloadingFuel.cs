@@ -5,7 +5,7 @@ using Il2CppTLD.IntBackedUnit;
 
 namespace ExamineActionsAPIDemo
 {
-    class ActionUnloadingFuel : IExamineAction, IExamineActionProduceLiquid, IExamineActionCustomInfo
+    class ActionUnloadingFuel : IExamineAction, IExamineActionProduceLiquid, IExamineActionDisplayInfo
     {
         public ActionUnloadingFuel()
         {

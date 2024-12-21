@@ -3,7 +3,7 @@ using MelonLoader;
 
 namespace ExamineActionsAPI
 {
-    class DebugAction_Materials : IExamineAction, IExamineActionRequireItems, IExamineActionFailable, IExamineActionCustomInfo
+    class DebugAction_Materials : IExamineAction, IExamineActionRequireItems, IExamineActionFailable, IExamineActionDisplayInfo
     {
         public DebugAction_Materials()
         {

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ExamineActionsAPIDemo
 {
-    class ActionBruteForceSharpening : IExamineAction, IExamineActionInterruptable, IExamineActionCancellable, IExamineActionCustomInfo
+    class ActionBruteForceSharpening : IExamineAction, IExamineActionInterruptable, IExamineActionCancellable, IExamineActionDisplayInfo
     {
         string IExamineAction.Id => nameof(ActionBruteForceSharpening);
 

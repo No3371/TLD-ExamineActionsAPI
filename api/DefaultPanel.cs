@@ -272,7 +272,7 @@ namespace ExamineActionsAPI
             }
 
             if (!ExamineActionsAPI.DISABLE_CUSTOM_INFO
-             && state.Action is IExamineActionCustomInfo eaci)
+             && state.Action is IExamineActionDisplayInfo eaci)
             {
                 infoCache.Clear();
                 eaci.GetInfoConfigs(state, infoCache);
@@ -552,7 +552,7 @@ namespace ExamineActionsAPI
 		{
 			repairPanelClone.SetActive(toggle);
 		}
-		public void SetupCustomInfos (IExamineActionCustomInfo act, ExamineActionState state)
+		public void SetupCustomInfos (IExamineActionDisplayInfo act, ExamineActionState state)
 		{
             var conf1 = infoCache.Count > 0? infoCache[0] : null;
             var conf2 = infoCache.Count > 1? infoCache[1] : null;

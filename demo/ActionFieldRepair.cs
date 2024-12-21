@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ExamineActionsAPIDemo
 {
-    class ActionFieldRepair : IExamineAction, IExamineActionInterruptable, IExamineActionCancellable, IExamineActionCustomInfo, IExamineActionRequireItems, IExamineActionFailable
+    class ActionFieldRepair : IExamineAction, IExamineActionInterruptable, IExamineActionCancellable, IExamineActionDisplayInfo, IExamineActionRequireItems, IExamineActionFailable
     {
         string IExamineAction.Id => nameof(ActionFieldRepair);
 

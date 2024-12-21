@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ExamineActionsAPIDemo
 {
-    class ActionSliceMeat : IExamineAction, IExamineActionProduceItems, IExamineActionRequireTool, IExamineActionCustomInfo
+    class ActionSliceMeat : IExamineAction, IExamineActionProduceItems, IExamineActionRequireTool, IExamineActionDisplayInfo
     {
         public ActionSliceMeat() {}
         IExamineActionPanel? IExamineAction.CustomPanel => null;

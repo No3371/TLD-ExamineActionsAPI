@@ -127,6 +127,6 @@ Please refer to the [example mod](https://github.com/No3371/TLD-ExamineActionsAP
 - Make the action requires tool to be performed.
 - You can also scale how much condition to be reduced on the tool.
 
-### [IExamineActionCustomInfo](api/Interfaces/IExamineActionCustomInfo.cs)
+### [IExamineActionDisplayInfo](api/Interfaces/IExamineActionDisplayInfo.cs)
 
 - Display up to 2 information like how the duration/chance is shown.
