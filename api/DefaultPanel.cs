@@ -675,9 +675,12 @@ namespace ExamineActionsAPI
             else if (consumeI)
                 consumeLabel.text = "Consume on: Interruption";
 
-            int consuming = state.Action.GetConsumingUnits(state);
-            if (consuming > 1)
-                consumeLabel.text += $" (x{consuming})";
+            if (state.Subject.m_LiquidItem != null && state.Action.GetConsumingLiquidLiters(state) > 0f)
+                consumeLabel.text += $" ({state.Action.GetConsumingLiquidLiters(state)}L)";
+            else if (state.Subject.m_PowderItem != null && state.Action.GetConsumingPowderKgs(state) > 0f)
+                consumeLabel.text += $" ({state.Action.GetConsumingPowderKgs(state)}KG)";
+            else if (state.Action.GetConsumingUnits(state) > 0)
+                consumeLabel.text += $" (x{state.Action.GetConsumingUnits(state)})";
         }
 
         void SetInfoBlock1Row ()

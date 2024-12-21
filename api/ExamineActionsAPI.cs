@@ -245,8 +245,11 @@ namespace ExamineActionsAPI
 				reason = PerformingBlockedReased.Action;
 			}
 
-            if (State.Action.ConsumeOnSuccess(State) && State.Action.GetConsumingUnits(State) > (State.Subject.m_StackableItem?.m_Units ?? 1))
+            if (State.Action.ConsumeOnSuccess(State))
             {
+				if (State.Action.GetConsumingUnits(State) > (State.Subject.m_StackableItem?.m_Units ?? 1)
+				 || State.Action.GetConsumingPowderKgs(State) > (State.Subject.m_PowderItem?.m_Weight.ToQuantity(1f) ?? 0f)
+				 || State.Action.GetConsumingLiquidLiters(State) > (State.Subject.m_LiquidItem?.m_Liquid.ToQuantity(1f) ?? 0f))
 				reason = PerformingBlockedReased.SubjectShortage;
             }
 
@@ -465,7 +468,7 @@ namespace ExamineActionsAPI
 			if (State.Action.ConsumeOnSuccess(State))
 			{
 				consumed = true;
-				destroyed = ConsumeSubject(State.Action.GetConsumingUnits(State));
+				destroyed = ConsumeSubject();
 			}
 			State.Action.OnSuccess(State);
 			State.Panel.OnActionSucceed(State);
@@ -498,7 +501,7 @@ namespace ExamineActionsAPI
 			if (eaf.ConsumeOnFailure(State))
 			{
 				consumed = true;
-				destroyed = ConsumeSubject(State.Action.GetConsumingUnits(State));
+				destroyed = ConsumeSubject();
 			}
             eaf.OnActionFailure(State);
 			State.Panel.OnActionFailed(State);
@@ -543,7 +546,7 @@ namespace ExamineActionsAPI
 			if (interruptable.ShouldConsumeOnInterruption(State))
 			{
 				consumed = true;
-				destroyed = ConsumeSubject(State.Action.GetConsumingUnits(State));
+				destroyed = ConsumeSubject();
 			}
 			interruptable.OnInterruption(State);
 			State.Panel.OnActionInterrupted(State, system);
@@ -577,7 +580,7 @@ namespace ExamineActionsAPI
 			if (cancellable.ConsumeOnCancellation(State))
 			{
 				consumed = true;
-				destroyed = ConsumeSubject(State.Action.GetConsumingUnits(State));
+				destroyed = ConsumeSubject();
 			}
             cancellable.OnActionCancelled(State);
 			State.Panel.OnActionCancelled(State);
@@ -594,15 +597,37 @@ namespace ExamineActionsAPI
 			// VeryVerboseLog($"-OnActionCancelled");
 		}
 
-		internal bool ConsumeSubject (int units)
+		internal bool ConsumeSubject ()
 		{
 			// VeryVerboseLog($"+ConsumeSubject");
 			Inventory inv = GameManager.GetInventoryComponent();
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 			if (State.Subject.m_StackableItem)
 			{
-				State.Subject.m_StackableItem.m_Units -= units;
+				State.Subject.m_StackableItem.m_Units -= State.Action.GetConsumingUnits(State);
 				if (State.Subject.m_StackableItem.m_Units <= 0)
+				{
+					pie.MaybeReturnAmmoOrFuelToInventory(State.Subject);
+					inv.DestroyGear(State.Subject);
+					// VeryVerboseLog($"-ConsumeSubject");
+					return true;
+				}
+			}
+			else if (State.Subject.m_PowderItem)
+			{
+				State.Subject.m_PowderItem.RemovePowder(ItemWeight.FromKilograms(State.Action.GetConsumingPowderKgs(State)));
+				if (State.Subject?.m_PowderItem != null && State.Subject.m_PowderItem.m_Weight.m_Units <= 0)
+				{
+					pie.MaybeReturnAmmoOrFuelToInventory(State.Subject);
+					inv.DestroyGear(State.Subject);
+					// VeryVerboseLog($"-ConsumeSubject");
+					return true;
+				}
+			}
+			else if (State.Subject.m_LiquidItem)
+			{
+				State.Subject.m_LiquidItem.RemoveLiquid(ItemLiquidVolume.FromLiters(State.Action.GetConsumingLiquidLiters(State)), out _);
+				if (State.Subject?.m_LiquidItem != null && State.Subject.m_LiquidItem.m_Liquid.m_Units <= 0)
 				{
 					pie.MaybeReturnAmmoOrFuelToInventory(State.Subject);
 					inv.DestroyGear(State.Subject);
