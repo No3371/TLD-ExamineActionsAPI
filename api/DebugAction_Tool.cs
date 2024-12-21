@@ -127,7 +127,7 @@ namespace ExamineActionsAPI
             powders.Add(new (PowderAndLiquidTypesLocator.GunPowderType, 0.05f, 50));
         }
 
-        void IExamineActionRequireLiquid.GetRequiredLiquid(ExamineActionState state, List<MaterialOrProductLiquidConf> liquids)
+        void IExamineActionRequireLiquid.GetMaterialLiquid(ExamineActionState state, List<MaterialOrProductLiquidConf> liquids)
         {
             liquids.Add(new (PowderAndLiquidTypesLocator.WaterPottableType, 0.05f, 100));
             liquids.Add(new (PowderAndLiquidTypesLocator.WaterPottableType, 0.05f, 50));

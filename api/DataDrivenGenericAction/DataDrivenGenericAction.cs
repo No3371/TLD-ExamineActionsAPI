@@ -302,8 +302,8 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         public void GetRequiredPowder(ExamineActionState state, List<MaterialOrProductPowderConf> powders)
         => MaterialPowderProvider?.GetRequiredPowder(state,powders);
 
-        public void GetRequiredLiquid(ExamineActionState state, List<MaterialOrProductLiquidConf> liquids)
-        => MaterialLiquidProvider?.GetRequiredLiquid(state,liquids);
+        public void GetMaterialLiquid(ExamineActionState state, List<MaterialOrProductLiquidConf> liquids)
+        => MaterialLiquidProvider?.GetMaterialLiquid(state,liquids);
 
         public bool RequireTool(ExamineActionState state) => IsToolRequired;
 

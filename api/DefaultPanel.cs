@@ -314,7 +314,7 @@ namespace ExamineActionsAPI
             if (state.Action is IExamineActionRequireLiquid erl)
             {
                 liquids = new(1);
-                erl.GetRequiredLiquid(state, liquids);
+                erl.GetMaterialLiquid(state, liquids);
             }
             List<MaterialOrProductPowderConf> powders = null;
             if (state.Action is IExamineActionRequirePowder erp)

@@ -259,7 +259,7 @@ namespace ExamineActionsAPI
             if (act is IExamineActionRequireLiquid erl)
             {
                 liquids = new(1);
-                erl.GetRequiredLiquid(state, liquids);
+                erl.GetMaterialLiquid(state, liquids);
 				for (int i = 0; i < liquids.Count; i++)
 				{
                     if (liquids[i].Type == null)
@@ -317,7 +317,7 @@ namespace ExamineActionsAPI
             if (this.Action is IExamineActionRequireLiquid eapl)
             {
                 liquids = new();
-                eapl.GetRequiredLiquid(this, liquids);
+                eapl.GetMaterialLiquid(this, liquids);
             }
             powders = null;
             if (this.Action is IExamineActionRequirePowder eapp)

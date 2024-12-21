@@ -715,7 +715,7 @@ namespace ExamineActionsAPI
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 			Inventory inv = GameManager.GetInventoryComponent();
             List<MaterialOrProductLiquidConf> liquids = new (1);
-			act.GetRequiredLiquid(State, liquids);
+			act.GetMaterialLiquid(State, liquids);
 			if (liquids == null) return;
             for (int i = 0; i < liquids.Count; i++)
 			{

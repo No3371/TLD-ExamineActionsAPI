@@ -5,7 +5,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         [MelonLoader.TinyJSON.Include]
 		public List<List<MaterialOrProductDef>?> LiquidBySubActionId { get; set; }
 
-        public void GetRequiredLiquid(ExamineActionState state, List<MaterialOrProductLiquidConf> materials)
+        public void GetMaterialLiquid(ExamineActionState state, List<MaterialOrProductLiquidConf> materials)
         {
             if (LiquidBySubActionId.Count <= state.SubActionId)
                 return;

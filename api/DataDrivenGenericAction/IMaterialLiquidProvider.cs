@@ -3,6 +3,6 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 {
     public interface IMaterialLiquidProvider
 	{
-		void GetRequiredLiquid(ExamineActionState state, List<MaterialOrProductLiquidConf> materials);
+		void GetMaterialLiquid(ExamineActionState state, List<MaterialOrProductLiquidConf> materials);
 	}
 }
