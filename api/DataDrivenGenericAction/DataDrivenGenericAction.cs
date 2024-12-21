@@ -264,8 +264,8 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         int IExamineAction.CalculateDurationMinutes(ExamineActionState state)
 		=> DurationMinuteProvider?.CalculateDurationMinutes(state) ?? 10;
 
-        float IExamineActionFailable.CalculateFailureChance(ExamineActionState state)
-        => FailureChanceProvider?.CalculateFailureChance(state) ?? 0;
+        float IExamineActionFailable.GetFailureChance(ExamineActionState state)
+        => FailureChanceProvider?.GetFailureChance(state) ?? 0;
 
         float IExamineAction.CalculateProgressSeconds(ExamineActionState state)
         => ProgressSecondProvider?.CalculateProgressSeconds(state) ?? 2.5f;

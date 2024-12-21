@@ -108,7 +108,7 @@ namespace ExamineActionsAPIDemo
             items.Add(new ("GEAR_Cloth", 1, 100));
         }
 
-        float IExamineActionFailable.CalculateFailureChance(ExamineActionState state)
+        float IExamineActionFailable.GetFailureChance(ExamineActionState state)
         {
             return 10;
         }

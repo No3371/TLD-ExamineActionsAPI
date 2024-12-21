@@ -67,7 +67,7 @@ namespace ExamineActionsAPI
         }
 
 
-        public float CalculateFailureChance(ExamineActionState state)
+        public float GetFailureChance(ExamineActionState state)
         {
             return 95f;
         }

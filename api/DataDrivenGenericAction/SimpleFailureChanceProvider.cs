@@ -8,7 +8,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 		public int BaseFailureChance { get; set; }
         [MelonLoader.TinyJSON.Include]
 		public int FailureChanceOffsetPerSubAction { get; set; }
-        public float CalculateFailureChance(ExamineActionState state)
+        public float GetFailureChance(ExamineActionState state)
         {
             return BaseFailureChance + FailureChanceOffsetPerSubAction * state.SubActionId;
         }

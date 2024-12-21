@@ -8,7 +8,7 @@ namespace ExamineActionsAPI
         /// <summary>
         /// Chance to fail. Range: 0 - 100
         /// </summary>
-		float CalculateFailureChance (ExamineActionState state);
+		float GetFailureChance (ExamineActionState state);
         /// <summary>
         /// Get called on failure
         /// </summary>

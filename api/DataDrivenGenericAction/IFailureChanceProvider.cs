@@ -3,6 +3,6 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 {
     public interface IFailureChanceProvider
 	{
-		float CalculateFailureChance(ExamineActionState state);
+		float GetFailureChance(ExamineActionState state);
 	}
 }

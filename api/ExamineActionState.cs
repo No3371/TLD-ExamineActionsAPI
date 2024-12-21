@@ -220,7 +220,7 @@ namespace ExamineActionsAPI
         {
             if (Action is IExamineActionFailable failable)
             {
-                var successChance = (100f - failable.CalculateFailureChance(this));
+                var successChance = (100f - failable.GetFailureChance(this));
                 successChance = Mathf.Clamp(successChance, 0f, 100f);
                 ActiveSuccessChance = successChance;
             }
