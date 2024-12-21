@@ -1,6 +1,6 @@
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
-    public interface IGetConsumingUnitsProvider
+    public interface IConsumingUnitsProvider
     {
         int GetConsumingUnits(ExamineActionState state);
     }

@@ -1,6 +1,6 @@
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
-    public class SimpleGetConsumingUnitsProvider : IGetConsumingUnitsProvider
+    public class SimpleConsumingUnitsProvider : IConsumingUnitsProvider
     {
         [MelonLoader.TinyJSON.Include]
 		public int BaseConsumingUnits { get; set; }

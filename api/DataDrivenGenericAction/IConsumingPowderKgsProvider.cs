@@ -1,6 +1,6 @@
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
-    public interface IGetConsumingPowderKgsProvider
+    public interface IConsumingPowderKgsProvider
     {
         float GetConsumingPowderKgs(ExamineActionState state);
     }

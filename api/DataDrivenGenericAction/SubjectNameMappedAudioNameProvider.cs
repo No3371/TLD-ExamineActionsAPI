@@ -2,7 +2,7 @@ using MelonLoader.TinyJSON;
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
-    public class SubjectNameMappedAudioNameProvider : IGetAudioNameProvider
+    public class SubjectNameMappedAudioNameProvider : IAudioNameProvider
     {
         [Include]
         public Dictionary<string, string> Map { get; set; }

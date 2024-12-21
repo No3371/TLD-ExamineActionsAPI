@@ -83,8 +83,8 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
             action.IsValidWeatherProvider = new SimpleIsValidWeatherProvider() {
                 IsFoggy = true
             };
-            action.GetConsumingUnitsProvider = new SimpleGetConsumingUnitsProvider();
-            action.GetAudioNameProvider = new SimpleGetAudioNameProvider();
+            action.ConsumingUnitsProvider = new SimpleConsumingUnitsProvider();
+            action.AudioNameProvider = new SimpleAudioNameProvider();
             action.RequiredInDoorState = Weather.IndoorState.Outdoors;
             MelonLoader.MelonLogger.Msg(MelonLoader.TinyJSON.JSON.Dump(action, MelonLoader.TinyJSON.EncodeOptions.EnforceHierarchyOrder | EncodeOptions.IncludePublicProperties));
         }
@@ -142,7 +142,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
             action.ProgressSecondProvider = new SimpleProgressSecondProvider() {
                 BaseProgressSeconds = 5
             };
-            action.GetAudioNameProvider = new SimpleGetAudioNameProvider() {
+            action.AudioNameProvider = new SimpleAudioNameProvider() {
                 AudioNameBySubAction = new [] {
                     "Play_CraftingLeatherHide",
                 }
@@ -237,13 +237,13 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         [Include]
         public IIsPointingToValidObjectProvider? IsPointingToValidObjectProvider  { get; set; }
         [Include]
-        public IGetConsumingUnitsProvider? GetConsumingUnitsProvider              { get; set; }
+        public IConsumingUnitsProvider? ConsumingUnitsProvider              { get; set; }
         [Include]
-        public IGetConsumingLiquidLitersProvider? GetConsumingLiquidLitersProvider{ get; set; }
+        public IConsumingLiquidLitersProvider? ConsumingLiquidLitersProvider{ get; set; }
         [Include]
-        public IGetConsumingPowderKgsProvider? GetConsumingPowderKgsProvider      { get; set; }
+        public IConsumingPowderKgsProvider? ConsumingPowderKgsProvider      { get; set; }
         [Include]
-        public IGetAudioNameProvider? GetAudioNameProvider                        { get; set; }
+        public IAudioNameProvider? AudioNameProvider                        { get; set; }
         [Include]
         public ILightRequirementTypeProvider? LightRequirementTypeProvider        { get; set; }
         [Include]
@@ -274,7 +274,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         => CanPerformProvider?.CanPerform(state) ?? true;
 
         string? IExamineAction.GetAudioName(ExamineActionState state)
-        => GetAudioNameProvider?.GetAudioName(state);
+        => AudioNameProvider?.GetAudioName(state);
 
         int IExamineAction.GetSubActionCount(ExamineActionState state)
         => SubActionCountProvider?.GetSubActionCount(state) ?? 1;
@@ -364,13 +364,13 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
             }
         }
         int IExamineAction.GetConsumingUnits(ExamineActionState state)
-        => GetConsumingUnitsProvider?.GetConsumingUnits(state) ?? 1;
+        => ConsumingUnitsProvider?.GetConsumingUnits(state) ?? 1;
 
         float IExamineAction.GetConsumingLiquidLiters(ExamineActionState state)
-        => GetConsumingLiquidLitersProvider?.GetConsumingLiquidLiters(state) ?? 0f;
+        => ConsumingLiquidLitersProvider?.GetConsumingLiquidLiters(state) ?? 0f;
 
         float IExamineAction.GetConsumingPowderKgs(ExamineActionState state)
-        => GetConsumingPowderKgsProvider?.GetConsumingPowderKgs(state) ?? 0f;
+        => ConsumingPowderKgsProvider?.GetConsumingPowderKgs(state) ?? 0f;
         bool IExamineActionHasExternalConstraints.IsPointingToValidObject(ExamineActionState state, GameObject pointedObject)
         => IsPointingToValidObjectProvider?.IsPointingToValidObject(state, pointedObject) ?? true;
 

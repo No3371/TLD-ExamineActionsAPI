@@ -1,6 +1,6 @@
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
-    public interface IGetAudioNameProvider
+    public interface IAudioNameProvider
     {
         string? GetAudioName (ExamineActionState state);
     }

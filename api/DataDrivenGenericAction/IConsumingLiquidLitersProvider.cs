@@ -1,6 +1,6 @@
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
-    public interface IGetConsumingLiquidLitersProvider
+    public interface IConsumingLiquidLitersProvider
     {
         float GetConsumingLiquidLiters(ExamineActionState state);
     }
