@@ -16,6 +16,58 @@ namespace ExamineActionsAPI
             MelonLogger.Msg($"Preloading official liquid: { KeroseneType?.name}");
             MelonLogger.Msg($"Preloading official liquid: { AccelerantType?.name}");
         }
+        public static PowderType? LoadPowder (string name)
+        {
+            switch (name)
+            {
+                case "POWDER_Gunpowder":
+                    return GunPowderType;
+            }
+            if (PowderTypeCache.TryGetValue(name, out PowderType? type))
+            {
+                return type;
+            }
+            else
+            {
+                PowderType? pt = Addressables.LoadAsset<PowderType>(name).Result;
+                if (pt == null)
+                    MelonLogger.Error($"Failed to retrieve powder type {name} (It's ok this happens on game start)");
+                PowderTypeCache.Add(name, pt);
+                return pt;
+            }
+        }
+
+        public static LiquidType? LoadLiquid (string name)
+        {
+            switch (name)
+            {
+                case "LIQUID_WaterPottable":
+                    return WaterPottableType;
+                case "LIQUID_WaterNonPottable":
+                    return WaterNonPottableType;
+                case "LIQUID_Antiseptic":
+                    return AntisepticType;
+                case "LIQUID_Kerosene":
+                    return KeroseneType;
+                case "LIQUID_Accelerant":
+                    return AccelerantType;
+            }
+            if (LiquidTypeCache.TryGetValue(name, out LiquidType? type))
+            {
+                return type;
+            }
+            else
+            {
+                LiquidType? lt = Addressables.LoadAsset<LiquidType>(name).Result;
+                if (lt == null)
+                    MelonLogger.Error($"Failed to retrieve liquid type {name} (It's ok this happens on game start)");
+                LiquidTypeCache.Add(name, lt);
+                return lt;
+            }
+        }
+        static Dictionary<string, PowderType> PowderTypeCache { get; set; } = new();
+        static Dictionary<string, LiquidType> LiquidTypeCache { get; set; } = new();
+
         private static PowderType? gunPowderType;
 
         public static PowderType? GunPowderType
@@ -106,37 +158,5 @@ namespace ExamineActionsAPI
                 return accelerantType;
             }
         }
-        // public static IReadOnlyDictionary<string, PowderType> PowderTypes
-        // {
-        //     get
-        //     {
-        //         if (powderTypes == null)
-        //         {
-        //             powderTypes = new();
-        // 	        MelonLogger.Msg($"Populating powder types");
-        //             foreach (var b in BlueprintManager.Instance.m_AllBlueprints)
-        //             {
-        //                 if (b.m_RequiredPowder != null)
-        //                     foreach (var c in b.m_RequiredPowder)
-        //                     {
-        //                         if (powderTypes.ContainsKey(c.m_Powder.name)) continue;
-        //                         powderTypes.Add(c.m_Powder.name, c.m_Powder);
-        //                         MelonModLogger.Msg($"Found PowderType: {c.m_Powder.name}: {Addressables.LoadAsset<LiquidType>(c.m_Powder.name)?.ReferenceCount}");
-        //                     }
-        //             }
-
-        //             var allLocations = new List<IResourceLocation>();
-        //             var resourceLocators = Addressables.ResourceLocators.ToArray();
-        //             foreach (var loc in resourceLocators)
-        //             {
-        // 	            MelonLogger.Msg($"---Locator: {loc.LocatorId}");
-        //                 foreach (var k in loc.Keys.ToArray())
-        // 	            MelonLogger.Msg($"---{k.GetType().Name} {k.ToString()}");
-        //             }
-
-        //         }
-        //         return powderTypes;
-        //     }
-        // }
     }
 }
