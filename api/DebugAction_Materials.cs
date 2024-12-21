@@ -58,7 +58,7 @@ namespace ExamineActionsAPI
 			return false;
         }
 
-        void IExamineActionRequireItems.GetRequiredItems(ExamineActionState state, System.Collections.Generic.List<MaterialOrProductItemConf> items)
+        void IExamineActionRequireItems.GetMaterialItems(ExamineActionState state, System.Collections.Generic.List<MaterialOrProductItemConf> items)
         {
             items.Add(new ("GEAR_Stick", 1, 100));
             items.Add(new ("GEAR_Stone", 2, 8));

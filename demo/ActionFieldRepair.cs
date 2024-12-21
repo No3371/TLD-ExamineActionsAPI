@@ -101,7 +101,7 @@ namespace ExamineActionsAPIDemo
         }
         void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
 
-        void IExamineActionRequireItems.GetRequiredItems(ExamineActionState state, List<MaterialOrProductItemConf> items)
+        void IExamineActionRequireItems.GetMaterialItems(ExamineActionState state, List<MaterialOrProductItemConf> items)
         {
             items.Add(new ("GEAR_GutDried", 1, 100));
             items.Add(new ("GEAR_GutDried", 1, 50));

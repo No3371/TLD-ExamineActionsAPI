@@ -653,7 +653,7 @@ namespace ExamineActionsAPI
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 			Inventory inv = GameManager.GetInventoryComponent();
             List<MaterialOrProductItemConf> items = new (1);
-			act.GetRequiredItems(State, items);
+			act.GetMaterialItems(State, items);
 			if (items == null) return;
             for (int i = 0; i < items.Count; i++)
 			{

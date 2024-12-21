@@ -232,7 +232,7 @@ namespace ExamineActionsAPI
             if (act is IExamineActionRequireItems erm)
             {
                 materials = new (1);
-                erm.GetRequiredItems(state, materials);
+                erm.GetMaterialItems(state, materials);
 				for (int i = 0; i < materials.Count; i++)
 				{
 					int totalOfTheGearTypeToCheck = materials[i].Units;
@@ -311,7 +311,7 @@ namespace ExamineActionsAPI
             if (this.Action is IExamineActionRequireItems erm)
             {
                 items = new(1);
-                erm.GetRequiredItems(this, items);
+                erm.GetMaterialItems(this, items);
             }
             liquids = null;
             if (this.Action is IExamineActionRequireLiquid eapl)

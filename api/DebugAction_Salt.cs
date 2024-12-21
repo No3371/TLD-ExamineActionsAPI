@@ -57,7 +57,7 @@ namespace ExamineActionsAPI
 			return true;
         }
 
-        void IExamineActionRequireItems.GetRequiredItems(ExamineActionState state, System.Collections.Generic.List<MaterialOrProductItemConf> items)
+        void IExamineActionRequireItems.GetMaterialItems(ExamineActionState state, System.Collections.Generic.List<MaterialOrProductItemConf> items)
         {
             items.Add(new ("GEAR_Stone", 2, 8));
             items.Add(new ("GEAR_Stone", 1, 55));
@@ -208,7 +208,7 @@ namespace ExamineActionsAPI
 			return true;
         }
 
-        void IExamineActionRequireItems.GetRequiredItems(ExamineActionState state, System.Collections.Generic.List<MaterialOrProductItemConf> items)
+        void IExamineActionRequireItems.GetMaterialItems(ExamineActionState state, System.Collections.Generic.List<MaterialOrProductItemConf> items)
         {
             items.Add(new ("GEAR_Stone", 2, 8));
             items.Add(new ("GEAR_Stone", 1, 55));

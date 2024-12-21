@@ -296,8 +296,8 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         public void GetProducts(ExamineActionState state, List<MaterialOrProductItemConf> products)
         => ProductItemProvider?.GetProducts(state, products);
 
-        public void GetRequiredItems(ExamineActionState state, List<MaterialOrProductItemConf> items)
-        => MaterialItemProvider?.GetRequiredItems(state, items);
+        public void GetMaterialItems(ExamineActionState state, List<MaterialOrProductItemConf> items)
+        => MaterialItemProvider?.GetMaterialItems(state, items);
 
         public void GetRequiredPowder(ExamineActionState state, List<MaterialOrProductPowderConf> powders)
         => MaterialPowderProvider?.GetRequiredPowder(state,powders);

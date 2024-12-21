@@ -308,7 +308,7 @@ namespace ExamineActionsAPI
             if (state.Action is IExamineActionRequireItems erm)
             {
                 materials = new (1);
-                erm.GetRequiredItems(state, materials);
+                erm.GetMaterialItems(state, materials);
             }
             List<MaterialOrProductLiquidConf> liquids = null;
             if (state.Action is IExamineActionRequireLiquid erl)

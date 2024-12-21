@@ -6,7 +6,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         [MelonLoader.TinyJSON.Include]
 		public List<List<MaterialOrProductDef>?> ItemBySubActionId { get; set; }
 
-        public void GetRequiredItems(ExamineActionState state, List<MaterialOrProductItemConf> materials)
+        public void GetMaterialItems(ExamineActionState state, List<MaterialOrProductItemConf> materials)
         {
             if (ItemBySubActionId.Count <= state.SubActionId)
                 return;

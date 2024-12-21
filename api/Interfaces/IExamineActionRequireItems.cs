@@ -11,6 +11,6 @@ namespace ExamineActionsAPI
 		/// <para> Can add nothing to the list to make it free (ex: for one of the sub actions)</para>
 		/// </summary>
 		/// <param name="items">("GEAR_NNN", N, 0-100)</param>
-		void GetRequiredItems(ExamineActionState state, List<MaterialOrProductItemConf> items);
+		void GetMaterialItems(ExamineActionState state, List<MaterialOrProductItemConf> items);
 	}
 }
