@@ -132,6 +132,7 @@ namespace ExamineActionsAPI
 			InterruptionFlag = false;
 			InterruptionSystemFlag = false;
 			ActiveActionMaterialRequirementsMet = null;
+            ActiveActionToolRequirementsMet = null;
 			SelectingTool = false;
 			Panel?.Toggle(false);
 			Panel = null;
