@@ -577,7 +577,7 @@ namespace ExamineActionsAPI
             IExamineActionCancellable? cancellable = State.Action as IExamineActionCancellable;
 			var consumed = false;
 			var destroyed = false;
-			if (cancellable.ConsumeOnCancellation(State))
+			if (cancellable.ShouldConsumeOnCancellation(State))
 			{
 				consumed = true;
 				destroyed = ConsumeSubject();

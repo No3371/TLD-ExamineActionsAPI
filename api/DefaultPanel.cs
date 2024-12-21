@@ -639,7 +639,7 @@ namespace ExamineActionsAPI
         {
             var consumeS = state.Action.ShouldConsumeOnSuccess(state);
             var consumeF = (state.Action as IExamineActionFailable)?.ShouldConsumeOnFailure(state) ?? false; // null means anyway not possible to happens
-            var consumeC = (state.Action as IExamineActionCancellable)?.ConsumeOnCancellation(state) ?? false;
+            var consumeC = (state.Action as IExamineActionCancellable)?.ShouldConsumeOnCancellation(state) ?? false;
             var consumeI = (state.Action as IExamineActionInterruptable)?.ShouldConsumeOnInterruption(state) ?? false;
             
             if (!consumeS && !consumeF && !consumeC && !consumeI)

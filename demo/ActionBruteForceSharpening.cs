@@ -54,7 +54,7 @@ namespace ExamineActionsAPIDemo
             return state.Subject.GetNormalizedCondition() < MAX_CONDITION;
         }
 
-        bool IExamineActionCancellable.ConsumeOnCancellation(ExamineActionState state)
+        bool IExamineActionCancellable.ShouldConsumeOnCancellation(ExamineActionState state)
         {
             return false;
         }

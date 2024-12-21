@@ -19,6 +19,6 @@ namespace ExamineActionsAPI
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>
-		bool ConsumeOnCancellation (ExamineActionState state);
+		bool ShouldConsumeOnCancellation (ExamineActionState state);
 	}
 }

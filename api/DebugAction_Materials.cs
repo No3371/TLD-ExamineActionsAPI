@@ -113,7 +113,7 @@ namespace ExamineActionsAPI
             return 6f;
         }
 
-        public bool ConsumeOnCancellation(ExamineActionState state)
+        public bool ShouldConsumeOnCancellation(ExamineActionState state)
         {
             return false;
         }

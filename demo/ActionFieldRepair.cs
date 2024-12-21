@@ -43,7 +43,7 @@ namespace ExamineActionsAPIDemo
             return state.Subject.GetNormalizedCondition() < GetNormalizedConditionCap(state);
         }
 
-        bool IExamineActionCancellable.ConsumeOnCancellation(ExamineActionState state)
+        bool IExamineActionCancellable.ShouldConsumeOnCancellation(ExamineActionState state)
         {
             return false;
         }

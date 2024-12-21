@@ -119,7 +119,7 @@ namespace ExamineActionsAPI
             return 6f;
         }
 
-        public bool ConsumeOnCancellation(ExamineActionState state)
+        public bool ShouldConsumeOnCancellation(ExamineActionState state)
         {
             return false;
         }
@@ -139,7 +139,7 @@ namespace ExamineActionsAPI
             
         }
 
-        bool IExamineActionCancellable.ConsumeOnCancellation(ExamineActionState state)
+        bool IExamineActionCancellable.ShouldConsumeOnCancellation(ExamineActionState state)
         {
             return false;
         }
@@ -271,7 +271,7 @@ namespace ExamineActionsAPI
             return 6f;
         }
 
-        public bool ConsumeOnCancellation(ExamineActionState state)
+        public bool ShouldConsumeOnCancellation(ExamineActionState state)
         {
             return false;
         }
@@ -291,7 +291,7 @@ namespace ExamineActionsAPI
             
         }
 
-        bool IExamineActionCancellable.ConsumeOnCancellation(ExamineActionState state)
+        bool IExamineActionCancellable.ShouldConsumeOnCancellation(ExamineActionState state)
         {
             return false;
         }

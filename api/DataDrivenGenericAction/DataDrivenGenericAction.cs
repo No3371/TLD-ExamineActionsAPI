@@ -197,7 +197,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         [Include]
         public bool CanBeCancelled                                                 { get; set; }
         [Include]
-        public bool ConsumeOnCancellation                                         { get; set; }
+        public bool ShouldConsumeOnCancellation                                         { get; set; }
         [Include]
         public bool ShouldConsumeOnFailure                                              { get; set; }
         [Include]
@@ -281,7 +281,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 
         bool IExamineActionCancellable.CanBeCancelled(ExamineActionState state) => CanBeCancelled;
 
-        bool IExamineActionCancellable.ConsumeOnCancellation(ExamineActionState state) => ConsumeOnCancellation;
+        bool IExamineActionCancellable.ShouldConsumeOnCancellation(ExamineActionState state) => ShouldConsumeOnCancellation;
 
         bool IExamineActionFailable.ShouldConsumeOnFailure(ExamineActionState state) => ShouldConsumeOnFailure;
 
