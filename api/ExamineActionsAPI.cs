@@ -303,8 +303,8 @@ namespace ExamineActionsAPI
 			if (reason != null)
 			{
 				GameAudioManager.PlayGUIError();
-				State.Panel.OnBlockedPerformingAction(State, reason.Value);
-				State.PanelExtension?.OnBlockedPerformingAction(State, reason.Value);
+				State.Panel.OnPerformingBlocked(State, reason.Value);
+				State.PanelExtension?.OnPerformingBlocked(State, reason.Value);
 				return;
 			}
 

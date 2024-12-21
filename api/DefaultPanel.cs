@@ -713,7 +713,7 @@ namespace ExamineActionsAPI
             UpdateInfoBlock(state);
         }
 
-        void IExamineActionPanel.OnBlockedPerformingAction(ExamineActionState state, PerformingBlockedReased reason)
+        void IExamineActionPanel.OnPerformingBlocked(ExamineActionState state, PerformingBlockedReased reason)
         {
             bottomWarningLabel.gameObject.SetActive(true);
             bottomWarningLabel.text = reason switch
