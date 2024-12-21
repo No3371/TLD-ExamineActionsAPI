@@ -16,12 +16,6 @@ namespace ExamineActionsAPIDemo
 
         IExamineActionPanel? IExamineAction.CustomPanel => null;
 
-        // Because the action is designed to take quite some time to finish
-        // We implements IExamineActionInterruptable so the action will be automatically stopped when:
-        // - The player has health issue
-        // - The player does not have enough lighting (knives are dangerous!)
-        ActionsToBlock? IExamineActionInterruptable.LightRequirementType => ActionsToBlock.Repair;
-
         bool IExamineActionInterruptable.InterruptOnStarving => true;
 
         bool IExamineActionInterruptable.InterruptOnExhausted => true;
@@ -82,7 +76,14 @@ namespace ExamineActionsAPIDemo
 
         void IExamineAction.OnActionSelected(ExamineActionState state) {}
 
-        void IExamineActionInterruptable.OnInterrupted(ExamineActionState state) {}
+        void IExamineActionInterruptable.OnInterruption(ExamineActionState state) {}
+
+        // Because the action is designed to take quite some time to finish
+        // We implements IExamineActionInterruptable so the action will be automatically stopped when:
+        // - The player has health issue
+        // - The player does not have enough lighting (knives are dangerous!)
+        ActionsToBlock? IExamineActionInterruptable.GetLightRequirementType(ExamineActionsAPI.ExamineActionState state)
+        => ActionsToBlock.Repair;
 
         void IExamineAction.OnPerform(ExamineActionState state) {}
 

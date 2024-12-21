@@ -16,8 +16,6 @@ namespace ExamineActionsAPIDemo
 
         IExamineActionPanel? IExamineAction.CustomPanel => null;
 
-        ActionsToBlock? IExamineActionInterruptable.LightRequirementType => ActionsToBlock.Repair;
-
         bool IExamineActionInterruptable.InterruptOnStarving => true;
 
         bool IExamineActionInterruptable.InterruptOnExhausted => true;
@@ -67,7 +65,8 @@ namespace ExamineActionsAPIDemo
 
         void IExamineAction.OnActionSelected(ExamineActionState state) {}
 
-        void IExamineActionInterruptable.OnInterrupted(ExamineActionState state) {}
+        void IExamineActionInterruptable.OnInterruption(ExamineActionState state) {}
+        ActionsToBlock? IExamineActionInterruptable.GetLightRequirementType(ExamineActionState state) => ActionsToBlock.Repair;
 
         void IExamineAction.OnPerform(ExamineActionState state) {}
 

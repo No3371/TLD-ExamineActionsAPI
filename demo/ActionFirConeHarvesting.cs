@@ -19,8 +19,6 @@ namespace ExamineActionsAPIDemo
 
         LocalizedString IExamineAction.ActionButtonLocalizedString { get; } = new LocalizedString() { m_LocalizationID = "Harvest" };
 
-        ActionsToBlock? IExamineActionInterruptable.LightRequirementType => null;
-
         bool IExamineActionInterruptable.InterruptOnStarving => false;
 
         bool IExamineActionInterruptable.InterruptOnExhausted => false;
@@ -73,15 +71,18 @@ namespace ExamineActionsAPIDemo
         }
         void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state)
         {
-            (this as IExamineActionInterruptable)?.OnInterrupted(state);
+            (this as IExamineActionInterruptable)?.OnInterruption(state);
         }
 
-        void IExamineActionInterruptable.OnInterrupted(ExamineActionState state)
+        void IExamineActionInterruptable.OnInterruption(ExamineActionState state)
         {
             int completed = (int) (state.NormalizedProgress!.Value * state.SubActionId);
             GameManager.m_PlayerManager.InstantiateItemInPlayerInventory(GearItem.LoadGearItemPrefab("GEAR_1FirConeFuel"), completed);
             GameManager.m_PlayerManager.InstantiateItemInPlayerInventory(GearItem.LoadGearItemPrefab("GEAR_3FirConeSeeds"), completed * 2);
             state.Subject!.m_StackableItem.m_Units -= completed;
         }
+
+        ActionsToBlock? IExamineActionInterruptable.GetLightRequirementType(ExamineActionState state)
+        => null;
     }
 }

@@ -640,7 +640,7 @@ namespace ExamineActionsAPI
             var consumeS = state.Action.ConsumeOnSuccess(state);
             var consumeF = (state.Action as IExamineActionFailable)?.ConsumeOnFailure(state) ?? false; // null means anyway not possible to happens
             var consumeC = (state.Action as IExamineActionCancellable)?.ConsumeOnCancellation(state) ?? false;
-            var consumeI = (state.Action as IExamineActionInterruptable)?.ConsumeOnInterruption(state) ?? false;
+            var consumeI = (state.Action as IExamineActionInterruptable)?.ShouldConsumeOnInterruption(state) ?? false;
             
             if (!consumeS && !consumeF && !consumeC && !consumeI)
                 consumeLabel.text = "Never consume";

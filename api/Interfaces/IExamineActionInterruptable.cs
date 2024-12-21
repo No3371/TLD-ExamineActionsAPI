@@ -11,12 +11,12 @@ namespace ExamineActionsAPI
 		/// <summary>
 		/// Action not finished, for example: light goes out during during the process.
 		/// </summary>
-		void OnInterrupted (ExamineActionState state);
+		void OnInterruption (ExamineActionState state);
 		/// <summary>
 		/// Will the subject be consumed on interruption
 		/// </summary>
-		bool ConsumeOnInterruption (ExamineActionState state) => false;
-		ActionsToBlock? LightRequirementType { get; }
+		bool ShouldConsumeOnInterruption (ExamineActionState state) => false;
+		ActionsToBlock? GetLightRequirementType (ExamineActionState state);
 		bool InterruptOnStarving { get; }
 		bool InterruptOnExhausted { get; }
 		bool InterruptOnFreezing { get; }

@@ -32,6 +32,7 @@ namespace ExamineActionsAPI
 				Register(new DebugAction_Cancel());
 				Register(new DebugAction_Materials());
 				Register(new DebugAction_Salt());
+				Register(new DebugAction_Salt2());
 				Register(new DebugAction_Simple());
 				Register(new DebugAction_Tool());
 			}
@@ -467,12 +468,12 @@ namespace ExamineActionsAPI
 	
 			var consumed = false;
 			var destroyed = false;
-			if (interruptable.ConsumeOnInterruption(State))
+			if (interruptable.ShouldConsumeOnInterruption(State))
 			{
 				consumed = true;
 				destroyed = ConsumeSubject(State.Action.GetConsumingUnits(State));
 			}
-			interruptable.OnInterrupted(State);
+			interruptable.OnInterruption(State);
 			State.Panel.OnActionInterrupted(State, system);
 			State.PanelExtension?.OnActionInterrupted(State, system);
 			PostActionFinished();
@@ -825,7 +826,8 @@ namespace ExamineActionsAPI
 
 		internal bool ShouldInterrupt (IExamineActionInterruptable act)
 		{
-			if (act.LightRequirementType != null && GameManager.GetWeatherComponent().IsTooDarkForAction(act.LightRequirementType.Value))
+            ActionsToBlock? lightReq = act.GetLightRequirementType(State);
+            if (lightReq != null && GameManager.GetWeatherComponent().IsTooDarkForAction(lightReq.Value))
 			{
 				HUDMessage.AddMessage(Localization.Get("GAMEPLAY_TooDarkToRead"), false, false);
 				return true;
