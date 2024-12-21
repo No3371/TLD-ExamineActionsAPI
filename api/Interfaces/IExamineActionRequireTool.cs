@@ -17,6 +17,6 @@ namespace ExamineActionsAPI
 		/// Scale the degration on use to the used tool
 		/// </summary>
 		/// <param name="state"></param>
-		float CalculateDegradingScale(ExamineActionState state) => 1;
+		float GetDegradingScale(ExamineActionState state) => 1;
 	}
 }

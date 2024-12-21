@@ -90,7 +90,7 @@ namespace ExamineActionsAPIDemo
             }
         }
 
-        float IExamineActionRequireTool.CalculateDegradingScale(ExamineActionState state) => 0.2f;
+        float IExamineActionRequireTool.GetDegradingScale(ExamineActionState state) => 0.2f;
 
 
         public void GetInfoConfigs(ExamineActionState state, List<InfoItemConfig> configs)

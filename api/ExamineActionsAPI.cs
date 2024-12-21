@@ -424,7 +424,7 @@ namespace ExamineActionsAPI
 				if (degrade)
 				{
 					var cache = degrade.m_DegradeHP;
-					degrade.m_DegradeHP *= toolUser.CalculateDegradingScale(State);
+					degrade.m_DegradeHP *= toolUser.GetDegradingScale(State);
 					pie.DegradeToolUsedForAction();
 					degrade.m_DegradeHP = cache;
 				}
