@@ -65,7 +65,42 @@ namespace ExamineActionsAPI
 				return;
 			}
 
+			if (action is IExamineActionHasDependendency ahd)
+			{
+				if (ahd.MelonDependency != null)
+				foreach (var dep in ahd.MelonDependency)
+				{
+					if ((dep.Name == "*" && MelonMod.RegisteredMelons.Any(m => m.Info.Name == dep.Name)
+						|| MelonMod.FindMelon(dep.Name, dep.Author)?.Registered != true))
+					{
+						Instance.LoggerInstance.Error($"Action not registered because its dependency melon {dep.Author}, {dep.Name} is not loaded.");
+						return;
+					}
+				}
+
+				if (ahd.GearNameDependency != null)
+				foreach (var dep in ahd.GearNameDependency)
+				{
+					if (GearItem.LoadGearItemPrefab(dep) == null)
+					{
+						Instance.LoggerInstance.Error($"Action not registered because its dependency gear {dep} can not be loaded.");
+						return;
+					}
+				}
+
+				if (ahd.CSharpTypeDependency != null)
+				foreach (var dep in ahd.CSharpTypeDependency)
+				{
+					if (Type.GetType(dep) == null)
+					{
+						Instance.LoggerInstance.Error($"Action not registered because its dependency CSharp type {dep} can not be loaded.");
+						return;
+					}
+				}
+			}
+
 			Instance.RegisteredExamineActions.Add(action);
+			Instance.LoggerInstance.Msg($"Action registered: {action.Id}");
 		}
 
 		[Conditional("VERY_VERBOSE")]
