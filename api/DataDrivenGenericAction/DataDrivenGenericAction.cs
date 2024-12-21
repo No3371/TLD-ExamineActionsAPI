@@ -20,6 +20,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
     {
         public DataDrivenGenericAction ()
         {
+            Id = "!!!ACTION_ID_UNSET!!!";
             RequiredInDoorState = Weather.IndoorState.NotSet;
             IsToolRequired = true;
             IsCancellable = true;
@@ -152,7 +153,9 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         [Include]
         public bool IsToolRequired                                                { get; set; }
         [Include]
-        public IDurationMinutesProvider? DurationMinuteProvider                    { get; set; }
+        public ISubActionCountProvider? SubActionCountProvider                    { get; set; }
+        [Include]
+        public IDurationMinutesProvider? DurationMinuteProvider                   { get; set; }
         [Include]
         public IFailureChanceProvider? FailureChanceProvider                      { get; set; }
         [Include]
@@ -182,19 +185,25 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         [Include]
         public IIsPointingToValidObjectProvider? IsPointingToValidObjectProvider  { get; set; }
         [Include]
-        public IGetConsumingUnitsProvider? GetConsumingUnitsProvider { get; set; }
+        public IGetConsumingUnitsProvider? GetConsumingUnitsProvider              { get; set; }
         [Include]
-        public IGetAudioNameProvider? GetAudioNameProvider { get; set; }
+        public IGetConsumingLiquidLitersProvider? GetConsumingLiquidLitersProvider{ get; set; }
         [Include]
-        public ICallback[]? OnPerformCallbacks { get; set; }
+        public IGetConsumingPowderKgsProvider? GetConsumingPowderKgsProvider      { get; set; }
         [Include]
-        public ICallback[]? OnSuccessCallbacks { get; set; }
+        public IGetAudioNameProvider? GetAudioNameProvider                        { get; set; }
         [Include]
-        public ICallback[]? OnFailureCallbacks { get; set; }
+        public ILightRequirementTypeProvider? LightRequirementTypeProvider        { get; set; }
         [Include]
-        public ICallback[]? OnInterruptionCallbacks { get; set; }
+        public ICallback[]? OnPerformCallbacks       { get; set; }
         [Include]
-        public ICallback[]? OnCancellationCallbacks { get; set; }
+        public ICallback[]? OnSuccessCallbacks       { get; set; }
+        [Include]
+        public ICallback[]? OnFailureCallbacks       { get; set; }
+        [Include]   
+        public ICallback[]? OnInterruptionCallbacks  { get; set; }
+        [Include]
+        public ICallback[]? OnCancellationCallbacks  { get; set; }
 
         /// <value>NotSet, Outdoors, Indoors</value>
         [Include]
@@ -214,6 +223,9 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 
         string? IExamineAction.GetAudioName(ExamineActionState state)
         => GetAudioNameProvider?.GetAudioName(state);
+
+        int IExamineAction.GetSubActionCount(ExamineActionState state)
+        => SubActionCountProvider?.GetSubActionCount(state) ?? 1;
 
         bool IExamineActionCancellable.CanBeCancelled(ExamineActionState state) => IsCancellable;
 
@@ -302,6 +314,11 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         int IExamineAction.GetConsumingUnits(ExamineActionState state)
         => GetConsumingUnitsProvider?.GetConsumingUnits(state) ?? 1;
 
+        float IExamineAction.GetConsumingLiquidLiters(ExamineActionState state)
+        => GetConsumingLiquidLitersProvider?.GetConsumingLiquidLiters(state) ?? 0f;
+
+        float IExamineAction.GetConsumingPowderKgs(ExamineActionState state)
+        => GetConsumingPowderKgsProvider?.GetConsumingPowderKgs(state) ?? 0f;
         bool IExamineActionHasExternalConstraints.IsPointingToValidObject(ExamineActionState state, GameObject pointedObject)
         => IsPointingToValidObjectProvider?.IsPointingToValidObject(state, pointedObject) ?? true;
 
@@ -315,6 +332,6 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         => IsValidTimeProvider?.IsValidTime(state, time) ?? true;
 
         public ActionsToBlock? GetLightRequirementType(ExamineActionState state)
-        => LightRequirementType;
+        => LightRequirementTypeProvider?.GetLightRequirementType(state);
     }
 }
