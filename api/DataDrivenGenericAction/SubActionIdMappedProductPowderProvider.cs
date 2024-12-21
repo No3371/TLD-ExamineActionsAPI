@@ -1,7 +1,7 @@
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
-    public class SimpleMultiProductPowderProvider : IProductPowderProvider
+    public class SubActionIdMappedProductPowderProvider : IProductPowderProvider
     {
         [MelonLoader.TinyJSON.Include]
 		public List<List<MaterialOrProductDef>?> PowderBySubActionId { get; set; }

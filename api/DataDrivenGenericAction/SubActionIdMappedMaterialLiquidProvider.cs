@@ -1,6 +1,6 @@
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
-    public class SimpleMultiMaterialLiquidProvider : IMaterialLiquidProvider
+    public class SubActionIdMappedMaterialLiquidProvider : IMaterialLiquidProvider
     {
         [MelonLoader.TinyJSON.Include]
 		public List<List<MaterialOrProductDef>?> LiquidBySubActionId { get; set; }

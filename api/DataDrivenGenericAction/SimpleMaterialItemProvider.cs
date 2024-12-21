@@ -1,7 +1,7 @@
 // #define VERY_VERBOSE
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
-    public class SimpleSingleMaterialItemProvider : IMaterialItemProvider
+    public class SimpleMaterialItemProvider : IMaterialItemProvider
     {
         [MelonLoader.TinyJSON.Include]
 		public List<MaterialOrProductSizedBySubActionDef> Item { get; set; }

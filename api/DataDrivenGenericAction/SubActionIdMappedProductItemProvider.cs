@@ -1,7 +1,7 @@
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
-    public class SimpleMultiProductItemProvider : IProductItemProvider
+    public class SubActionIdMappedProductItemProvider : IProductItemProvider
     {
         [MelonLoader.TinyJSON.Include]
 		public List<List<MaterialOrProductDef>?> ItemBySubActionId { get; set; }

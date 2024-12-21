@@ -1,9 +1,9 @@
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
-    public class SimpleSingleMaterialPowderProvider : IMaterialPowderProvider
+    public class SimpleMaterialPowderProvider : IMaterialPowderProvider
     {
-        public SimpleSingleMaterialPowderProvider() {}
+        public SimpleMaterialPowderProvider() {}
         [MelonLoader.TinyJSON.Include]
         public List<MaterialOrProductSizedBySubActionDef>? Powder { get; set; }
         public void GetMaterialPowder(ExamineActionState state, List<MaterialOrProductPowderConf> materials)

@@ -58,13 +58,13 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
                 CuttingToolTypeFilter = ToolsItem.CuttingToolType.Knife
             };
             action.IsToolRequired = true;
-            action.MaterialItemProvider = new SimpleSingleMaterialItemProvider() {
+            action.MaterialItemProvider = new SimpleMaterialItemProvider() {
                 Item = new () {
                     new MaterialOrProductSizedBySubActionDef (new ("GEAR_Knife", 1, 100), 0, 1),
                 }
             };
             action.MaterialLiquidProvider = new SimpleMaterialLiquidProvider();
-            action.MaterialPowderProvider = new SimpleSingleMaterialPowderProvider();
+            action.MaterialPowderProvider = new SimpleMaterialPowderProvider();
             action.FailureChanceProvider = new SimpleFailureChanceProvider();
             action.DurationMinuteProvider = new SimpleDurationMinutesProvider() {
                 BaseDurationMinutes = 5
@@ -115,7 +115,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
             action.SubActionCountProvider = new SimpleSubActionCountProvider() {
                 SubActionCount = 4
             };
-            action.MaterialItemProvider = new SimpleMultiMaterialItemProvider() {
+            action.MaterialItemProvider = new SubActionIdMappedMaterialItemProvider() {
                 ItemBySubActionId = new () {
                     new () { new MaterialOrProductDef ("GEAR_LeatherHide", 1, 100) },
                     new () { new MaterialOrProductDef ("GEAR_WolfPelt", 1, 100) },
@@ -123,7 +123,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
                     new () { new MaterialOrProductDef ("GEAR_MooseHide", 1, 100) }
                 },
             };
-            action.ProductItemProvider = new SimpleMultiProductItemProvider() {
+            action.ProductItemProvider = new SubActionIdMappedProductItemProvider() {
                 ItemBySubActionId = new () {
                     new () { new MaterialOrProductDef ("GEAR_TanningRackDPS2", 1, 100) },
                     new () { new MaterialOrProductDef ("GEAR_TanningRackWPS2", 1, 100) },
