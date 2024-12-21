@@ -30,8 +30,6 @@ namespace ExamineActionsAPI
 
         public ActionsToBlock? LightRequirement => null;
 
-        public bool ConsumeOnFailure => true;
-
         public bool AllowStarving => false;
 
         public bool AllowExhausted => false;

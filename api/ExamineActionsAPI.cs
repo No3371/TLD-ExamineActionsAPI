@@ -498,7 +498,7 @@ namespace ExamineActionsAPI
             IExamineActionFailable? eaf = (State.Action as IExamineActionFailable);
 			var consumed = false;
 			var destroyed = false;
-			if (eaf.ConsumeOnFailure(State))
+			if (eaf.ShouldConsumeOnFailure(State))
 			{
 				consumed = true;
 				destroyed = ConsumeSubject();

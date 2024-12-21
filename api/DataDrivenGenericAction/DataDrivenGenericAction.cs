@@ -23,8 +23,8 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
             Id = "!!!ACTION_ID_UNSET!!!";
             RequiredInDoorState = Weather.IndoorState.NotSet;
             IsToolRequired = true;
-            IsCancellable = true;
-            ConsumeOnSuccess = true;
+            CanBeCancelled = true;
+            ShouldConsumeOnSuccess = true;
         }
         public static DataDrivenGenericAction? NewWithJson (string json)
         {
@@ -195,13 +195,13 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         [Include]
         public float NormalizedConditionInterruptThreshold                        { get; set; }
         [Include]
-        public bool IsCancellable                                                 { get; set; }
+        public bool CanBeCancelled                                                 { get; set; }
         [Include]
         public bool ConsumeOnCancellation                                         { get; set; }
         [Include]
-        public bool ConsumeOnFailure                                              { get; set; }
+        public bool ShouldConsumeOnFailure                                              { get; set; }
         [Include]
-        public bool ConsumeOnSuccess                                              { get; set; }
+        public bool ShouldConsumeOnSuccess                                              { get; set; }
         [Include]
         public bool IsToolRequired                                                { get; set; }
         [Include]
@@ -279,13 +279,13 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         int IExamineAction.GetSubActionCount(ExamineActionState state)
         => SubActionCountProvider?.GetSubActionCount(state) ?? 1;
 
-        bool IExamineActionCancellable.CanBeCancelled(ExamineActionState state) => IsCancellable;
+        bool IExamineActionCancellable.CanBeCancelled(ExamineActionState state) => CanBeCancelled;
 
         bool IExamineActionCancellable.ConsumeOnCancellation(ExamineActionState state) => ConsumeOnCancellation;
 
-        bool IExamineActionFailable.ConsumeOnFailure(ExamineActionState state) => ConsumeOnFailure;
+        bool IExamineActionFailable.ShouldConsumeOnFailure(ExamineActionState state) => ShouldConsumeOnFailure;
 
-        bool IExamineAction.ShouldConsumeOnSuccess(ExamineActionState state) => ConsumeOnSuccess;
+        bool IExamineAction.ShouldConsumeOnSuccess(ExamineActionState state) => ShouldConsumeOnSuccess;
 
         public void GetProductLiquid(ExamineActionState state, List<MaterialOrProductLiquidConf> liquids)
         => ProductLiquidProvider?.GetProductLiquid(state,liquids);

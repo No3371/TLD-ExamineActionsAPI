@@ -16,6 +16,6 @@ namespace ExamineActionsAPI
         /// <summary>
         /// Will the gear be consumed on failure
         /// </summary>
-		bool ConsumeOnFailure (ExamineActionState state);
+		bool ShouldConsumeOnFailure (ExamineActionState state);
 	}
 }

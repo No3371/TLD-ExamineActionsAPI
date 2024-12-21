@@ -29,8 +29,6 @@ namespace ExamineActionsAPI
 
         public ActionsToBlock? LightRequirement => ActionsToBlock.Repair;
 
-        public bool ConsumeOnFailure => false;
-
         public bool ConsumeMaterialsOnFailure => false;
 
         public bool AllowStarving => false;
@@ -122,9 +120,9 @@ namespace ExamineActionsAPI
             return false;
         }
 
-        bool IExamineActionFailable.ConsumeOnFailure(ExamineActionState state)
+        bool IExamineActionFailable.ShouldConsumeOnFailure(ExamineActionState state)
         {
-            return true;
+            return false;
         }
 
         public bool ShouldConsumeOnSuccess(ExamineActionState state)

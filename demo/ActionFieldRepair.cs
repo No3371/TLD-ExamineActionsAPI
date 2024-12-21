@@ -115,7 +115,7 @@ namespace ExamineActionsAPIDemo
 
         void IExamineActionFailable.OnActionFailure(ExamineActionState state) {}
 
-        bool IExamineActionFailable.ConsumeOnFailure(ExamineActionState state)
+        bool IExamineActionFailable.ShouldConsumeOnFailure(ExamineActionState state)
         {
             return false;
         }

@@ -27,8 +27,6 @@ namespace ExamineActionsAPI
 
         public ActionsToBlock? LightRequirement => ActionsToBlock.Repair;
 
-        public bool ConsumeOnFailure => false;
-
         public bool ConsumeMaterialsOnFailure => false;
 
         public bool AllowStarving => false;
@@ -131,9 +129,9 @@ namespace ExamineActionsAPI
             return false;
         }
 
-        bool IExamineActionFailable.ConsumeOnFailure(ExamineActionState state)
+        bool IExamineActionFailable.ShouldConsumeOnFailure(ExamineActionState state)
         {
-            return true;
+            return false;
         }
 
         void IExamineActionCancellable.OnActionCancellation(ExamineActionState state)
@@ -179,8 +177,6 @@ namespace ExamineActionsAPI
         public InfoItemConfig? Info2 { get; }
 
         public ActionsToBlock? LightRequirement => ActionsToBlock.Repair;
-
-        public bool ConsumeOnFailure => false;
 
         public bool ConsumeMaterialsOnFailure => false;
 
@@ -285,9 +281,9 @@ namespace ExamineActionsAPI
             return false;
         }
 
-        bool IExamineActionFailable.ConsumeOnFailure(ExamineActionState state)
+        bool IExamineActionFailable.ShouldConsumeOnFailure(ExamineActionState state)
         {
-            return true;
+            return false;
         }
 
         void IExamineActionCancellable.OnActionCancellation(ExamineActionState state)
