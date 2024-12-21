@@ -3,6 +3,6 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 {
     public interface IMaterialPowderProvider
 	{
-		void GetRequiredPowder(ExamineActionState state, List<MaterialOrProductPowderConf> Powder);
+		void GetRequiredPowder(ExamineActionState state, List<MaterialOrProductPowderConf> materials);
 	}
 }

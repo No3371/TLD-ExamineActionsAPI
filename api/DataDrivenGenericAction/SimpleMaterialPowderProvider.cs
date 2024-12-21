@@ -1,17 +1,17 @@
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
-    public class SimpleMaterialPowderProvider : IMaterialPowderProvider
+    public class SimpleSingleMaterialPowderProvider : IMaterialPowderProvider
     {
-        public SimpleMaterialPowderProvider() {}
+        public SimpleSingleMaterialPowderProvider() {}
         [MelonLoader.TinyJSON.Include]
         public List<MaterialOrProductSizedBySubActionDef>? Powder { get; set; }
-        public void GetRequiredPowder(ExamineActionState state, List<MaterialOrProductPowderConf> powder)
+        public void GetRequiredPowder(ExamineActionState state, List<MaterialOrProductPowderConf> materials)
         {
             for (int i = 0; i < Powder?.Count; i++)
             {
                 var conf = Powder[i].ToPowderConf(state);
-                powder.Add(conf);
+                materials.Add(conf);
             }
         }
     }

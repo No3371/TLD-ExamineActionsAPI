@@ -3,6 +3,6 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 {
     public interface IMaterialItemProvider
 	{
-		void GetRequiredItems(ExamineActionState state, List<MaterialOrProductItemConf> items);
+		void GetRequiredItems(ExamineActionState state, List<MaterialOrProductItemConf> materials);
 	}
 }

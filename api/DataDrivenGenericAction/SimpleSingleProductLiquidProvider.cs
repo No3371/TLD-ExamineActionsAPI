@@ -1,18 +1,16 @@
-using System.Text.Json.Serialization;
-
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
-    public class SimpleMaterialLiquidProvider : IMaterialLiquidProvider
+    public class SimpleSingleProductLiquidProvider : IProductLiquidProvider
     {
-        public SimpleMaterialLiquidProvider() {}
+        public SimpleSingleProductLiquidProvider() {}
         [MelonLoader.TinyJSON.Include]
         public List<MaterialOrProductSizedBySubActionDef>? Liquid { get; set; }
-        public void GetRequiredLiquid(ExamineActionState state, List<MaterialOrProductLiquidConf> materials)
+        public void GetProductLiquid(ExamineActionState state, List<MaterialOrProductLiquidConf> products)
         {
             for (int i = 0; i < Liquid?.Count; i++)
             {
                 var conf = Liquid[i].ToLiquidConf(state);
-                materials.Add(conf);
+                products.Add(conf);
             }
         }
     }

@@ -4,14 +4,14 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
     public class SimpleSingleMaterialItemProvider : IMaterialItemProvider
     {
         [MelonLoader.TinyJSON.Include]
-		public List<MaterialOrProductSizedBySubActionDef> Items { get; set; }
+		public List<MaterialOrProductSizedBySubActionDef> Item { get; set; }
 
-        public void GetRequiredItems(ExamineActionState state, List<MaterialOrProductItemConf> items)
+        public void GetRequiredItems(ExamineActionState state, List<MaterialOrProductItemConf> materials)
         {
-            for (int i = 0; i < Items?.Count; i++)
+            for (int i = 0; i < Item?.Count; i++)
             {
-                var conf = Items[i].ToItemConf(state);
-                items.Add(conf);
+                var conf = Item[i].ToItemConf(state);
+                materials.Add(conf);
             }
         }
     }
