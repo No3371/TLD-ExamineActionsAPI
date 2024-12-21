@@ -7,6 +7,7 @@ namespace ExamineActionsAPI
     /// </summary>
     public interface IExamineActionRequireTool
 	{
+		bool RequireTool(ExamineActionState state) => true;
 		/// <summary>
 		/// <para>Find appropriate gears as tools (usually from inventroy) and add them to the list.</para>
 		/// <para>You can add null (bare hands) as an option too.</para>
