@@ -43,6 +43,6 @@ namespace ExamineActionsAPI
             if (normalizedNewCondition < 0.1f) normalizedNewCondition = 0;
             state.Subject.SetNormalizedHP(normalizedNewCondition);
         }
-        public override bool ConsumeOnSuccess(ExamineActionState state) => false;
+        public override bool ShouldConsumeOnSuccess(ExamineActionState state) => false;
     }
 }

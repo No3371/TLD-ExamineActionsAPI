@@ -48,7 +48,7 @@ namespace ExamineActionsAPIDemo
             return false;
         }
 
-        bool IExamineAction.ConsumeOnSuccess(ExamineActionState state)
+        bool IExamineAction.ShouldConsumeOnSuccess(ExamineActionState state)
         {
             return false;
         }
@@ -59,7 +59,7 @@ namespace ExamineActionsAPIDemo
             return true;
         }
 
-        void IExamineActionCancellable.OnActionCancelled(ExamineActionState state) {}
+        void IExamineActionCancellable.OnActionCancellation(ExamineActionState state) {}
 
         void IExamineAction.OnActionDeselected(ExamineActionState state) {}
 
@@ -68,7 +68,7 @@ namespace ExamineActionsAPIDemo
         void IExamineActionInterruptable.OnInterruption(ExamineActionState state) {}
         ActionsToBlock? IExamineActionInterruptable.GetLightRequirementType(ExamineActionState state) => ActionsToBlock.Repair;
 
-        void IExamineAction.OnPerform(ExamineActionState state) {}
+        void IExamineAction.OnPerforming(ExamineActionState state) {}
 
         void IExamineAction.OnSuccess(ExamineActionState state)
         {

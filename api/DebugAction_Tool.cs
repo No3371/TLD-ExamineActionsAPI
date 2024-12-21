@@ -61,7 +61,7 @@ namespace ExamineActionsAPI
 			return true;
         }
 
-        public void OnPerform(ExamineActionState state)
+        public void OnPerforming(ExamineActionState state)
         {
         }
 
@@ -110,7 +110,7 @@ namespace ExamineActionsAPI
             return false;
         }
 
-        public bool ConsumeOnSuccess(ExamineActionState state)
+        public bool ShouldConsumeOnSuccess(ExamineActionState state)
         {
             return false;
         }

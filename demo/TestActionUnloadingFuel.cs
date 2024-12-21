@@ -26,17 +26,17 @@ namespace ExamineActionsAPIDemo
         IExamineActionPanel? IExamineAction.CustomPanel => null;
         InfoItemConfig info;
 
-        public bool IsActionAvailable(GearItem item)
+        bool IExamineAction.IsActionAvailable(GearItem item)
         {
             return item.m_KeroseneLampItem != null;
             
         }
 
-        public bool CanPerform(ExamineActionState state)
+        bool IExamineAction.CanPerform(ExamineActionState state)
         {
             return state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters.m_Units > 0;
         }
-        public void OnPerform(ExamineActionState state)
+        void IExamineAction.OnPerforming(ExamineActionState state)
         {
             Il2CppTLD.Gear.KeroseneLampItem lamp = state.Subject.m_KeroseneLampItem;
             if (lamp.IsOn()) lamp.TurnOff(true);
@@ -50,7 +50,7 @@ namespace ExamineActionsAPIDemo
             state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters = ItemLiquidVolume.FromLiters(0);
         }
 
-        public bool ConsumeOnSuccess(ExamineActionState state) => false;
+        bool IExamineAction.ShouldConsumeOnSuccess(ExamineActionState state) => false;
         void IExamineAction.OnActionSelected(ExamineActionState state) {}
         void IExamineAction.OnActionDeselected(ExamineActionState state) {}
         void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}

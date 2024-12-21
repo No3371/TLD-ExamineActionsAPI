@@ -245,7 +245,7 @@ namespace ExamineActionsAPI
 				reason = PerformingBlockedReased.Action;
 			}
 
-            if (State.Action.ConsumeOnSuccess(State))
+            if (State.Action.ShouldConsumeOnSuccess(State))
             {
 				if (State.Action.GetConsumingUnits(State) > (State.Subject.m_StackableItem?.m_Units ?? 1)
 				 || State.Action.GetConsumingPowderKgs(State) > (State.Subject.m_PowderItem?.m_Weight.ToQuantity(1f) ?? 0f)
@@ -381,7 +381,7 @@ namespace ExamineActionsAPI
 			this.LoggerInstance.Msg($"Performing custom action {State.Action.Id}... ({State.StartedAtGameTime})");
 			State.Panel.OnPerformingAction(State);
 			State.PanelExtension?.OnPerformingAction(State);
-			State.Action.OnPerform(State);
+			State.Action.OnPerforming(State);
 			VeryVerboseLog($"->>>>>>>>>>>>>>PerformAction ({ GameManager.m_TimeOfDay.GetMinutes() }m");
 		}
 
@@ -465,7 +465,7 @@ namespace ExamineActionsAPI
 
 			var consumed = false;
 			var destroyed = false;
-			if (State.Action.ConsumeOnSuccess(State))
+			if (State.Action.ShouldConsumeOnSuccess(State))
 			{
 				consumed = true;
 				destroyed = ConsumeSubject();
@@ -582,7 +582,7 @@ namespace ExamineActionsAPI
 				consumed = true;
 				destroyed = ConsumeSubject();
 			}
-            cancellable.OnActionCancelled(State);
+            cancellable.OnActionCancellation(State);
 			State.Panel.OnActionCancelled(State);
 			State.PanelExtension?.OnActionCancelled(State);
 			PostActionFinished();
@@ -959,7 +959,7 @@ namespace ExamineActionsAPI
 				HUDMessage.AddMessage(Localization.Get("GAMEPLAY_CannotReadWithAfflictions"), false, false);
 				return true;
 			}
-			if (act.CustomShouldInterrupt(State))
+			if (act.ShouldInterrupt(State))
 			{
 				return true;
 			}

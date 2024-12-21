@@ -21,7 +21,7 @@ namespace ExamineActionsAPIDemo
 
         public bool CanPerform(ExamineActionState state) => state.Subject.m_StackableItem.m_Units >= 5;
 
-        public bool ConsumeOnSuccess(ExamineActionState state) => true;
+        bool IExamineAction.ShouldConsumeOnSuccess(ExamineActionState state) => true;
         public int GetConsumingUnits (ExamineActionState state) => (state.SubActionId + 1) * 5;
         int IExamineAction.GetSubActionCount (ExamineActionState state) => state.Subject.m_StackableItem.m_Units / 5;
 
@@ -37,7 +37,7 @@ namespace ExamineActionsAPIDemo
             products.Add(new (state.Subject.name == "GEAR_2FirConeSeedsRoasted" ?  "GEAR_1FirSeedBunchRoasted" :  "GEAR_2FirSeedBunch", (state.SubActionId + 1), 100));
         }
 
-        void IExamineAction.OnPerform(ExamineActionState state) {}
+        void IExamineAction.OnPerforming(ExamineActionState state) {}
 
         void IExamineAction.OnActionSelected(ExamineActionState state) {}
 

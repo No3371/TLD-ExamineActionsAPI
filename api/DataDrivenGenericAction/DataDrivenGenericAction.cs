@@ -285,7 +285,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 
         bool IExamineActionFailable.ConsumeOnFailure(ExamineActionState state) => ConsumeOnFailure;
 
-        bool IExamineAction.ConsumeOnSuccess(ExamineActionState state) => ConsumeOnSuccess;
+        bool IExamineAction.ShouldConsumeOnSuccess(ExamineActionState state) => ConsumeOnSuccess;
 
         public void GetProductLiquid(ExamineActionState state, List<MaterialOrProductLiquidConf> liquids)
         => ProductLiquidProvider?.GetProductLiquid(state,liquids);
@@ -313,7 +313,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         bool IExamineAction.IsActionAvailable(GearItem item)
         => IsActionAvailableProvider?.IsActionAvailable(item) ?? true;
 
-        void IExamineActionCancellable.OnActionCancelled(ExamineActionState state)
+        void IExamineActionCancellable.OnActionCancellation(ExamineActionState state)
         {
             if (OnCancellationCallbacks != null)
             foreach (var callback in OnCancellationCallbacks)
@@ -346,7 +346,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
             }
         }
 
-        void IExamineAction.OnPerform(ExamineActionState state)
+        void IExamineAction.OnPerforming(ExamineActionState state)
         {
             if (OnPerformCallbacks != null)
             foreach (var callback in OnPerformCallbacks)

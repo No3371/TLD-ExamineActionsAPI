@@ -43,7 +43,7 @@ namespace ExamineActionsAPI
 
         public void OnActionSelected(ExamineActionState state) {}
 
-        public void OnPerform(ExamineActionState state) {}
+        public void OnPerforming(ExamineActionState state) {}
 
         public void OnSuccess(ExamineActionState state)
         {
@@ -52,12 +52,12 @@ namespace ExamineActionsAPI
             
         }
 
-        public bool ConsumeOnSuccess(ExamineActionState state)
+        public bool ShouldConsumeOnSuccess(ExamineActionState state)
         {
             return false;
         }
 
-        void IExamineActionCancellable.OnActionCancelled(ExamineActionState state) {}
+        void IExamineActionCancellable.OnActionCancellation(ExamineActionState state) {}
         bool IExamineActionCancellable.ConsumeOnCancellation(ExamineActionState state) => false;
 
         void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}

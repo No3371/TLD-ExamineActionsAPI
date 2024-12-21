@@ -31,7 +31,7 @@ namespace ExamineActionsAPIDemo
             return state.Subject.m_FoodItem.m_CaloriesRemaining > 100;
         }
 
-        void IExamineAction.OnPerform(ExamineActionState state)
+        void IExamineAction.OnPerforming(ExamineActionState state)
         {
             float ratio = UnityEngine.Random.Range(25,60) / state.Subject.m_FoodItem.m_CaloriesRemaining;
             state.Temp.Add(0, ratio);
@@ -57,7 +57,7 @@ namespace ExamineActionsAPIDemo
 
         void IExamineAction.OnActionDeselected(ExamineActionState state) {}
 
-        bool IExamineAction.ConsumeOnSuccess(ExamineActionState state) => false;
+        bool IExamineAction.ShouldConsumeOnSuccess(ExamineActionState state) => false;
 
         void IExamineActionProduceItems.GetProducts(ExamineActionsAPI.ExamineActionState state, System.Collections.Generic.List<MaterialOrProductItemConf> products)
         {

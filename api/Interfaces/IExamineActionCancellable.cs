@@ -13,7 +13,7 @@ namespace ExamineActionsAPI
         /// Called on cancellation
         /// </summary>
         /// <param name="state"></param>
-		void OnActionCancelled (ExamineActionState state);
+		void OnActionCancellation (ExamineActionState state);
         /// <summary>
         /// Will the gear still be consumed on cancellation
         /// </summary>

@@ -38,6 +38,6 @@ namespace ExamineActionsAPI
         }
 
         public override void OnSuccess(ExamineActionState state) {}
-        public override bool ConsumeOnSuccess(ExamineActionState state) => false;
+        public override bool ShouldConsumeOnSuccess(ExamineActionState state) => false;
     }
 }

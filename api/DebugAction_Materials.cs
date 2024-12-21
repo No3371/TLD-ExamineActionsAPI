@@ -84,7 +84,7 @@ namespace ExamineActionsAPI
             // throw new NotImplementedException();
         }
 
-        public void OnPerform(ExamineActionState state)
+        public void OnPerforming(ExamineActionState state)
         {
 			MelonLogger.Msg($"Performing Salt");
         }
@@ -125,7 +125,7 @@ namespace ExamineActionsAPI
             return true;
         }
 
-        public bool ConsumeOnSuccess(ExamineActionState state)
+        public bool ShouldConsumeOnSuccess(ExamineActionState state)
         {
             return true;
         }

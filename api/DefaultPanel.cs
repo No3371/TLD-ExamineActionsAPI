@@ -637,7 +637,7 @@ namespace ExamineActionsAPI
 
         void UpdateConsumeLabel (ExamineActionState state)
         {
-            var consumeS = state.Action.ConsumeOnSuccess(state);
+            var consumeS = state.Action.ShouldConsumeOnSuccess(state);
             var consumeF = (state.Action as IExamineActionFailable)?.ConsumeOnFailure(state) ?? false; // null means anyway not possible to happens
             var consumeC = (state.Action as IExamineActionCancellable)?.ConsumeOnCancellation(state) ?? false;
             var consumeI = (state.Action as IExamineActionInterruptable)?.ShouldConsumeOnInterruption(state) ?? false;

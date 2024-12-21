@@ -20,7 +20,7 @@ namespace ExamineActionsAPI
 		/// <para>Materials and tools check is covered by the API, use this if you want to apply additional conditions.</para>
 		/// </summary>
 		bool CanPerform (ExamineActionState state);
-		void OnPerform (ExamineActionState state);
+		void OnPerforming (ExamineActionState state);
 		/// <summary>
 		/// How many ingame minutes is required to finish this action?
 		/// </summary>
@@ -61,9 +61,9 @@ namespace ExamineActionsAPI
 		/// </summary>
 		void OnActionDeselected (ExamineActionState state);
 		/// <summary>
-		/// Will the gear be consumed on success?
+		/// Will the subject be consumed on success?
 		/// </summary>
-		bool ConsumeOnSuccess (ExamineActionState state);
+		bool ShouldConsumeOnSuccess (ExamineActionState state);
 		/// <summary>
 		/// If the action should consume the subject more than 1 unit, override it with this.
 		/// </summary>

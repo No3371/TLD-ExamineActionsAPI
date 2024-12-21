@@ -59,7 +59,7 @@ namespace ExamineActionsAPIDemo
             return false;
         }
 
-        bool IExamineAction.ConsumeOnSuccess(ExamineActionState state)
+        bool IExamineAction.ShouldConsumeOnSuccess(ExamineActionState state)
         {
             return false;
         }
@@ -70,7 +70,7 @@ namespace ExamineActionsAPIDemo
             return true;
         }
 
-        void IExamineActionCancellable.OnActionCancelled(ExamineActionState state) {}
+        void IExamineActionCancellable.OnActionCancellation(ExamineActionState state) {}
 
         void IExamineAction.OnActionDeselected(ExamineActionState state) {}
 
@@ -85,7 +85,7 @@ namespace ExamineActionsAPIDemo
         ActionsToBlock? IExamineActionInterruptable.GetLightRequirementType(ExamineActionsAPI.ExamineActionState state)
         => ActionsToBlock.Repair;
 
-        void IExamineAction.OnPerform(ExamineActionState state) {}
+        void IExamineAction.OnPerforming(ExamineActionState state) {}
 
         // Here we modify the condition of the item being sharpened
         // Normalized means 0.0 ~ 1.0 (0% ~ 100%)

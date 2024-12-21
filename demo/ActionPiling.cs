@@ -51,7 +51,7 @@ namespace ExamineActionsAPIDemo
                 _ => false
             };
         }
-        void IExamineAction.OnPerform(ExamineActionState state) {}
+        void IExamineAction.OnPerforming(ExamineActionState state) {}
 
         int IExamineAction.CalculateDurationMinutes(ExamineActionState state)
         {
@@ -68,7 +68,7 @@ namespace ExamineActionsAPIDemo
 
         void IExamineAction.OnActionDeselected(ExamineActionState state) {}
 
-        bool IExamineAction.ConsumeOnSuccess(ExamineActionState state) => true;
+        bool IExamineAction.ShouldConsumeOnSuccess(ExamineActionState state) => true;
         int IExamineAction.GetConsumingUnits(ExamineActionState state)
         {
             return state.Subject.name switch

@@ -90,7 +90,7 @@ namespace ExamineActionsAPI
             // throw new NotImplementedException();
         }
 
-        public void OnPerform(ExamineActionState state)
+        public void OnPerforming(ExamineActionState state)
         {
 			MelonLogger.Msg($"Performing Salt");
         }
@@ -136,7 +136,7 @@ namespace ExamineActionsAPI
             return true;
         }
 
-        void IExamineActionCancellable.OnActionCancelled(ExamineActionState state)
+        void IExamineActionCancellable.OnActionCancellation(ExamineActionState state)
         {
             
         }
@@ -146,7 +146,7 @@ namespace ExamineActionsAPI
             return false;
         }
 
-        public bool ConsumeOnSuccess(ExamineActionState state)
+        public bool ShouldConsumeOnSuccess(ExamineActionState state)
         {
             return true;
         }
@@ -243,7 +243,7 @@ namespace ExamineActionsAPI
             // throw new NotImplementedException();
         }
 
-        public void OnPerform(ExamineActionState state)
+        public void OnPerforming(ExamineActionState state)
         {
 			MelonLogger.Msg($"Performing Salt");
         }
@@ -290,7 +290,7 @@ namespace ExamineActionsAPI
             return true;
         }
 
-        void IExamineActionCancellable.OnActionCancelled(ExamineActionState state)
+        void IExamineActionCancellable.OnActionCancellation(ExamineActionState state)
         {
             
         }
@@ -300,7 +300,7 @@ namespace ExamineActionsAPI
             return false;
         }
 
-        public bool ConsumeOnSuccess(ExamineActionState state)
+        public bool ShouldConsumeOnSuccess(ExamineActionState state)
         {
             return true;
         }

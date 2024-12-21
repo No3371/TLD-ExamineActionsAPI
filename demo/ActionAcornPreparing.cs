@@ -25,7 +25,7 @@ namespace ExamineActionsAPIDemo
         }
 
         bool IExamineAction.CanPerform(ExamineActionState state) => true;
-        void IExamineAction.OnPerform(ExamineActionState state) {}
+        void IExamineAction.OnPerforming(ExamineActionState state) {}
 
         int IExamineAction.CalculateDurationMinutes(ExamineActionState state)
         {
@@ -46,7 +46,7 @@ namespace ExamineActionsAPIDemo
 
         void IExamineAction.OnActionDeselected(ExamineActionState state) {}
 
-        bool IExamineAction.ConsumeOnSuccess(ExamineActionState state) => true;
+        bool IExamineAction.ShouldConsumeOnSuccess(ExamineActionState state) => true;
         // For this action, we are using the sub action feature as "how many acorn to prepare"
         // So the SubAction#0 would be "prepare 1 acorn"
         // which will consume 1 acorn
