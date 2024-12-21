@@ -1,11 +1,8 @@
-// #define VERY_VERBOSE
+﻿// #define VERY_VERBOSE
 using Il2Cpp;
 using MelonLoader;
 using UnityEngine;
 using Il2CppTLD.Gear;
-using UnityEngine.Playables;
-using UnityEngine.AddressableAssets;
-using Il2CppAK.Wwise;
 using System.Diagnostics;
 using Il2CppTLD.IntBackedUnit;
 
