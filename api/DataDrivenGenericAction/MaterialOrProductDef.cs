@@ -1,9 +1,21 @@
 namespace ExamineActionsAPI.DataDrivenGenericAction;
 
-public struct MaterialOrProductDef (string Name, float Size, byte Chance)
+public struct MaterialOrProductDef
 {
-    public float SizeExtraMultiplierPerSubAction { get; set; }
-    public float SizeOffsetPerSubAction { get; set; }
+    public MaterialOrProductDef(string name, float size, byte chance)
+    {
+        Name = name;
+        Size = size;
+        Chance = chance;
+    }
+    [MelonLoader.TinyJSON.Include]
+    public string Name { get; set; }
+
+
+    [MelonLoader.TinyJSON.Include]
+    public float Size { get; set; }
+    [MelonLoader.TinyJSON.Include]
+    public byte Chance { get; set; }
     public MaterialOrProductLiquidConf ToLiquidConf (ExamineActionState state)
     {
         var conf = new MaterialOrProductLiquidConf
@@ -12,12 +24,6 @@ public struct MaterialOrProductDef (string Name, float Size, byte Chance)
             Liters = Size,
             Chance = Chance
         };
-        
-        if (state.SubActionId != 0)
-        {
-            conf.Liters *= 1 + (state.SubActionId * SizeExtraMultiplierPerSubAction);
-            conf.Liters += (state.SubActionId * SizeOffsetPerSubAction);
-        }
 
         return conf;
     }
@@ -30,12 +36,6 @@ public struct MaterialOrProductDef (string Name, float Size, byte Chance)
             Units = (int)Size,
             Chance = Chance
         };
-        
-        if (state.SubActionId != 0)
-        {
-            conf.Units = (int) (conf.Units * (1f + state.SubActionId * SizeExtraMultiplierPerSubAction));
-            conf.Units += (int) (state.SubActionId * SizeOffsetPerSubAction);
-        }
 
         return conf;
     }
@@ -48,12 +48,6 @@ public struct MaterialOrProductDef (string Name, float Size, byte Chance)
             Kgs = Size,
             Chance = Chance
         };
-
-        if (state.SubActionId != 0)
-        {
-            conf.Kgs *= 1 + (state.SubActionId * SizeExtraMultiplierPerSubAction);
-            conf.Kgs += (state.SubActionId * SizeOffsetPerSubAction);
-        }
 
         return conf;
     }
