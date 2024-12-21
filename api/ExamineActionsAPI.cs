@@ -5,6 +5,7 @@ using UnityEngine;
 using Il2CppTLD.Gear;
 using System.Diagnostics;
 using Il2CppTLD.IntBackedUnit;
+using System.Collections;
 
 namespace ExamineActionsAPI
 {
@@ -39,17 +40,41 @@ namespace ExamineActionsAPI
 			// 	uConsole.Log(InterfaceManager.GetPanel<Panel_Inventory_Examine>().GetSelectedTool().name);
 			// }));
 
-			// uConsole.RegisterCommand("eaapi_btn_idx", new Action(() => {
-			// 	uConsole.Log(InterfaceManager.GetPanel<Panel_Inventory_Examine>().m_SelectedButtonIndex.ToString());
-			// }));
-			// uConsole.RegisterCommand("eaapi_act_chance", new Action(() => {
-			// 	uConsole.Log(InterfaceManager.GetPanel<Panel_Inventory_Examine>().GetChanceActionSuccess(0).ToString());
-			// }));
+			uConsole.RegisterCommand("output_action_json", new Action(() => {
+				DataDrivenGenericAction.DataDrivenGenericAction.LogJsonTemplate();
+			}));
+			uConsole.RegisterCommand("output_action_json_minimal", new Action(() => {
+				DataDrivenGenericAction.DataDrivenGenericAction.LogMinimalJsonTemplate();
+			}));
+			// ModComponentCompatibility.PatchModComponent(this);
 
 			State = new ExamineActionState();
 		}
 
-		public static void Register (IExamineAction action)
+        public override void OnLateInitializeMelon()
+        {
+			MelonCoroutines.Start(LoadZippedJsons());
+        }
+
+        IEnumerator LoadZippedJsons ()
+		{
+			 var task = DataDrivenGenericAction.ZippedActionDefLoader.Run();
+			 var wait = new WaitForSeconds(1f);
+			 while (!task.IsCompleted)
+			 	yield return wait;
+
+			if (task.IsFaulted)
+			{
+				LoggerInstance.Error("Failed to load examine action definition files: ", task.Exception);
+			}
+			else if (task.IsCompletedSuccessfully)
+			{
+				foreach (var a in task.Result)
+				    Register(a);
+			}
+		}
+
+        public static void Register (IExamineAction action)
 		{
 			// Filter out unsupported/bugged interface here
 			bool filtered = false;
@@ -98,6 +123,18 @@ namespace ExamineActionsAPI
 
 			Instance.RegisteredExamineActions.Add(action);
 			Instance.LoggerInstance.Msg($"Action registered: {action.Id}");
+		}
+
+		public static void TryRegisterWithJson (params string[] jsons)
+		{
+			foreach (string json in jsons)
+			{
+				var action = DataDrivenGenericAction.DataDrivenGenericAction.NewWithJson(json);
+				if (action != null)
+				{
+					Register(action);
+				}
+			}
 		}
 
 		[Conditional("VERY_VERBOSE")]
