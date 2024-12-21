@@ -45,22 +45,26 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
                 ActionButtonLocalizedStringKey = "EXAMPLE_JSON_ACTION",
             };
             action.MenuItemSpriteName = "LOADED_SPRITE_ASSET_NAME";
-            action.ProductItemProvider = new SimpleProductItemProvider();
-            action.ProductLiquidProvider = new SimpleProductLiquidProvider();
-            action.ProductPowderProvider = new SimpleProductPowderProvider();
+            action.ProductItemProvider = new SimpleSingleProductItemProvider();
+            action.ProductLiquidProvider = new SimpleSingleProductLiquidProvider();
+            action.ProductPowderProvider = new SimpleSingleProductPowderProvider();
             action.ProgressSecondProvider = new SimpleProgressSecondProvider() {
                 BaseProgressSeconds = 1
             };
             action.CanPerformProvider = new SimpleCanPerformProvider() {
-                ValidGearNames = new () { "GEAR_Stone", "GEAR_RawMeatDeer" }
+                ValidGearNames = new () {"GEAR_Stone", "GEAR_RawMeatDeer"}
             };
             action.ToolOptionsProvider = new SimpleToolOptionsProvider() {
                 CuttingToolTypeFilter = ToolsItem.CuttingToolType.Knife
             };
             action.IsToolRequired = true;
-            action.MaterialItemProvider = new SimpleMaterialItemProvider(new MaterialOrProductDef ("GEAR_Knife", 1, 100));
+            action.MaterialItemProvider = new SimpleSingleMaterialItemProvider() {
+                Item = new () {
+                    new MaterialOrProductSizedBySubActionDef (new ("GEAR_Knife", 1, 100), 0, 1),
+                }
+            };
             action.MaterialLiquidProvider = new SimpleMaterialLiquidProvider();
-            action.MaterialPowderProvider = new SimpleMaterialPowderProvider();
+            action.MaterialPowderProvider = new SimpleSingleMaterialPowderProvider();
             action.FailureChanceProvider = new SimpleFailureChanceProvider();
             action.DurationMinuteProvider = new SimpleDurationMinutesProvider() {
                 BaseDurationMinutes = 5
@@ -96,6 +100,56 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
             action.MenuItemSpriteName = "LOADED_SPRITE_ASSET_NAME";
             MelonLoader.MelonLogger.Msg(MelonLoader.TinyJSON.JSON.Dump(action, MelonLoader.TinyJSON.EncodeOptions.EnforceHierarchyOrder | MelonLoader.TinyJSON.EncodeOptions.IncludePublicProperties));
         }
+
+        public static void LogCampingToolExample ()
+        {
+            var action = new DataDrivenGenericAction()
+            {
+                Id = "CampingTools_TanningRack_Tan",
+                MenuItemLocalizationKey = "Tan",
+                ActionButtonLocalizedStringKey = "GAMEPLAY_CT_TRackButton",
+            };
+            action.IsActionAvailableProvider = new SimpleIsActionAvailableProvider() {
+                ValidGearNames = new () { "GEAR_TanningRack"  }
+            };
+            action.SubActionCountProvider = new SimpleSubActionCountProvider() {
+                SubActionCount = 4
+            };
+            action.MaterialItemProvider = new SimpleMultiMaterialItemProvider() {
+                ItemBySubActionId = new () {
+                    new () { new MaterialOrProductDef ("GEAR_LeatherHide", 1, 100) },
+                    new () { new MaterialOrProductDef ("GEAR_WolfPelt", 1, 100) },
+                    new () { new MaterialOrProductDef ("GEAR_BearHide", 1, 100) },
+                    new () { new MaterialOrProductDef ("GEAR_MooseHide", 1, 100) }
+                },
+            };
+            action.ProductItemProvider = new SimpleMultiProductItemProvider() {
+                ItemBySubActionId = new () {
+                    new () { new MaterialOrProductDef ("GEAR_TanningRackDPS2", 1, 100) },
+                    new () { new MaterialOrProductDef ("GEAR_TanningRackWPS2", 1, 100) },
+                    new () { new MaterialOrProductDef ("GEAR_TanningRackBP2", 1, 100) },
+                    new () { new MaterialOrProductDef ("GEAR_TanningRackMP2", 1, 100) }
+                },
+            };
+            action.DurationMinuteProvider = new SubActionIdMappedDurationMinutesProvider() {
+                Map = new () {
+                    { 0, 15 },
+                    { 1, 15 },
+                    { 2, 40 },
+                    { 3, 40 },
+                }
+            };
+            action.ProgressSecondProvider = new SimpleProgressSecondProvider() {
+                BaseProgressSeconds = 5
+            };
+            action.GetAudioNameProvider = new SimpleGetAudioNameProvider() {
+                AudioNameBySubAction = new [] {
+                    "Play_CraftingLeatherHide",
+                }
+            };
+            MelonLoader.MelonLogger.Msg(MelonLoader.TinyJSON.JSON.Dump(action, MelonLoader.TinyJSON.EncodeOptions.EnforceHierarchyOrder | MelonLoader.TinyJSON.EncodeOptions.IncludePublicProperties));
+        }
+
         [Include]
         public (string Author, string Name)[]? MelonDependency { get; set; }
         [Include]
@@ -123,8 +177,6 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 
         [Exclude]
         public IExamineActionPanel? CustomPanel => null;
-        [Include]
-        public ActionsToBlock? LightRequirementType { get; set; }
 
         [Include]
         public bool InterruptOnStarving                                           { get; set; }
