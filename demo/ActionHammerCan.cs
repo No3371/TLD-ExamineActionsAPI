@@ -30,7 +30,7 @@ namespace ExamineActionsAPIDemo
         void IExamineAction.OnPerform(ExamineActionState state) {}
         int IExamineAction.CalculateDurationMinutes(ExamineActionState state)
         {
-            return 5;
+            return 10;
         }
 
         float IExamineAction.CalculateProgressSeconds(ExamineActionState state)
@@ -47,7 +47,7 @@ namespace ExamineActionsAPIDemo
 
         void IExamineActionProduceItems.GetProducts(ExamineActionsAPI.ExamineActionState state, System.Collections.Generic.List<MaterialOrProductItemConf> products)
         {
-            products.Add(new ("GEAR_ScrapMetal", 1, 100));
+            products.Add(new ("GEAR_ScrapMetal", 1, 75));
         }
 
         // We are using the subject as the prefab so we can have an new meat item that every part of it is identical to the subject
