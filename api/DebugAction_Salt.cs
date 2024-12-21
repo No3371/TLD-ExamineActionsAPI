@@ -80,7 +80,7 @@ namespace ExamineActionsAPI
             return 95f;
         }
 
-        public void OnActionFailed(ExamineActionState state)
+        public void OnActionFailure(ExamineActionState state)
         {
             // throw new NotImplementedException();
         }
@@ -233,7 +233,7 @@ namespace ExamineActionsAPI
             return 95f;
         }
 
-        public void OnActionFailed(ExamineActionState state)
+        public void OnActionFailure(ExamineActionState state)
         {
             // throw new NotImplementedException();
         }

@@ -113,7 +113,7 @@ namespace ExamineActionsAPIDemo
             return 10;
         }
 
-        void IExamineActionFailable.OnActionFailed(ExamineActionState state) {}
+        void IExamineActionFailable.OnActionFailure(ExamineActionState state) {}
 
         bool IExamineActionFailable.ConsumeOnFailure(ExamineActionState state)
         {

@@ -428,7 +428,7 @@ namespace ExamineActionsAPI
 				consumed = true;
 				destroyed = ConsumeSubject(State.Action.GetConsumingUnits(State));
 			}
-            eaf.OnActionFailed(State);
+            eaf.OnActionFailure(State);
 			State.Panel.OnActionFailed(State);
 			State.PanelExtension?.OnActionFailed(State);
 			PostActionFinished();

@@ -12,7 +12,7 @@ namespace ExamineActionsAPI
         /// <summary>
         /// Get called on failure
         /// </summary>
-		void OnActionFailed (ExamineActionState state);
+		void OnActionFailure (ExamineActionState state);
         /// <summary>
         /// Will the gear be consumed on failure
         /// </summary>
