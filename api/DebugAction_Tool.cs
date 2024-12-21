@@ -120,7 +120,7 @@ namespace ExamineActionsAPI
 
         void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
 
-        void IExamineActionRequirePowder.GetRequiredPowder(ExamineActionState state, List<MaterialOrProductPowderConf> powders)
+        void IExamineActionRequirePowder.GetMaterialPowder(ExamineActionState state, List<MaterialOrProductPowderConf> powders)
         {
             powders.Add(new (PowderAndLiquidTypesLocator.GunPowderType, 0.05f, 100));
             powders.Add(new (PowderAndLiquidTypesLocator.GunPowderType, 0.11f, 100));

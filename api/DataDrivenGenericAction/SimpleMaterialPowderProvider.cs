@@ -6,7 +6,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         public SimpleSingleMaterialPowderProvider() {}
         [MelonLoader.TinyJSON.Include]
         public List<MaterialOrProductSizedBySubActionDef>? Powder { get; set; }
-        public void GetRequiredPowder(ExamineActionState state, List<MaterialOrProductPowderConf> materials)
+        public void GetMaterialPowder(ExamineActionState state, List<MaterialOrProductPowderConf> materials)
         {
             for (int i = 0; i < Powder?.Count; i++)
             {

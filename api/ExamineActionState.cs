@@ -283,7 +283,7 @@ namespace ExamineActionsAPI
             if (act is IExamineActionRequirePowder erp)
             {
                 powders = new(1);
-                erp.GetRequiredPowder(state, powders);
+                erp.GetMaterialPowder(state, powders);
 				for (int i = 0; i < powders.Count; i++)
 				{
                     if (powders[i].Type == null)
@@ -323,7 +323,7 @@ namespace ExamineActionsAPI
             if (this.Action is IExamineActionRequirePowder eapp)
             {
                 powders = new();
-                eapp.GetRequiredPowder(this, powders);
+                eapp.GetMaterialPowder(this, powders);
             }
         }
 

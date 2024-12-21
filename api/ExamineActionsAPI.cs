@@ -763,7 +763,7 @@ namespace ExamineActionsAPI
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 			Inventory inv = GameManager.GetInventoryComponent();
             List<MaterialOrProductPowderConf> powders = new (1);
-			act.GetRequiredPowder(State, powders);
+			act.GetMaterialPowder(State, powders);
 			if (powders == null) return;
             for (int i = 0; i < powders.Count; i++)
 			{

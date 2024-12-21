@@ -320,7 +320,7 @@ namespace ExamineActionsAPI
             if (state.Action is IExamineActionRequirePowder erp)
             {
                 powders = new(1);
-                erp.GetRequiredPowder(state, powders);
+                erp.GetMaterialPowder(state, powders);
             }
 
             int matCount = materials?.Count ?? 0;
