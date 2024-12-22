@@ -12,42 +12,31 @@ The API provides a easy way to add new examine actions (like harvest/repair/shar
 
 It's a very flexible framework, a lot of options can be combined to design custom actions that have totally dynamic behaviors according to what is being examined, what tools is selected... etc.
 
-## Demo
+It can even be used to create a fully fledged crafting system.
 
-There are 9 actions availabe in the demo mod:
+## Things To Do
 
-- Paper From Books: Tear books into paper stacks.
-    - Available on any researchable items.
-- Brute Force Sharpening: Spend hours to merely sharpen tools without whetstone.
-    - Available on any sharpenable items.
-- Slice Meat: Cut a small piece from meats.
-    - Available on any meat or fish.
-- Prepare Acorns: Prepare up to 3 acorns or 1 large portion, at once.
-    - Available on acorns.
-- Unload Storm Lanterns: Unload fuel from storm lanterns.
-    - Available on storm lanterns.
-- Field Repair: Quickly restore clothing items to 20% condition with gut and cloth.
-    - Avaialbe on repairable clothing items.
-- Hammer Can: Hammer cans or unwanted canned foods into scrap metals.
-    - Avaialbe on cans or foods that give cans when eaten or smashed.
-- (ItemPile compat) Pile sticks/coals/charcoals/cattails/stones without crafting.
-    - Only availabe when stickpile item is found registered.
-- (ItemPile compat) unpile multiple piles of sticks/coals/charcoals/cattails/stones at once.
-    - Only availabe when stickpile item is found registered.
-- (Bountiful Foraging compat) Harvest Fir cones.
-- (Bountiful Foraging compat) Make Fir Cones Seeds bunches.
+Things To Do is a mod which is initially made to showcase the features of ExamineActionsAPI, but eventually included actual gameplay features.
+
+Please refer to its [readme](/demo/README.md) for more information.
 
 ## Usage
 
 Start by implementing IExamineAction on your action class, once all the required properties are implemented, it's good to go. Call  `ExamineActionsAPI.Regsiter()` to regsiter the action.
 
-Please refer to the [example mod](https://github.com/No3371/TLD-ExamineActionsAPI/blob/master/demo/ThingsToDo.cs) files under the demo folder.
+Please refer to action implementations in [ThingsToDo](/demo).
+
+## DataDrivenGenericAction
+
+The API supports auto registering actions in json files. ([Examples](/api/DataDrivenGenericAction//Examples))
+
+To supply action definition jsons, compress them into a zip file named as `eaapi` files (for example: `mymod.eaapi`), then put the zip into `Mods` folder.
 
 ## Interfaces
 
 ### [IExamineAction](api/Interfaces/IExamineAction.cs)
 
-- The core interface, classes implementing this are qualified as custom actions
+- The core interface, any class implementing this can be registered
 - Without implementing other interfaces, the action will always success and be finished
     - Only exception is the action is forcefully interrupted in situations like wolf attacks
 - Action menu name & sprite, button text and progress audio can be customized.
@@ -129,4 +118,9 @@ Please refer to the [example mod](https://github.com/No3371/TLD-ExamineActionsAP
 
 ### [IExamineActionDisplayInfo](api/Interfaces/IExamineActionDisplayInfo.cs)
 
-- Display up to 2 information like how the duration/chance is shown.
+- Display up to 3 information like how the duration/chance is shown.
+- While the panel can display up to 4 information blocks, one is always occupied by the action time. If the action implements interfaces that automatically display related info, the blocks provided later may not be displayed.
+
+### [IExamineActionHasExternalConstraints](api/Interfaces/IExamineActionHasExternalConstraints.cs)
+
+- Apply additional constraints to the action, like weather, time... or even requires the player to looking at some specific object...
