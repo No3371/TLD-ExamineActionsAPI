@@ -20,28 +20,30 @@ Things To Do is a mod which is initially made to showcase the features of Examin
 
 Please refer to its [readme](/demo/README.md) for more information.
 
+## Data Driven Generic Action
+
+The API supports auto registering actions in json files. ([Examples](/api/DataDrivenGenericAction//Examples))
+
+To supply action definition jsons, compress them into a zip file named as `eaapi` files (for example: `mymod.eaapi`), then put the zip into `Mods` folder.
+
 ## Usage
 
 Start by implementing IExamineAction on your action class, once all the required properties are implemented, it's good to go. Call  `ExamineActionsAPI.Regsiter()` to regsiter the action.
 
 Please refer to action implementations in [ThingsToDo](/demo).
 
-## DataDrivenGenericAction
+### Interfaces
 
-The API supports auto registering actions in json files. ([Examples](/api/DataDrivenGenericAction//Examples))
-
-To supply action definition jsons, compress them into a zip file named as `eaapi` files (for example: `mymod.eaapi`), then put the zip into `Mods` folder.
-
-## Interfaces
-
-### [IExamineAction](api/Interfaces/IExamineAction.cs)
+#### [IExamineAction](api/Interfaces/IExamineAction.cs)
 
 - The core interface, any class implementing this can be registered
 - Without implementing other interfaces, the action will always success and be finished
     - Only exception is the action is forcefully interrupted in situations like wolf attacks
 - Action menu name & sprite, button text and progress audio can be customized.
 
-### [IExamineActionRequireItems](api/Interfaces/IExamineActionRequireItems.cs)
+Besides `IExamineAction`, additional interfaces can be implemented to introduce various mechanics to the action.
+
+#### [IExamineActionRequireItems](api/Interfaces/IExamineActionRequireItems.cs)
 
 - Setup what are required (and to be consumed) for the action
 - The parameters of each:
@@ -52,7 +54,7 @@ To supply action definition jsons, compress them into a zip file named as `eaapi
     - The subject item/stack is always ignored/excluded in the material check and consumation.
     - For example, you are examine a stack of 99 sticks, even if the action only requires 1 sticks, it can't be performed because the stack of 99 sticks is excluded.
 
-### [IExamineActionProduceItems](api/Interfaces/IExamineActionProduceItems.cs)
+#### [IExamineActionProduceItems](api/Interfaces/IExamineActionProduceItems.cs)
 
 - Supports up to 5 in total of items/liquid/powder
 - The parameters of each:
@@ -60,7 +62,7 @@ To supply action definition jsons, compress them into a zip file named as `eaapi
     - How many units to produce
     - The chance the product is yieled, ranging from 0 to 100.
 
-### [IExamineActionRequireLiquid](api/Interfaces/IExamineActionRequireLiquid.cs)
+#### [IExamineActionRequireLiquid](api/Interfaces/IExamineActionRequireLiquid.cs)
 
 - Supports up to 5 in total of items/liquid/powder
 - The parameters of each:
@@ -69,7 +71,7 @@ To supply action definition jsons, compress them into a zip file named as `eaapi
     - How many liters to consume
     - The chance these liquid is consumed, ranging from 0 to 100
 
-### [IExamineActionProduceLiquid](api/Interfaces/IExamineActionProduceLiquid.cs)
+#### [IExamineActionProduceLiquid](api/Interfaces/IExamineActionProduceLiquid.cs)
 
 - Supports up to 5 in total of items/liquid/powder
 - The parameters of each:
@@ -78,7 +80,7 @@ To supply action definition jsons, compress them into a zip file named as `eaapi
     - How many liters to produce
     - The chance these liquid is produced, ranging from 0 to 100
   
-### [IExamineActionRequirePowder](api/Interfaces/IExamineActionRequirePowder.cs)
+#### [IExamineActionRequirePowder](api/Interfaces/IExamineActionRequirePowder.cs)
 
 - Supports up to 5 in total of items/liquid/powder
 - The parameters of each:
@@ -87,7 +89,7 @@ To supply action definition jsons, compress them into a zip file named as `eaapi
     - How many kilograms to consume
     - The chance these powder is consumed, ranging from 0 to 100
 
-### [IExamineActionProducePowder](api/Interfaces/IExamineActionProducePowder.cs)
+#### [IExamineActionProducePowder](api/Interfaces/IExamineActionProducePowder.cs)
 
 - Supports up to 5 in total of items/liquid/powder
 - The parameters of each:
@@ -96,31 +98,31 @@ To supply action definition jsons, compress them into a zip file named as `eaapi
     - How many kilograms to produce
     - The chance these powder is produced, ranging from 0 to 100
 
-### [IExamineActionFailable](api/Interfaces/IExamineActionFailable.cs)
+#### [IExamineActionFailable](api/Interfaces/IExamineActionFailable.cs)
 
 - Make the action possible to fail by chance (0 ~ 100)
 - You can control should the subject to be still consumed on a failure
 
-### [IExamineActionInterruptable](api/Interfaces/IExamineActionInterruptable.cs)
+#### [IExamineActionInterruptable](api/Interfaces/IExamineActionInterruptable.cs)
 
 - Make the action possible to be interrupted due to light/conditions/afflictions...
 - You can control should the subject to be still consumed on a interruption
 
-### [IExamineActionCancellable](api/Interfaces/IExamineActionCancellable.cs)
+#### [IExamineActionCancellable](api/Interfaces/IExamineActionCancellable.cs)
 
 - Make the action can be cancelled by players
 - You can control should the subject to be still consumed on a cancellation
   
-### [IExamineActionRequireTool](api/Interfaces/IExamineActionRequireTool.cs)
+#### [IExamineActionRequireTool](api/Interfaces/IExamineActionRequireTool.cs)
 
 - Make the action requires tool to be performed.
 - You can also scale how much condition to be reduced on the tool.
 
-### [IExamineActionDisplayInfo](api/Interfaces/IExamineActionDisplayInfo.cs)
+#### [IExamineActionDisplayInfo](api/Interfaces/IExamineActionDisplayInfo.cs)
 
 - Display up to 3 information like how the duration/chance is shown.
 - While the panel can display up to 4 information blocks, one is always occupied by the action time. If the action implements interfaces that automatically display related info, the blocks provided later may not be displayed.
 
-### [IExamineActionHasExternalConstraints](api/Interfaces/IExamineActionHasExternalConstraints.cs)
+#### [IExamineActionHasExternalConstraints](api/Interfaces/IExamineActionHasExternalConstraints.cs)
 
 - Apply additional constraints to the action, like weather, time... or even requires the player to looking at some specific object...
