@@ -300,15 +300,15 @@ namespace ExamineActionsAPI
 					reason = PerformingBlockedReased.ToolRequirement;
 					return;
 				}
-				else
-				{
-					if (pie.m_RepairToolsList.m_Tools.Count > 0)
-					{
-						State.SelectingTool = true;
-						State.Panel.OnSelectingTool(State);
-						State.PanelExtension?.OnSelectingTool(State);
-						pie.SelectWindow(pie.GetActionToolSelect());
-					}
+				else if (pie.m_RepairToolsList.m_Tools.Count == 0) {
+					reason = PerformingBlockedReased.ToolRequirement;
+					return;
+				}
+				else {
+					State.SelectingTool = true;
+					State.Panel.OnSelectingTool(State);
+					State.PanelExtension?.OnSelectingTool(State);
+					pie.SelectWindow(pie.GetActionToolSelect());
 					return;
 				}
 			}
