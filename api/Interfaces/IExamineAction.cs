@@ -24,11 +24,11 @@ namespace ExamineActionsAPI
 		/// <summary>
 		/// How many ingame minutes is required to finish this action?
 		/// </summary>
-		int CalculateDurationMinutes (ExamineActionState state);
+		int GetDurationMinutes (ExamineActionState state);
 		/// <summary>
 		/// How many realtime seconds minutes is required to finish this action?
 		/// </summary>
-		float CalculateProgressSeconds (ExamineActionState state);
+		float GetProgressSeconds (ExamineActionState state);
 		/// <summary>
 		/// Called when the action is finshed and succeed.
 		/// </summary>

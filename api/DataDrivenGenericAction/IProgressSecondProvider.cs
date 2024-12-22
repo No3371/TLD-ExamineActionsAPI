@@ -3,6 +3,6 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 {
     public interface IProgressSecondProvider
 	{
-		float CalculateProgressSeconds(ExamineActionState state);
+		float GetProgressSeconds(ExamineActionState state);
 	}
 }

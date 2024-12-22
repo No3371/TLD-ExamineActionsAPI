@@ -146,7 +146,7 @@ namespace ExamineActionsAPI
 
 		public void OnToolChanged ()
 		{
-			ActiveActionDurationMinutes = Action.CalculateDurationMinutes(this);
+			ActiveActionDurationMinutes = Action.GetDurationMinutes(this);
             MaybeUpdateSuccessChance();
 			if (SelectingTool) Panel.OnSelectingToolChanged(this);
 		}
@@ -173,7 +173,7 @@ namespace ExamineActionsAPI
                 }
             }
 
-            ActiveActionDurationMinutes = this.Action.CalculateDurationMinutes(this);
+            ActiveActionDurationMinutes = this.Action.GetDurationMinutes(this);
         }
         static Il2CppSystem.Collections.Generic.List<GameObject> temp = new ();
         public bool CheckCanPerformSelectedAction (IExamineAction act)

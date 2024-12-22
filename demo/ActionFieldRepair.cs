@@ -28,12 +28,12 @@ namespace ExamineActionsAPIDemo
 
         float IExamineActionInterruptable.NormalizedConditionInterruptThreshold => 0.5f;
 
-        int IExamineAction.CalculateDurationMinutes(ExamineActionState state)
+        int IExamineAction.GetDurationMinutes(ExamineActionState state)
         {
             return Mathf.Max(5, state.Subject.m_Repairable.m_DurationMinutes/10);
         }
 
-        float IExamineAction.CalculateProgressSeconds(ExamineActionState state)
+        float IExamineAction.GetProgressSeconds(ExamineActionState state)
         {
             return 3;
         }

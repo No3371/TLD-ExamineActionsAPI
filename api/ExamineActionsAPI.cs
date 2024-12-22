@@ -356,7 +356,7 @@ namespace ExamineActionsAPI
 			pie.m_ElapsedProgressBarSeconds = 0;
 			pie.m_GearItem.SetHaltDecay(true);
 			pie.SetInventoryAlpha(0);
-			// pie.m_ProgressBarTimeSeconds = SelectedCustomAction.CalculateProgressSeconds(State);
+			// pie.m_ProgressBarTimeSeconds = SelectedCustomAction.GetProgressSeconds(State);
 			// pie.AccelerateTimeOfDay(duration, false);
 			State.ActionInProgress = true;
 
@@ -372,7 +372,7 @@ namespace ExamineActionsAPI
 			if (audio != null)
 				gpb.Launch(
 					State.Action.ActionButtonLocalizedString.Text(),
-					State.Action.CalculateProgressSeconds(State),
+					State.Action.GetProgressSeconds(State),
 					State.ActiveActionDurationMinutes.Value,
 					State.ActiveResult.Value == ActionResult.Success? 1 : UnityEngine.Random.Range(0.2f, 0.8f),
 					audio,
@@ -384,7 +384,7 @@ namespace ExamineActionsAPI
 			else
 				gpb.Launch(
 					State.Action.ActionButtonLocalizedString.Text(),
-					State.Action.CalculateProgressSeconds(State),
+					State.Action.GetProgressSeconds(State),
 					State.ActiveActionDurationMinutes.Value,
 					State.ActiveResult.Value == ActionResult.Success? 1 : UnityEngine.Random.Range(0.2f, 0.8f),
 					true,

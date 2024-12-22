@@ -19,12 +19,12 @@ namespace ExamineActionsAPI
 
         public IExamineActionPanel? CustomPanel => null;
         int IExamineAction.GetSubActionCount(ExamineActionState state) => 2;
-        public int CalculateDurationMinutes(ExamineActionState state)
+        public int GetDurationMinutes(ExamineActionState state)
         {
             return state.SubActionId == 0 ? 30 : 10;
         }
 
-        public float CalculateProgressSeconds(ExamineActionState state)
+        public float GetProgressSeconds(ExamineActionState state)
         {
             return state.SubActionId == 0 ? 30 : 10;
         }

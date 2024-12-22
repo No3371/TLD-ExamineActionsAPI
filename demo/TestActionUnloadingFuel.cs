@@ -42,9 +42,9 @@ namespace ExamineActionsAPIDemo
             if (lamp.IsOn()) lamp.TurnOff(true);
         }
 
-        public int CalculateDurationMinutes(ExamineActionState state) => 3;
+        public int GetDurationMinutes(ExamineActionState state) => 3;
 
-        public float CalculateProgressSeconds(ExamineActionState state) => 2;
+        public float GetProgressSeconds(ExamineActionState state) => 2;
         public void OnSuccess(ExamineActionState state)
         {
             state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters = ItemLiquidVolume.FromLiters(0);

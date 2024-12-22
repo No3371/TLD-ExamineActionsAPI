@@ -27,7 +27,7 @@ namespace ExamineActionsAPIDemo
         bool IExamineAction.CanPerform(ExamineActionState state) => true;
         void IExamineAction.OnPerforming(ExamineActionState state) {}
 
-        int IExamineAction.CalculateDurationMinutes(ExamineActionState state)
+        int IExamineAction.GetDurationMinutes(ExamineActionState state)
         {
             // For this action, we are using the sub action feature as "how many acorn to prepare"
             // So the SubAction#0 would be "prepare 1 acorn"
@@ -35,7 +35,7 @@ namespace ExamineActionsAPIDemo
             return (state.SubActionId + 1) * 10;
         }
 
-        float IExamineAction.CalculateProgressSeconds(ExamineActionState state)
+        float IExamineAction.GetProgressSeconds(ExamineActionState state)
         {
             // Make it so preparing more than 1 acorn takes 2 seconds to finish
             return state.SubActionId == 0? 1 : 2;

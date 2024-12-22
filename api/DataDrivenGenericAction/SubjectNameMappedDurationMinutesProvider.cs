@@ -7,7 +7,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 		public Dictionary<string, int> Map { get; set;}
         [MelonLoader.TinyJSON.Include]
 		public int? DefaultDurationMinutes { get; set; }
-        public int CalculateDurationMinutes(ExamineActionState state)
+        public int GetDurationMinutes(ExamineActionState state)
         {
 			int mins = DefaultDurationMinutes?? 5;
 			Map.TryGetValue(state.Subject.name, out mins);

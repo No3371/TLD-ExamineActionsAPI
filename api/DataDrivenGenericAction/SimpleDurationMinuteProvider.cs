@@ -9,6 +9,6 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 		public int BaseDurationMinutes { get; set; }
         [MelonLoader.TinyJSON.Include]
 		public int DurationMinutesOffsetPerSubAction { get; set; }
-		public int CalculateDurationMinutes(ExamineActionState state) => BaseDurationMinutes + DurationMinutesOffsetPerSubAction * state.SubActionId;
+		public int GetDurationMinutes(ExamineActionState state) => BaseDurationMinutes + DurationMinutesOffsetPerSubAction * state.SubActionId;
 	}
 }

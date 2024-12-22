@@ -41,7 +41,7 @@ namespace ExamineActionsAPI
 
         public float MinimumCondition => 0.5f;
 
-        public int CalculateDurationMinutes(ExamineActionState state)
+        public int GetDurationMinutes(ExamineActionState state)
         {
             return 2;
         }
@@ -114,7 +114,7 @@ namespace ExamineActionsAPI
 			MelonLogger.Msg($"Salt interrupted");
         }
 
-        public float CalculateProgressSeconds(ExamineActionState state)
+        public float GetProgressSeconds(ExamineActionState state)
         {
             return 6f;
         }
@@ -192,7 +192,7 @@ namespace ExamineActionsAPI
 
         public float MinimumCondition => 0.5f;
 
-        public int CalculateDurationMinutes(ExamineActionState state)
+        public int GetDurationMinutes(ExamineActionState state)
         {
             return 2;
         }
@@ -266,7 +266,7 @@ namespace ExamineActionsAPI
 			MelonLogger.Msg($"Salt interrupted");
         }
 
-        public float CalculateProgressSeconds(ExamineActionState state)
+        public float GetProgressSeconds(ExamineActionState state)
         {
             return 6f;
         }

@@ -9,8 +9,8 @@ namespace ExamineActionsAPI
         public virtual string? MenuItemSpriteName { get; } = null;
         public abstract LocalizedString ActionButtonLocalizedString { get; }
         public virtual IExamineActionPanel? CustomPanel { get; } = null;
-        public abstract int CalculateDurationMinutes(ExamineActionState state);
-        public abstract float CalculateProgressSeconds(ExamineActionState state);
+        public abstract int GetDurationMinutes(ExamineActionState state);
+        public abstract float GetProgressSeconds(ExamineActionState state);
         public abstract bool CanPerform(ExamineActionState state);
         public abstract bool ShouldConsumeOnSuccess(ExamineActionState state);
         public abstract bool IsActionAvailable(GearItem item);

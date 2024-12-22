@@ -35,12 +35,12 @@ namespace ExamineActionsAPIDemo
 
         void IExamineAction.OnPerforming(ExamineActionState state) {}
 
-        int IExamineAction.CalculateDurationMinutes(ExamineActionState state)
+        int IExamineAction.GetDurationMinutes(ExamineActionState state)
         {
             return state.SelectedTool == null ? 10 : 3;
         }
 
-        float IExamineAction.CalculateProgressSeconds(ExamineActionState state)
+        float IExamineAction.GetProgressSeconds(ExamineActionState state)
         {
             return state.SelectedTool == null ? 4 : 2;
         }

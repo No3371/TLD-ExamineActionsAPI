@@ -17,12 +17,12 @@ namespace ExamineActionsAPI
         public override string MenuItemSpriteName => "ico_lightSource_lantern";
         public override LocalizedString ActionButtonLocalizedString { get; }
 
-        public override int CalculateDurationMinutes(ExamineActionState state)
+        public override int GetDurationMinutes(ExamineActionState state)
         {
             return 1;
         }
 
-        public override float CalculateProgressSeconds(ExamineActionState state)
+        public override float GetProgressSeconds(ExamineActionState state)
         {
             return 0.5f;
         }

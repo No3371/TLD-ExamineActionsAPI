@@ -41,7 +41,7 @@ namespace ExamineActionsAPI
 
         IExamineActionPanel? IExamineAction.CustomPanel => null;
 
-        public int CalculateDurationMinutes(ExamineActionState state)
+        public int GetDurationMinutes(ExamineActionState state)
         {
             return 2;
         }
@@ -108,7 +108,7 @@ namespace ExamineActionsAPI
 			MelonLogger.Msg($"Salt interrupted");
         }
 
-        public float CalculateProgressSeconds(ExamineActionState state)
+        public float GetProgressSeconds(ExamineActionState state)
         {
             return 6f;
         }

@@ -37,12 +37,12 @@ namespace ExamineActionsAPIDemo
             state.Temp.Add(0, ratio);
         }
 
-        int IExamineAction.CalculateDurationMinutes(ExamineActionState state)
+        int IExamineAction.GetDurationMinutes(ExamineActionState state)
         {
             return 1;
         }
 
-        float IExamineAction.CalculateProgressSeconds(ExamineActionState state)
+        float IExamineAction.GetProgressSeconds(ExamineActionState state)
         {
             return 1;
         }

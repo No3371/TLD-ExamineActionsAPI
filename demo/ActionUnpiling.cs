@@ -43,12 +43,12 @@ namespace ExamineActionsAPIDemo
         }
         void IExamineAction.OnPerforming(ExamineActionState state) {}
 
-        int IExamineAction.CalculateDurationMinutes(ExamineActionState state)
+        int IExamineAction.GetDurationMinutes(ExamineActionState state)
         {
             return (state.SubActionId + 1);
         }
 
-        float IExamineAction.CalculateProgressSeconds(ExamineActionState state)
+        float IExamineAction.GetProgressSeconds(ExamineActionState state)
         {
             return Mathf.Max(1, (state.SubActionId + 1) * 0.5f);
         }

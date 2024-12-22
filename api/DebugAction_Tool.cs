@@ -42,7 +42,7 @@ namespace ExamineActionsAPI
 
         public float MinimumCondition => 0;
 
-        public int CalculateDurationMinutes(ExamineActionState state)
+        public int GetDurationMinutes(ExamineActionState state)
         {
             return 30;
         }
@@ -98,7 +98,7 @@ namespace ExamineActionsAPI
 			MelonLogger.Msg($"TOOL interrupted");
         }
 
-        public float CalculateProgressSeconds(ExamineActionState state)
+        public float GetProgressSeconds(ExamineActionState state)
         {
             return 1;
         }

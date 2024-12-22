@@ -3,6 +3,6 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 {
     public interface IDurationMinutesProvider
 	{
-		int CalculateDurationMinutes(ExamineActionState state);
+		int GetDurationMinutes(ExamineActionState state);
 	}
 }

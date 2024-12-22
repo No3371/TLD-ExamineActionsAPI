@@ -40,12 +40,12 @@ namespace ExamineActionsAPIDemo
         bool IExamineAction.CanPerform(ExamineActionState state) => true;
         void IExamineAction.OnPerforming(ExamineActionState state) {}
 
-        int IExamineAction.CalculateDurationMinutes(ExamineActionState state)
+        int IExamineAction.GetDurationMinutes(ExamineActionState state)
         {
             return (state.SubActionId + 1) * 10;
         }
 
-        float IExamineAction.CalculateProgressSeconds(ExamineActionState state)
+        float IExamineAction.GetProgressSeconds(ExamineActionState state)
         {
             return (state.SubActionId + 1) * 1;
         }

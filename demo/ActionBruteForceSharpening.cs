@@ -34,7 +34,7 @@ namespace ExamineActionsAPIDemo
         int IExamineAction.GetSubActionCount(ExamineActionState state) => Math.Clamp((int) (0.75f - state.Subject.GetNormalizedCondition() / 0.01f), 0, 5);
         // The base ingame time to sharpen is 2 hours, and we scale it by SubActionId
         // SubActionid is 0 based so we add 1 to it
-        int IExamineAction.CalculateDurationMinutes(ExamineActionState state)
+        int IExamineAction.GetDurationMinutes(ExamineActionState state)
         {
             return 120 * (state.SubActionId + 1);
         }
@@ -43,7 +43,7 @@ namespace ExamineActionsAPIDemo
         // it's to prevent players performing this unaware of how much time it
         // But we limit it to 12 seconds because 10+ seconds already always feels long
         // SubActionid is 0 based so we add 1 to it
-        float IExamineAction.CalculateProgressSeconds(ExamineActionState state)
+        float IExamineAction.GetProgressSeconds(ExamineActionState state)
         {
             return Mathf.Min(12, 4 * (state.SubActionId + 1));
         }

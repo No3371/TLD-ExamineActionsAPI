@@ -15,9 +15,9 @@ namespace ExamineActionsAPIDemo
 
         IExamineActionPanel? IExamineAction.CustomPanel => null;
 
-        public int CalculateDurationMinutes(ExamineActionState state) => 1;
+        public int GetDurationMinutes(ExamineActionState state) => 1;
 
-        public float CalculateProgressSeconds(ExamineActionState state) => 1;
+        public float GetProgressSeconds(ExamineActionState state) => 1;
 
         public bool CanPerform(ExamineActionState state) => state.Subject.m_StackableItem.m_Units >= 5;
 

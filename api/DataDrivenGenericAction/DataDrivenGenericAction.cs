@@ -265,14 +265,14 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         [Include]
         Weather.IndoorState RequiredInDoorState { get; set; }
 
-        int IExamineAction.CalculateDurationMinutes(ExamineActionState state)
-		=> DurationMinuteProvider?.CalculateDurationMinutes(state) ?? 10;
+        int IExamineAction.GetDurationMinutes(ExamineActionState state)
+		=> DurationMinuteProvider?.GetDurationMinutes(state) ?? 10;
 
         float IExamineActionFailable.GetFailureChance(ExamineActionState state)
         => FailureChanceProvider?.GetFailureChance(state) ?? 0;
 
-        float IExamineAction.CalculateProgressSeconds(ExamineActionState state)
-        => ProgressSecondProvider?.CalculateProgressSeconds(state) ?? 2.5f;
+        float IExamineAction.GetProgressSeconds(ExamineActionState state)
+        => ProgressSecondProvider?.GetProgressSeconds(state) ?? 2.5f;
 
         bool IExamineAction.CanPerform(ExamineActionState state)
         => CanPerformProvider?.CanPerform(state) ?? true;
