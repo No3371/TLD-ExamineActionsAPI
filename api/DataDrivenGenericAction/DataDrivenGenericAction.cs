@@ -379,6 +379,8 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         [Include]
         public ICallback[]? OnFailureCallbacks                                    { get; set; }
         [Include]
+        public ICallback[]? OnActionInterruptedBySystemCallbacks                  { get; set; }
+        [Include]
         public ICallback[]? OnInterruptionCallbacks                               { get; set; }
         [Include]
         public ICallback[]? OnCancellationCallbacks                               { get; set; }
@@ -459,7 +461,14 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
             }
         }
 
-        void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state) {}
+        void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state)
+        {
+            if (OnActionInterruptedBySystemCallbacks != null)
+            foreach (var callback in OnActionInterruptedBySystemCallbacks)
+            {
+                callback.Run(state);
+            }
+        }
 
         void IExamineAction.OnActionSelected(ExamineActionState state) {}
 
