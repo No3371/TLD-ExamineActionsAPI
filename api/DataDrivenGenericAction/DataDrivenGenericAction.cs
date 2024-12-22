@@ -154,21 +154,47 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
             MelonLoader.MelonLogger.Msg(MelonLoader.TinyJSON.JSON.Dump(action, MelonLoader.TinyJSON.EncodeOptions.EnforceHierarchyOrder | MelonLoader.TinyJSON.EncodeOptions.IncludePublicProperties));
         }
 
+        /// <summary>
+        /// Melon mods required for this action to be regsitered.
+        /// Values in "{Author}.{ModName}" format makes the API looks for any mod with the name and author.
+        /// Values in "{ModName} format" makes the API looks for any mod with the name.
+        /// </summary>
         [Include]
         public string[]? MelonDependency { get; set; }
+        /// <summary>
+        /// Gears required for this action to be registered.
+        /// For exmaple: { "GEAR_Stone", "GEAR_Stick" } means the API will only register the action when this two types of gear can be loaded at runtime.
+        /// </summary>
         [Include]
         public string[]? GearNameDependency { get; set; }
+        /// <summary>
+        /// C# types required for this action to be registered.
+        /// The values are expected to be full type name in format "{Namespace}.{Type}, {Assembly}".
+        /// For example: "ExamineActionsAPI.DataDrivenGenericAction.DataDrivenGenericAction, ExamineActionsAPI"
+        /// </summary>
         [Include]
         public string[]? CSharpTypeDependency { get; set; }
 
+        /// <summary>
+        /// See <see cref="ExamineActionsAPI.IExamineAction"/>
+        /// </summary>
         [Include]
         public string Id { get; set; }
 
+        /// <summary>
+        /// See <see cref="ExamineActionsAPI.IExamineAction"/>
+        /// </summary>
         [Include]
         public string MenuItemLocalizationKey { get; set; }
 
+        /// <summary>
+        /// See <see cref="ExamineActionsAPI.IExamineAction"/>
+        /// </summary>
         [Include]
         public string? MenuItemSpriteName { get; set; }
+        /// <summary>
+        /// See <see cref="ExamineActionsAPI.IExamineAction"/>
+        /// </summary>
         [Include]
         public string ActionButtonLocalizedStringKey { get; set; }
         [Exclude]
@@ -182,84 +208,180 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         [Exclude]
         public IExamineActionPanel? CustomPanel => null;
 
+        /// <summary>
+        /// See <see cref="ExamineActionsAPI.IExamineActionInterruptable"/>
+        /// </summary>
         [Include]
         public bool InterruptOnStarving                                           { get; set; }
 
+        /// <summary>
+        /// See <see cref="ExamineActionsAPI.IExamineActionInterruptable"/>
+        /// </summary>
         [Include]
         public bool InterruptOnExhausted                                          { get; set; }
 
+        /// <summary>
+        /// See <see cref="ExamineActionsAPI.IExamineActionInterruptable"/>
+        /// </summary>
         [Include]
         public bool InterruptOnFreezing                                           { get; set; }
 
+        /// <summary>
+        /// See <see cref="ExamineActionsAPI.IExamineActionInterruptable"/>
+        /// </summary>
         [Include]
         public bool InterruptOnDehydrated                                         { get; set; }
 
+        /// <summary>
+        /// See <see cref="ExamineActionsAPI.IExamineActionInterruptable"/>
+        /// </summary>
         [Include]
         public bool InterruptOnNonRiskAffliction                                  { get; set; }
+        /// <summary>
+        /// See <see cref="ExamineActionsAPI.IExamineActionInterruptable"/>
+        /// </summary>
         [Include]
         public float NormalizedConditionInterruptThreshold                        { get; set; }
+        /// <summary>
+        /// See <see cref="ExamineActionsAPI.IExamineActionCancellable"/>
+        /// </summary>
         [Include]
-        public bool CanBeCancelled                                                 { get; set; }
+        public bool CanBeCancelled                                                { get; set; }
+        /// <summary>
+        /// See <see cref="ExamineActionsAPI.IExamineActionCancellable"/>
+        /// </summary>
         [Include]
-        public bool ShouldConsumeOnCancellation                                         { get; set; }
+        public bool ShouldConsumeOnCancellation                                   { get; set; }
+        /// <summary>
+        /// See <see cref="ExamineActionsAPI.IExamineActionFailable"/>
+        /// </summary>
         [Include]
-        public bool ShouldConsumeOnFailure                                              { get; set; }
+        public bool ShouldConsumeOnFailure                                        { get; set; }
+        /// <summary>
+        /// See <see cref="ExamineActionsAPI.IExamineAction"/>
+        /// </summary>
         [Include]
-        public bool ShouldConsumeOnSuccess                                              { get; set; }
+        public bool ShouldConsumeOnSuccess                                        { get; set; }
+        /// <summary>
+        /// See <see cref="ExamineActionsAPI.IExamineActionRequireTool"/>
+        /// </summary>
         [Include]
         public bool IsToolRequired                                                { get; set; }
+        /// <summary>
+        /// Check for class files named ...SubActionCountProvider for available provider implmentations.
+        /// </summary>
         [Include]
         public ISubActionCountProvider? SubActionCountProvider                    { get; set; }
+        /// <summary>
+        /// Check for class files named ...DurationMinuteProvider for available provider implmentations.
+        /// </summary>
         [Include]
         public IDurationMinutesProvider? DurationMinuteProvider                   { get; set; }
+        /// <summary>
+        /// Check for class files named ...FailureChanceProvider for available provider implmentations.
+        /// </summary>
         [Include]
         public IFailureChanceProvider? FailureChanceProvider                      { get; set; }
+        /// <summary>
+        /// Check for class files named ...ProgressSecondProvider for available provider implmentations.
+        /// </summary>
         [Include]
         public IProgressSecondProvider? ProgressSecondProvider                    { get; set; }
+        /// <summary>
+        /// Check for class files named ...CanPerformProvider for available provider implmentations.
+        /// </summary>
         [Include]
         public ICanPerformProvider? CanPerformProvider                            { get; set; }
+        /// <summary>
+        /// Check for class files named ...IsActionAvailableProvider for available provider implmentations.
+        /// </summary>
         [Include]
         public IIsActionAvailableProvider? IsActionAvailableProvider              { get; set; }
+        /// <summary>
+        /// Check for class files named ...MaterialItemProvider for available provider implmentations.
+        /// </summary>
         [Include]
         public IMaterialItemProvider? MaterialItemProvider                        { get; set; }
+        /// <summary>
+        /// Check for class files named ...MaterialLiquidProvider for available provider implmentations.
+        /// </summary>
         [Include]
         public IMaterialLiquidProvider? MaterialLiquidProvider                    { get; set; }
+        /// <summary>
+        /// Check for class files named ...MaterialPowderProvider for available provider implmentations.
+        /// </summary>
         [Include]
         public IMaterialPowderProvider? MaterialPowderProvider                    { get; set; }
+        /// <summary>
+        /// Check for class files named ...ProductItemProvider for available provider implmentations.
+        /// </summary>
         [Include]
         public IProductItemProvider? ProductItemProvider                          { get; set; }
+        /// <summary>
+        /// Check for class files named ...ProductLiquidProvider for available provider implmentations.
+        /// </summary>
         [Include]
         public IProductLiquidProvider? ProductLiquidProvider                      { get; set; }
+        /// <summary>
+        /// Check for class files named ...ProductPowderProvider for available provider implmentations.
+        /// </summary>
         [Include]
         public IProductPowderProvider? ProductPowderProvider                      { get; set; }
+        /// <summary>
+        /// Check for class files named ...ToolOptionsProvider for available provider implmentations.
+        /// </summary>
         [Include]
         public IToolOptionsProvider? ToolOptionsProvider                          { get; set; }
+        /// <summary>
+        /// Check for class files named ...IsValidWeatherProvider for available provider implmentations.
+        /// </summary>
         [Include]
         public IIsValidWeatherProvider? IsValidWeatherProvider                    { get; set; }
+        /// <summary>
+        /// Check for class files named ...IsValidTimeProvider for available provider implmentations.
+        /// </summary>
         [Include]
         public IIsValidTimeProvider? IsValidTimeProvider                          { get; set; }
+        /// <summary>
+        /// Check for class files named ...IsPointingToValidObjectProvider for available provider implmentations.
+        /// </summary>
         [Include]
         public IIsPointingToValidObjectProvider? IsPointingToValidObjectProvider  { get; set; }
+        /// <summary>
+        /// Check for class files named ...ConsumingUnitsProvider for available provider implmentations.
+        /// </summary>
         [Include]
-        public IConsumingUnitsProvider? ConsumingUnitsProvider              { get; set; }
+        public IConsumingUnitsProvider? ConsumingUnitsProvider                    { get; set; }
+        /// <summary>
+        /// Check for class files named ...ConsumingLiquidLitersProvider for available provider implmentations.
+        /// </summary>
         [Include]
-        public IConsumingLiquidLitersProvider? ConsumingLiquidLitersProvider{ get; set; }
+        public IConsumingLiquidLitersProvider? ConsumingLiquidLitersProvider      { get; set; }
+        /// <summary>
+        /// Check for class files named ...ConsumingPowderKgsProvider for available provider implmentations.
+        /// </summary>
         [Include]
-        public IConsumingPowderKgsProvider? ConsumingPowderKgsProvider      { get; set; }
+        public IConsumingPowderKgsProvider? ConsumingPowderKgsProvider            { get; set; }
+        /// <summary>
+        /// Check for class files named ...AudioNameProvider for available provider implmentations.
+        /// </summary>
         [Include]
-        public IAudioNameProvider? AudioNameProvider                        { get; set; }
+        public IAudioNameProvider? AudioNameProvider                              { get; set; }
+        /// <summary>
+        /// Check for class files named ...LightRequirementTypeProvider for available provider implmentations.
+        /// </summary>
         [Include]
         public ILightRequirementTypeProvider? LightRequirementTypeProvider        { get; set; }
         [Include]
-        public ICallback[]? OnPerformCallbacks       { get; set; }
+        public ICallback[]? OnPerformCallbacks                                    { get; set; }
         [Include]
-        public ICallback[]? OnSuccessCallbacks       { get; set; }
+        public ICallback[]? OnSuccessCallbacks                                    { get; set; }
         [Include]
-        public ICallback[]? OnFailureCallbacks       { get; set; }
-        [Include]   
-        public ICallback[]? OnInterruptionCallbacks  { get; set; }
+        public ICallback[]? OnFailureCallbacks                                    { get; set; }
         [Include]
-        public ICallback[]? OnCancellationCallbacks  { get; set; }
+        public ICallback[]? OnInterruptionCallbacks                               { get; set; }
+        [Include]
+        public ICallback[]? OnCancellationCallbacks                               { get; set; }
 
         /// <value>NotSet, Outdoors, Indoors</value>
         [Include]
