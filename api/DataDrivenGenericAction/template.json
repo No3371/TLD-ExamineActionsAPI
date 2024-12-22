@@ -1,24 +1,33 @@
 {
     "@type": "ExamineActionsAPI.DataDrivenGenericAction.DataDrivenGenericAction",
+    "MelonDependency": [
+        "BA.ExamineActionsAPI"
+    ],
+    "GearNameDependency": [
+        "GEAR_Stone"
+    ],
+    "CSharpTypeDependency": [
+        "ExamineActionsAPI.DataDrivenGenericAction.DataDrivenGenericAction, ExamineActionsAPI"
+    ],
     "Id": "EXAMPLE_JSON_ACTION",
     "MenuItemLocalizationKey": "EXAMPLE_JSON_ACTION",
     "MenuItemSpriteName": "LOADED_SPRITE_ASSET_NAME",
     "ActionButtonLocalizedStringKey": "EXAMPLE_JSON_ACTION",
-    "LightRequirementType": null,
     "InterruptOnStarving": false,
     "InterruptOnExhausted": false,
     "InterruptOnFreezing": false,
     "InterruptOnDehydrated": false,
     "InterruptOnNonRiskAffliction": false,
     "NormalizedConditionInterruptThreshold": 0,
-    "IsCancellable": true,
-    "ConsumeOnCancellation": false,
-    "ConsumeOnFailure": false,
-    "ConsumeOnSuccess": true,
+    "CanBeCancelled": true,
+    "ShouldConsumeOnCancellation": false,
+    "ShouldConsumeOnFailure": false,
+    "ShouldConsumeOnSuccess": true,
     "IsToolRequired": true,
+    "SubActionCountProvider": null,
     "DurationMinuteProvider": {
-        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleDurationMinuteProvider",
-        "BaseDurationMinutes": 1,
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleDurationMinutesProvider",
+        "BaseDurationMinutes": 5,
         "DurationMinutesOffsetPerSubAction": 0
     },
     "FailureChanceProvider": {
@@ -34,7 +43,7 @@
     },
     "CanPerformProvider": {
         "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleCanPerformProvider",
-        "GearIds": [
+        "ValidGearNames": [
             "GEAR_Stone",
             "GEAR_RawMeatDeer"
         ],
@@ -49,7 +58,7 @@
     },
     "IsActionAvailableProvider": {
         "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleIsActionAvailableProvider",
-        "GearIds": null,
+        "ValidGearNames": null,
         "MinNormalizedCondition": 0.1,
         "MaxNormalizedCondition": 1,
         "MinStackSize": 0,
@@ -98,40 +107,39 @@
     },
     "MaterialItemProvider": {
         "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleMaterialItemProvider",
-        "Items": [
+        "Item": [
             {
-                "@type": "ExamineActionsAPI.MaterialOrProductItemConf",
-                "GearName": "GEAR_Knife",
-                "Units": 1,
-                "Chance": 100
+                "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductSizedBySubActionDef",
+                "Def": {
+                    "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductDef",
+                    "Name": "GEAR_Knife",
+                    "Size": 1,
+                    "Chance": 100
+                },
+                "SizeExtraMultiplierPerSubAction": 0,
+                "SizeOffsetPerSubAction": 1
             }
-        ],
-        "UnitOffsetPerSubAction": null
+        ]
     },
     "MaterialLiquidProvider": {
         "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleMaterialLiquidProvider",
-        "Liquid": null,
-        "LiterOffsetPerSubAction": null
+        "Liquid": null
     },
     "MaterialPowderProvider": {
         "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleMaterialPowderProvider",
-        "Powder": null,
-        "KGOffsetPerSubAction": null
+        "Powder": null
     },
     "ProductItemProvider": {
-        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleProductItemProvider",
-        "Items": null,
-        "UnitOffsetPerSubAction": null
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleSingleProductItemProvider",
+        "Items": null
     },
     "ProductLiquidProvider": {
-        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleProductLiquidProvider",
-        "Liquid": null,
-        "LiterOffsetPerSubAction": null
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleSingleProductLiquidProvider",
+        "Liquid": null
     },
     "ProductPowderProvider": {
-        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleProductPowderProvider",
-        "Powder": null,
-        "KGOffsetPerSubAction": null
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleSingleProductPowderProvider",
+        "Powder": null
     },
     "ToolOptionsProvider": {
         "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleToolOptionsProvider",
@@ -160,7 +168,7 @@
     },
     "IsPointingToValidObjectProvider": {
         "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleIsPointingToValidObjectProvider",
-        "ObjectNameFilters": null,
+        "ValidObjectNames": null,
         "WorkbenchFilter": null,
         "AmmoWorkbenchFilter": null,
         "BedFilter": null,
@@ -169,10 +177,22 @@
         "HarvestableFilter": null,
         "ForgeFilter": null
     },
-    "GetConsumingUnitsProvider": {
-        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleGetConsumingUnitsProvider",
+    "ConsumingUnitsProvider": {
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleConsumingUnitsProvider",
         "BaseConsumingUnits": 0,
         "ConsumingUnitsOffsetPerSubAction": 0
     },
+    "ConsumingLiquidLitersProvider": null,
+    "ConsumingPowderKgsProvider": null,
+    "AudioNameProvider": {
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleAudioNameProvider",
+        "AudioNameBySubAction": null
+    },
+    "LightRequirementTypeProvider": null,
+    "OnPerformCallbacks": null,
+    "OnSuccessCallbacks": null,
+    "OnFailureCallbacks": null,
+    "OnInterruptionCallbacks": null,
+    "OnCancellationCallbacks": null,
     "RequiredInDoorState": "Outdoors"
 }

@@ -1,0 +1,193 @@
+{
+    "@type": "ExamineActionsAPI.DataDrivenGenericAction.DataDrivenGenericAction",
+    "MelonDependency": [
+        "Camping Tools"
+    ],
+    "GearNameDependency": null,
+    "CSharpTypeDependency": null,
+    "Id": "CampingTools_TanningRack_Tan",
+    "MenuItemLocalizationKey": "Tan",
+    "MenuItemSpriteName": null,
+    "ActionButtonLocalizedStringKey": "GAMEPLAY_CT_TRackButton",
+    "InterruptOnStarving": false,
+    "InterruptOnExhausted": false,
+    "InterruptOnFreezing": false,
+    "InterruptOnDehydrated": false,
+    "InterruptOnNonRiskAffliction": false,
+    "NormalizedConditionInterruptThreshold": 0,
+    "CanBeCancelled": true,
+    "ShouldConsumeOnCancellation": false,
+    "ShouldConsumeOnFailure": false,
+    "ShouldConsumeOnSuccess": true,
+    "IsToolRequired": true,
+    "SubActionCountProvider": {
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleSubActionCountProvider",
+        "SubActionCount": 4
+    },
+    "DurationMinuteProvider": {
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SubActionIdMappedDurationMinutesProvider",
+        "Map": {
+            "0": 15,
+            "1": 15,
+            "2": 40,
+            "3": 40
+        }
+    },
+    "FailureChanceProvider": null,
+    "ProgressSecondProvider": {
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleProgressSecondProvider",
+        "BaseProgressSeconds": 5,
+        "ProgressSecondsOffsetPerSubAction": 0,
+        "MaxProgressSeconds": null
+    },
+    "CanPerformProvider": null,
+    "IsActionAvailableProvider": {
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleIsActionAvailableProvider",
+        "ValidGearNames": [
+            "GEAR_TanningRack"
+        ],
+        "MinNormalizedCondition": 0,
+        "MaxNormalizedCondition": 1,
+        "MinStackSize": 0,
+        "MaxStackSize": 999,
+        "GunItemFilter": null,
+        "BowItemFilter": null,
+        "AmmoItemFilter": null,
+        "BaitItemFilter": null,
+        "FoodItemFilter": null,
+        "LureItemFilter": null,
+        "RopeItemFilter": null,
+        "ArrowItemFilter": null,
+        "FlareItemFilter": null,
+        "SnareItemFilter": null,
+        "StoneItemFilter": null,
+        "ToolsItemFilter": null,
+        "TorchItemFilter": null,
+        "EvolveItemFilter": null,
+        "ForageItemFilter": null,
+        "LiquidItemFilter": null,
+        "PowderItemFilter": null,
+        "RecipeItemFilter": null,
+        "HeatPadItemFilter": null,
+        "MatchesItemFilter": null,
+        "CharcoalItemFilter": null,
+        "ClothingItemFilter": null,
+        "FirstAidItemFilter": null,
+        "ResearchItemFilter": null,
+        "WildlifeItemFilter": null,
+        "BearSpearItemFilter": null,
+        "BreakDownItemFilter": null,
+        "ForceLockItemFilter": null,
+        "SmashableItemFilter": null,
+        "StackableItemFilter": null,
+        "AmmoCasingItemFilter": null,
+        "CanOpeningItemFilter": null,
+        "CookingPotItemFilter": null,
+        "FlashlightItemFilter": null,
+        "FuelSourceItemFilter": null,
+        "NoiseMakerItemFilter": null,
+        "FireStarterItemFilter": null,
+        "KeroseneLampItemFilter": null,
+        "FlareGunRoundItemFilter": null,
+        "HandheldShortwaveItemFilter": null,
+        "NarrativeCollectibleItemFilter": null
+    },
+    "MaterialItemProvider": {
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SubActionIdMappedMaterialItemProvider",
+        "ItemBySubActionId": [
+            [
+                {
+                    "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductDef",
+                    "Name": "GEAR_LeatherHide",
+                    "Size": 1,
+                    "Chance": 100
+                }
+            ],
+            [
+                {
+                    "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductDef",
+                    "Name": "GEAR_WolfPelt",
+                    "Size": 1,
+                    "Chance": 100
+                }
+            ],
+            [
+                {
+                    "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductDef",
+                    "Name": "GEAR_BearHide",
+                    "Size": 1,
+                    "Chance": 100
+                }
+            ],
+            [
+                {
+                    "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductDef",
+                    "Name": "GEAR_MooseHide",
+                    "Size": 1,
+                    "Chance": 100
+                }
+            ]
+        ]
+    },
+    "MaterialLiquidProvider": null,
+    "MaterialPowderProvider": null,
+    "ProductItemProvider": {
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SubActionIdMappedProductItemProvider",
+        "ItemBySubActionId": [
+            [
+                {
+                    "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductDef",
+                    "Name": "GEAR_TanningRackDPS2",
+                    "Size": 1,
+                    "Chance": 100
+                }
+            ],
+            [
+                {
+                    "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductDef",
+                    "Name": "GEAR_TanningRackWPS2",
+                    "Size": 1,
+                    "Chance": 100
+                }
+            ],
+            [
+                {
+                    "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductDef",
+                    "Name": "GEAR_TanningRackBP2",
+                    "Size": 1,
+                    "Chance": 100
+                }
+            ],
+            [
+                {
+                    "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductDef",
+                    "Name": "GEAR_TanningRackMP2",
+                    "Size": 1,
+                    "Chance": 100
+                }
+            ]
+        ]
+    },
+    "ProductLiquidProvider": null,
+    "ProductPowderProvider": null,
+    "ToolOptionsProvider": null,
+    "IsValidWeatherProvider": null,
+    "IsValidTimeProvider": null,
+    "IsPointingToValidObjectProvider": null,
+    "ConsumingUnitsProvider": null,
+    "ConsumingLiquidLitersProvider": null,
+    "ConsumingPowderKgsProvider": null,
+    "AudioNameProvider": {
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleAudioNameProvider",
+        "AudioNameBySubAction": [
+            "Play_CraftingLeatherHide"
+        ]
+    },
+    "LightRequirementTypeProvider": null,
+    "OnPerformCallbacks": null,
+    "OnSuccessCallbacks": null,
+    "OnFailureCallbacks": null,
+    "OnInterruptionCallbacks": null,
+    "OnCancellationCallbacks": null,
+    "RequiredInDoorState": "NotSet"
+}
