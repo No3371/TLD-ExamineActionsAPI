@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThingsToDo", "demo\ThingsToDo.csproj", "{4BC82320-B301-4CA7-9253-43442E24B8D2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExamineToCraft", "craft\ExamineToCraft.csproj", "{44FB4177-80A0-4452-855A-EAC3AFA16363}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,10 @@ Global
 		{4BC82320-B301-4CA7-9253-43442E24B8D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4BC82320-B301-4CA7-9253-43442E24B8D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4BC82320-B301-4CA7-9253-43442E24B8D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44FB4177-80A0-4452-855A-EAC3AFA16363}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44FB4177-80A0-4452-855A-EAC3AFA16363}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44FB4177-80A0-4452-855A-EAC3AFA16363}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44FB4177-80A0-4452-855A-EAC3AFA16363}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
