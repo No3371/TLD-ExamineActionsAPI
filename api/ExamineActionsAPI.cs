@@ -92,11 +92,24 @@ namespace ExamineActionsAPI
 				if (ahd.MelonDependency != null)
 				foreach (var dep in ahd.MelonDependency)
 				{
-					if ((dep.Name == "*" && MelonMod.RegisteredMelons.Any(m => m.Info.Name == dep.Name)
-						|| MelonMod.FindMelon(dep.Name, dep.Author)?.Registered != true))
+					Span<char> depSpan = new Span<char>(dep.ToCharArray());
+					if (depSpan.Contains('.'))
 					{
-						Instance.LoggerInstance.Error($"Action not registered because its dependency melon {dep.Author}, {dep.Name} is not loaded.");
-						return;
+						var author = depSpan.Slice(0, depSpan.IndexOf('.'));
+						var name = depSpan.Slice(depSpan.IndexOf('.') + 1);
+						if (MelonMod.FindMelon(name.ToString(), author.ToString())?.Registered != true)
+						{
+							Instance.LoggerInstance.Error($"Action {action.Id} not registered because its dependency melon {author}.{name} is not loaded.");
+							return;
+						}
+					}
+					else
+					{
+						if (!MelonMod.RegisteredMelons.Any(m => m.Info.Name == dep))
+						{
+							Instance.LoggerInstance.Error($"Action {action.Id} not registered because its dependency melon {dep} is not loaded.");
+							return;
+						}
 					}
 				}
 
@@ -105,7 +118,7 @@ namespace ExamineActionsAPI
 				{
 					if (GearItem.LoadGearItemPrefab(dep) == null)
 					{
-						Instance.LoggerInstance.Error($"Action not registered because its dependency gear {dep} can not be loaded.");
+						Instance.LoggerInstance.Error($"Action {action.Id} not registered because its dependency gear {dep} can not be loaded.");
 						return;
 					}
 				}
@@ -115,7 +128,7 @@ namespace ExamineActionsAPI
 				{
 					if (Type.GetType(dep) == null)
 					{
-						Instance.LoggerInstance.Error($"Action not registered because its dependency CSharp type {dep} can not be loaded.");
+						Instance.LoggerInstance.Error($"Action {action.Id} not registered because its dependency CSharp type {dep} can not be loaded.");
 						return;
 					}
 				}

@@ -44,6 +44,9 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
                 MenuItemLocalizationKey = "EXAMPLE_JSON_ACTION",
                 ActionButtonLocalizedStringKey = "EXAMPLE_JSON_ACTION",
             };
+            action.MelonDependency = new [] { "BA.ExamineActionsAPI" };
+            action.GearNameDependency = new [] { "GEAR_Stone" };
+            action.CSharpTypeDependency = new [] { "ExamineActionsAPI.DataDrivenGenericAction.DataDrivenGenericAction, ExamineActionsAPI"  };
             action.MenuItemSpriteName = "LOADED_SPRITE_ASSET_NAME";
             action.ProductItemProvider = new SimpleSingleProductItemProvider();
             action.ProductLiquidProvider = new SimpleSingleProductLiquidProvider();
@@ -109,6 +112,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
                 MenuItemLocalizationKey = "Tan",
                 ActionButtonLocalizedStringKey = "GAMEPLAY_CT_TRackButton",
             };
+            action.MelonDependency = new [] { "Camping Tools" };
             action.IsActionAvailableProvider = new SimpleIsActionAvailableProvider() {
                 ValidGearNames = new () { "GEAR_TanningRack"  }
             };
@@ -151,7 +155,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         }
 
         [Include]
-        public (string Author, string Name)[]? MelonDependency { get; set; }
+        public string[]? MelonDependency { get; set; }
         [Include]
         public string[]? GearNameDependency { get; set; }
         [Include]
