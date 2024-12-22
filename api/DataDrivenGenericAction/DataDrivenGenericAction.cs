@@ -48,9 +48,9 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
             action.GearNameDependency = new [] { "GEAR_Stone" };
             action.CSharpTypeDependency = new [] { "ExamineActionsAPI.DataDrivenGenericAction.DataDrivenGenericAction, ExamineActionsAPI"  };
             action.MenuItemSpriteName = "LOADED_SPRITE_ASSET_NAME";
-            action.ProductItemProvider = new SimpleSingleProductItemProvider();
-            action.ProductLiquidProvider = new SimpleSingleProductLiquidProvider();
-            action.ProductPowderProvider = new SimpleSingleProductPowderProvider();
+            action.ProductItemProvider = new SimpleProductItemProvider();
+            action.ProductLiquidProvider = new SimpleProductLiquidProvider();
+            action.ProductPowderProvider = new SimpleProductPowderProvider();
             action.ProgressSecondProvider = new SimpleProgressSecondProvider() {
                 BaseProgressSeconds = 1
             };
