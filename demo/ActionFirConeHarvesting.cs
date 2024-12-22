@@ -6,7 +6,7 @@ namespace ExamineActionsAPIDemo
     /// <summary>
     /// This action provides an easy way to harvest fir cones from Bountiful Foraging mod.
     /// </summary>
-    class ActionFirConeHarvesting : IExamineAction, IExamineActionProduceItems, IExamineActionInterruptable
+    class ActionFirConeHarvesting : IExamineAction, IExamineActionProduceItems, IExamineActionInterruptable, IExamineActionHasDependendency
     {
         public ActionFirConeHarvesting() {}
         IExamineActionPanel? IExamineAction.CustomPanel => null;
@@ -30,6 +30,10 @@ namespace ExamineActionsAPIDemo
         bool IExamineActionInterruptable.InterruptOnNonRiskAffliction => false;
 
         float IExamineActionInterruptable.NormalizedConditionInterruptThreshold => 0f;
+
+        public string[]? MelonDependency { get; set; }
+        public string[]? GearNameDependency { get; set; } = { "GEAR_4FirCone" };
+        public string[]? CSharpTypeDependency { get; set; }
 
         bool IExamineAction.IsActionAvailable(GearItem item)
         {

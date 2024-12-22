@@ -3,7 +3,7 @@ using Il2Cpp;
 
 namespace ExamineActionsAPIDemo
 {
-    public class ActionFirSeedBunch : IExamineAction, IExamineActionProduceItems
+    public class ActionFirSeedBunch : IExamineAction, IExamineActionProduceItems, IExamineActionHasDependendency
     {
         public string Id => nameof(ActionFirSeedBunch);
 
@@ -14,6 +14,10 @@ namespace ExamineActionsAPIDemo
         string? IExamineAction.MenuItemSpriteName => null;
 
         IExamineActionPanel? IExamineAction.CustomPanel => null;
+
+        public string[]? MelonDependency { get; set; }
+        public string[]? GearNameDependency { get; set; } = { "GEAR_4FirCone" };
+        public string[]? CSharpTypeDependency { get; set; }
 
         public int GetDurationMinutes(ExamineActionState state) => 1;
 

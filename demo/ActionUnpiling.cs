@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ExamineActionsAPIDemo
 {
-    class ActionUnpiling : IExamineAction, IExamineActionProduceItems
+    class ActionUnpiling : IExamineAction, IExamineActionProduceItems, IExamineActionHasDependendency
     {
         public ActionUnpiling() {}
         IExamineActionPanel? IExamineAction.CustomPanel => null;
@@ -16,6 +16,9 @@ namespace ExamineActionsAPIDemo
         string IExamineAction.MenuItemSpriteName => null;
 
         LocalizedString IExamineAction.ActionButtonLocalizedString { get; } = new LocalizedString() { m_LocalizationID = "Unpile" };
+        public string[]? MelonDependency { get; set; }
+        public string[]? GearNameDependency { get; set; } = { "GEAR_StickPile010" };
+        public string[]? CSharpTypeDependency { get; set; }
 
         bool IExamineAction.IsActionAvailable(GearItem item)
         {

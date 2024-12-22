@@ -21,32 +21,11 @@ namespace ExamineActionsAPIDemo
 			ExamineActionsAPI.ExamineActionsAPI.Register(new ActionUnloadingFuel());
 			ExamineActionsAPI.ExamineActionsAPI.Register(new ActionFieldRepair());
 			ExamineActionsAPI.ExamineActionsAPI.Register(new ActionHammerCan());
+			ExamineActionsAPI.ExamineActionsAPI.Register(new ActionPiling());
+			ExamineActionsAPI.ExamineActionsAPI.Register(new ActionUnpiling());
+			ExamineActionsAPI.ExamineActionsAPI.Register(new ActionFirConeHarvesting());
+			ExamineActionsAPI.ExamineActionsAPI.Register(new ActionFirSeedBunch());
 
 		}
-
-        public override void OnLateInitializeMelon()
-        {
-            base.OnLateInitializeMelon();
-			MelonLoader.MelonCoroutines.Start(DelayedRegistration());
-        }
-
-        IEnumerator DelayedRegistration ()
-		{
-			yield return new WaitForSeconds(30f);
-			this.LoggerInstance.Msg("Delayed regsitration for ItemPiles and Bountiful Foraging.");
-			if (GearItem.LoadGearItemPrefab("GEAR_StickPile010") != null)
-			{
-				this.LoggerInstance.Msg("Found Item Pile mod...");
-				ExamineActionsAPI.ExamineActionsAPI.Register(new ActionPiling());
-				ExamineActionsAPI.ExamineActionsAPI.Register(new ActionUnpiling());
-			}
-			if (GearItem.LoadGearItemPrefab("GEAR_4FirCone") != null)
-			{
-				this.LoggerInstance.Msg("Found Bountiful Foraging mod...");
-				ExamineActionsAPI.ExamineActionsAPI.Register(new ActionFirConeHarvesting());
-				ExamineActionsAPI.ExamineActionsAPI.Register(new ActionFirSeedBunch());
-			}
-		}
-
 	}
 }
