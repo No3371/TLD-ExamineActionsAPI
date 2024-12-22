@@ -126,3 +126,7 @@ Besides `IExamineAction`, additional interfaces can be implemented to introduce 
 #### [IExamineActionHasExternalConstraints](api/Interfaces/IExamineActionHasExternalConstraints.cs)
 
 - Apply additional constraints to the action, like weather, time... or even requires the player to looking at some specific object...
+
+#### [IExamineActionHasDependendency](api/Interfaces/IExamineActionHasDependendency.cs)
+
+- Define dependencies required for the action to be registered, so it's easier to work with modded content.
