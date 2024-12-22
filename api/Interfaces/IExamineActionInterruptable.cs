@@ -10,6 +10,7 @@ namespace ExamineActionsAPI
 	{
 		/// <summary>
 		/// Action not finished, for example: light goes out during during the process.
+		/// Note that you may want to call this in IExamineAction.OnActionInterruptedBySystem so both types of interruption results the same
 		/// </summary>
 		void OnInterruption (ExamineActionState state);
 		/// <summary>
