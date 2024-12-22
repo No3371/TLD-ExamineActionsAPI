@@ -13,6 +13,8 @@ namespace ExamineActionsAPI
     {
 		public static ExamineActionsAPI Instance { get; private set; }
 		internal List<IExamineAction> RegisteredExamineActions = new List<IExamineAction>();
+		internal List<IExamineAction> PendingActionsToRetryRegistration = new List<IExamineAction>();
+		object retryTask;
 		public const bool DISABLE_CUSTOM_INFO = false; // Custom info can be simply disabled because it's pure UI thing (in case it's broken by updates)
 		public static readonly  Color BRIGHT_WHITE = new Color(1f, 1f, 1f, 1f);
 		public static readonly  Color SHALLOW_WHITE = new Color(1f, 1f, 1f, 0.6275f);
@@ -89,53 +91,85 @@ namespace ExamineActionsAPI
 
 			if (action is IExamineActionHasDependendency ahd)
 			{
-				if (ahd.MelonDependency != null)
-				foreach (var dep in ahd.MelonDependency)
+				if (!CheckDependency(action.Id, ahd))
 				{
-					Span<char> depSpan = new Span<char>(dep.ToCharArray());
-					if (depSpan.Contains('.'))
+					Instance.PendingActionsToRetryRegistration.Add(action);
+					MelonLogger.Warning($"Will retry registering {action.Id} once later.");
+					return;
+				}
+			}
+			Instance.RegisteredExamineActions.Add(action);
+			Instance.LoggerInstance.Msg($"Action registered: {action.Id}");
+
+			if (Instance.PendingActionsToRetryRegistration.Count > 0 && Instance.retryTask == null)
+			{
+				Instance.retryTask = MelonLoader.MelonCoroutines.Start(RetryRegistration());
+			}
+		}
+
+		static bool CheckDependency (string id, IExamineActionHasDependendency action)
+		{
+			if (action.MelonDependency != null)
+			foreach (var dep in action.MelonDependency)
+			{
+				Span<char> depSpan = new Span<char>(dep.ToCharArray());
+				if (depSpan.Contains('.'))
+				{
+					var author = depSpan.Slice(0, depSpan.IndexOf('.'));
+					var name = depSpan.Slice(depSpan.IndexOf('.') + 1);
+					if (MelonMod.FindMelon(name.ToString(), author.ToString())?.Registered != true)
 					{
-						var author = depSpan.Slice(0, depSpan.IndexOf('.'));
-						var name = depSpan.Slice(depSpan.IndexOf('.') + 1);
-						if (MelonMod.FindMelon(name.ToString(), author.ToString())?.Registered != true)
-						{
-							Instance.LoggerInstance.Error($"Action {action.Id} not registered because its dependency melon {author}.{name} is not loaded.");
-							return;
-						}
-					}
-					else
-					{
-						if (!MelonMod.RegisteredMelons.Any(m => m.Info.Name == dep))
-						{
-							Instance.LoggerInstance.Error($"Action {action.Id} not registered because its dependency melon {dep} is not loaded.");
-							return;
-						}
+						Instance.LoggerInstance.Error($"Action {id} not registered because its dependency melon {author}.{name} is not loaded.");
+						return false;
 					}
 				}
-
-				if (ahd.GearNameDependency != null)
-				foreach (var dep in ahd.GearNameDependency)
+				else
 				{
-					if (GearItem.LoadGearItemPrefab(dep) == null)
+					if (!MelonMod.RegisteredMelons.Any(m => m.Info.Name == dep))
 					{
-						Instance.LoggerInstance.Error($"Action {action.Id} not registered because its dependency gear {dep} can not be loaded.");
-						return;
-					}
-				}
-
-				if (ahd.CSharpTypeDependency != null)
-				foreach (var dep in ahd.CSharpTypeDependency)
-				{
-					if (Type.GetType(dep) == null)
-					{
-						Instance.LoggerInstance.Error($"Action {action.Id} not registered because its dependency CSharp type {dep} can not be loaded.");
-						return;
+						Instance.LoggerInstance.Error($"Action {id} not registered because its dependency melon {dep} is not loaded.");
+						return false;
 					}
 				}
 			}
 
-			Instance.RegisteredExamineActions.Add(action);
-			Instance.LoggerInstance.Msg($"Action registered: {action.Id}");
+			if (action.GearNameDependency != null)
+			foreach (var dep in action.GearNameDependency)
+			{
+				if (GearItem.LoadGearItemPrefab(dep) == null)
+				{
+					Instance.LoggerInstance.Error($"Action {id} not registered because its dependency gear {dep} can not be loaded.");
+					return false;
+				}
+			}
+
+			if (action.CSharpTypeDependency != null)
+			foreach (var dep in action.CSharpTypeDependency)
+			{
+				if (Type.GetType(dep) == null)
+				{
+					Instance.LoggerInstance.Error($"Action {id} not registered because its dependency CSharp type {dep} can not be loaded.");
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+        static IEnumerator RetryRegistration ()
+		{
+			yield return new WaitForSeconds(30f);
+			foreach (var act in Instance.PendingActionsToRetryRegistration)
+			{
+				if (!CheckDependency(act.Id, act as IExamineActionHasDependendency))
+				{
+					continue;
+				}
+				Instance.LoggerInstance.Msg($"Retry to register action: {act.Id} is successful.");
+				Instance.RegisteredExamineActions.Add(act);
+			}
+			Instance.PendingActionsToRetryRegistration.Clear();
+			Instance.retryTask = null;
 		}
 
 		public static void TryRegisterWithJson (params string[] jsons)
