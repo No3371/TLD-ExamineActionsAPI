@@ -1,6 +1,6 @@
 namespace ExamineActionsAPI.DataDrivenGenericAction;
 
-public class CallbackChangeSubjectCondition : ICallback
+public class CallbackChangeSubjectCondition : ICallbackProvider
 {
     [MelonLoader.TinyJSON.Include]
     public float[] NormalizedConditionChangeBySubActionId { get; set; }

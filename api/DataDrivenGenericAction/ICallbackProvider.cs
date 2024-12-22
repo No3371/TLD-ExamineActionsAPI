@@ -1,6 +1,6 @@
 namespace ExamineActionsAPI.DataDrivenGenericAction;
 
-public interface ICallback
+public interface ICallbackProvider
 {
     void Run (ExamineActionState state);
 }

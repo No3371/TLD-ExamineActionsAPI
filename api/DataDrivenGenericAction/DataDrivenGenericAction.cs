@@ -373,17 +373,17 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         [Include]
         public ILightRequirementTypeProvider? LightRequirementTypeProvider        { get; set; }
         [Include]
-        public ICallback[]? OnPerformCallbacks                                    { get; set; }
+        public ICallbackProvider[]? OnPerformingCallbackProviders                                    { get; set; }
         [Include]
-        public ICallback[]? OnSuccessCallbacks                                    { get; set; }
+        public ICallbackProvider[]? OnSuccessCallbackProviders                                    { get; set; }
         [Include]
-        public ICallback[]? OnFailureCallbacks                                    { get; set; }
+        public ICallbackProvider[]? OnFailureCallbackProviders                                    { get; set; }
         [Include]
-        public ICallback[]? OnActionInterruptedBySystemCallbacks                  { get; set; }
+        public ICallbackProvider[]? OnActionInterruptedBySystemCallbackProviders                  { get; set; }
         [Include]
-        public ICallback[]? OnInterruptionCallbacks                               { get; set; }
+        public ICallbackProvider[]? OnInterruptionCallbackProviders                               { get; set; }
         [Include]
-        public ICallback[]? OnCancellationCallbacks                               { get; set; }
+        public ICallbackProvider[]? OnCancellationCallbackProviders                               { get; set; }
 
         /// <value>NotSet, Outdoors, Indoors</value>
         [Include]
@@ -443,8 +443,8 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 
         void IExamineActionCancellable.OnActionCancellation(ExamineActionState state)
         {
-            if (OnCancellationCallbacks != null)
-            foreach (var callback in OnCancellationCallbacks)
+            if (OnCancellationCallbackProviders != null)
+            foreach (var callback in OnCancellationCallbackProviders)
             {
                 callback.Run(state);
             }
@@ -454,8 +454,8 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 
         void IExamineActionFailable.OnActionFailure(ExamineActionState state)
         {
-            if (OnFailureCallbacks != null)
-            foreach (var callback in OnFailureCallbacks)
+            if (OnFailureCallbackProviders != null)
+            foreach (var callback in OnFailureCallbackProviders)
             {
                 callback.Run(state);
             }
@@ -463,8 +463,8 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 
         void IExamineAction.OnActionInterruptedBySystem(ExamineActionState state)
         {
-            if (OnActionInterruptedBySystemCallbacks != null)
-            foreach (var callback in OnActionInterruptedBySystemCallbacks)
+            if (OnActionInterruptedBySystemCallbackProviders != null)
+            foreach (var callback in OnActionInterruptedBySystemCallbackProviders)
             {
                 callback.Run(state);
             }
@@ -474,8 +474,8 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 
         void IExamineActionInterruptable.OnInterruption(ExamineActionState state)
         {
-            if (OnInterruptionCallbacks != null)
-            foreach (var callback in OnInterruptionCallbacks)
+            if (OnInterruptionCallbackProviders != null)
+            foreach (var callback in OnInterruptionCallbackProviders)
             {
                 callback.Run(state);
             }
@@ -483,8 +483,8 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 
         void IExamineAction.OnPerforming(ExamineActionState state)
         {
-            if (OnPerformCallbacks != null)
-            foreach (var callback in OnPerformCallbacks)
+            if (OnPerformingCallbackProviders != null)
+            foreach (var callback in OnPerformingCallbackProviders)
             {
                 callback.Run(state);
             }
@@ -492,8 +492,8 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 
         void IExamineAction.OnSuccess(ExamineActionState state)
         {
-            if (OnSuccessCallbacks != null)
-            foreach (var callback in OnSuccessCallbacks)
+            if (OnSuccessCallbackProviders != null)
+            foreach (var callback in OnSuccessCallbackProviders)
             {
                 callback.Run(state);
             }
