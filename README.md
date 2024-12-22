@@ -28,9 +28,9 @@ To supply action definition jsons, compress them into a zip file named as `eaapi
 
 ## Usage
 
-Start by implementing IExamineAction on your action class, once all the required properties are implemented, it's good to go. Call  `ExamineActionsAPI.Regsiter()` to regsiter the action.
+Start by implementing `IExamineAction` on your action class, once all the required properties are implemented, it's good to go. Call  `ExamineActionsAPI.Regsiter()` to regsiter the action.
 
-Please refer to action implementations in [ThingsToDo](/demo).
+Please refer to action implementations in [ThingsToDo](/demo) for practical examples.
 
 ### Interfaces
 
@@ -40,8 +40,7 @@ Please refer to action implementations in [ThingsToDo](/demo).
 - Without implementing other interfaces, the action will always success and be finished
     - Only exception is the action is forcefully interrupted in situations like wolf attacks
 - Action menu name & sprite, button text and progress audio can be customized.
-
-Besides `IExamineAction`, additional interfaces can be implemented to introduce various mechanics to the action.
+- Additional interfaces below can be implemented to introduce various mechanics to the action.
 
 #### [IExamineActionRequireItems](api/Interfaces/IExamineActionRequireItems.cs)
 
