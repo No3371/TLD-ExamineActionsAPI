@@ -42,6 +42,7 @@
     "OnPerformCallbacks": null,
     "OnSuccessCallbacks": null,
     "OnFailureCallbacks": null,
+    "OnActionInterruptedBySystemCallbacks": null,
     "OnInterruptionCallbacks": null,
     "OnCancellationCallbacks": null,
     "RequiredInDoorState": "NotSet"
