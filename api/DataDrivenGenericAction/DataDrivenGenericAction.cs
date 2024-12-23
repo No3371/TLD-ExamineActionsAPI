@@ -22,7 +22,6 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         {
             Id = "!!!ACTION_ID_UNSET!!!";
             RequiredInDoorState = Weather.IndoorState.NotSet;
-            IsToolRequired = true;
             CanBeCancelled = true;
             ShouldConsumeOnSuccess = true;
         }
@@ -148,8 +147,6 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         /// <summary>
         /// Please refer to IExamineActionRequireTool
         /// </summary>
-        [Include]
-        public bool IsToolRequired                                                { get; set; }
         /// <summary>
         /// Check for class files named ...SubActionCountProvider for available provider implmentations.
         /// </summary>
@@ -316,7 +313,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         public void GetMaterialLiquid(ExamineActionState state, List<MaterialOrProductLiquidConf> liquids)
         => MaterialLiquidProvider?.GetMaterialLiquid(state,liquids);
 
-        public bool RequireTool(ExamineActionState state) => IsToolRequired;
+        public bool RequireTool(ExamineActionState state) => ToolOptionsProvider != null;
 
         public void GetToolOptions(ExamineActionState state, Il2CppSystem.Collections.Generic.List<GameObject> tools)
         => ToolOptionsProvider?.GetToolOptions(state, tools);
@@ -407,8 +404,6 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 
     static class ExampleJsonGen
     {
-        
-
         public static void LogJsonTemplate ()
         {
             var action = new DataDrivenGenericAction()
@@ -433,7 +428,6 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
             action.ToolOptionsProvider = new SimpleToolOptionsProvider() {
                 CuttingToolTypeFilter = ToolsItem.CuttingToolType.Knife
             };
-            action.IsToolRequired = true;
             action.MaterialItemProvider = new SimpleMaterialItemProvider() {
                 Item = new () {
                     new MaterialOrProductSizedBySubActionDef (new ("GEAR_Knife", 1, 100), 0, 1),
@@ -552,7 +546,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
             action.ToolOptionsProvider = new SimpleToolOptionsProvider() {
                 CuttingToolTypeFilter = ToolsItem.CuttingToolType.Hammer
             };
-            MelonLoader.MelonLogger.Msg(MelonLoader.TinyJSON.JSON.Dump(action, MelonLoader.TinyJSON.EncodeOptions.EnforceHierarchyOrder | MelonLoader.TinyJSON.EncodeOptions.IncludePublicProperties));
+            MelonLoader.MelonLogger.Msg(MelonLoader.TinyJSON.JSON.Dump(action, MelonLoader.TinyJSON.EncodeOptions.IncludePublicProperties));
         }
     }
 }
