@@ -1,14 +1,12 @@
 {
     "@type": "ExamineActionsAPI.DataDrivenGenericAction.DataDrivenGenericAction",
-    "MelonDependency": [
-        "Camping Tools"
-    ],
+    "MelonDependency": null,
     "GearNameDependency": null,
     "CSharpTypeDependency": null,
-    "Id": "CampingTools_TanningRack_Tan",
-    "MenuItemLocalizationKey": "Tan",
+    "Id": "Json_HammerCan",
+    "MenuItemLocalizationKey": "Hammer",
     "MenuItemSpriteName": null,
-    "ActionButtonLocalizedStringKey": "GAMEPLAY_CT_TRackButton",
+    "ActionButtonLocalizedStringKey": "Hammer",
     "InterruptOnStarving": false,
     "InterruptOnExhausted": false,
     "InterruptOnFreezing": false,
@@ -19,23 +17,16 @@
     "ShouldConsumeOnCancellation": false,
     "ShouldConsumeOnFailure": false,
     "ShouldConsumeOnSuccess": true,
-    "SubActionCountProvider": {
-        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleSubActionCountProvider",
-        "SubActionCount": 4
-    },
+    "SubActionCountProvider": null,
     "DurationMinuteProvider": {
-        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SubActionIdMappedDurationMinutesProvider",
-        "Map": {
-            "0": 15,
-            "1": 15,
-            "2": 40,
-            "3": 40
-        }
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleDurationMinutesProvider",
+        "BaseDurationMinutes": 10,
+        "DurationMinutesOffsetPerSubAction": 0
     },
     "FailureChanceProvider": null,
     "ProgressSecondProvider": {
         "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleProgressSecondProvider",
-        "BaseProgressSeconds": 5,
+        "BaseProgressSeconds": 3,
         "ProgressSecondsOffsetPerSubAction": 0,
         "MaxProgressSeconds": null
     },
@@ -43,7 +34,7 @@
     "IsActionAvailableProvider": {
         "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleIsActionAvailableProvider",
         "ValidGearNames": [
-            "GEAR_TanningRack"
+            "GEAR_RecycledCan"
         ],
         "MinNormalizedCondition": 0,
         "MaxNormalizedCondition": 1,
@@ -92,97 +83,39 @@
         "NarrativeCollectibleItemFilter": null,
         "RepairableFilter": null
     },
-    "MaterialItemProvider": {
-        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SubActionIdMappedMaterialItemProvider",
-        "ItemBySubActionId": [
-            [
-                {
-                    "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductDef",
-                    "Name": "GEAR_LeatherHide",
-                    "Size": 1,
-                    "Chance": 100
-                }
-            ],
-            [
-                {
-                    "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductDef",
-                    "Name": "GEAR_WolfPelt",
-                    "Size": 1,
-                    "Chance": 100
-                }
-            ],
-            [
-                {
-                    "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductDef",
-                    "Name": "GEAR_BearHide",
-                    "Size": 1,
-                    "Chance": 100
-                }
-            ],
-            [
-                {
-                    "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductDef",
-                    "Name": "GEAR_MooseHide",
-                    "Size": 1,
-                    "Chance": 100
-                }
-            ]
-        ]
-    },
+    "MaterialItemProvider": null,
     "MaterialLiquidProvider": null,
     "MaterialPowderProvider": null,
     "ProductItemProvider": {
-        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SubActionIdMappedProductItemProvider",
-        "ItemBySubActionId": [
-            [
-                {
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleProductItemProvider",
+        "Items": [
+            {
+                "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductSizedBySubActionDef",
+                "Def": {
                     "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductDef",
-                    "Name": "GEAR_TanningRackDPS2",
+                    "Name": "GEAR_ScrapMetal",
                     "Size": 1,
-                    "Chance": 100
-                }
-            ],
-            [
-                {
-                    "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductDef",
-                    "Name": "GEAR_TanningRackWPS2",
-                    "Size": 1,
-                    "Chance": 100
-                }
-            ],
-            [
-                {
-                    "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductDef",
-                    "Name": "GEAR_TanningRackBP2",
-                    "Size": 1,
-                    "Chance": 100
-                }
-            ],
-            [
-                {
-                    "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductDef",
-                    "Name": "GEAR_TanningRackMP2",
-                    "Size": 1,
-                    "Chance": 100
-                }
-            ]
+                    "Chance": 75
+                },
+                "SizeExtraMultiplierPerSubAction": 0,
+                "SizeOffsetPerSubAction": 0
+            }
         ]
     },
     "ProductLiquidProvider": null,
     "ProductPowderProvider": null,
-    "ToolOptionsProvider": null,
+    "ToolOptionsProvider": {
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleToolOptionsProvider",
+        "ToolTypeFilter": null,
+        "CuttingToolTypeFilter": "Hammer"
+    },
     "IsValidWeatherProvider": null,
     "IsValidTimeProvider": null,
     "IsPointingToValidObjectProvider": null,
     "ConsumingUnitsProvider": null,
     "ConsumingLiquidLitersProvider": null,
     "ConsumingPowderKgsProvider": null,
-    "AudioNameProvider": {
-        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleAudioNameProvider",
-        "AudioNameBySubAction": [
-            "Play_CraftingLeatherHide"
-        ]
-    },
+    "AudioNameProvider": null,
     "LightRequirementTypeProvider": null,
     "OnPerformingCallbackProviders": null,
     "OnSuccessCallbackProviders": null,

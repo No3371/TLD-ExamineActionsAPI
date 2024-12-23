@@ -23,7 +23,6 @@
     "ShouldConsumeOnCancellation": false,
     "ShouldConsumeOnFailure": false,
     "ShouldConsumeOnSuccess": true,
-    "IsToolRequired": true,
     "SubActionCountProvider": null,
     "DurationMinuteProvider": {
         "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleDurationMinutesProvider",
@@ -103,7 +102,8 @@
         "KeroseneLampItemFilter": null,
         "FlareGunRoundItemFilter": null,
         "HandheldShortwaveItemFilter": null,
-        "NarrativeCollectibleItemFilter": null
+        "NarrativeCollectibleItemFilter": null,
+        "RepairableFilter": null
     },
     "MaterialItemProvider": {
         "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleMaterialItemProvider",
@@ -130,15 +130,15 @@
         "Powder": null
     },
     "ProductItemProvider": {
-        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleSingleProductItemProvider",
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleProductItemProvider",
         "Items": null
     },
     "ProductLiquidProvider": {
-        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleSingleProductLiquidProvider",
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleProductLiquidProvider",
         "Liquid": null
     },
     "ProductPowderProvider": {
-        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleSingleProductPowderProvider",
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleProductPowderProvider",
         "Powder": null
     },
     "ToolOptionsProvider": {
@@ -189,11 +189,11 @@
         "AudioNameBySubAction": null
     },
     "LightRequirementTypeProvider": null,
-    "OnPerformCallbacks": null,
-    "OnSuccessCallbacks": null,
-    "OnFailureCallbacks": null,
-    "OnActionInterruptedBySystemCallbacks": null,
-    "OnInterruptionCallbacks": null,
-    "OnCancellationCallbacks": null,
+    "OnPerformingCallbackProviders": null,
+    "OnSuccessCallbackProviders": null,
+    "OnFailureCallbackProviders": null,
+    "OnActionInterruptedBySystemCallbackProviders": null,
+    "OnInterruptionCallbackProviders": null,
+    "OnCancellationCallbackProviders": null,
     "RequiredInDoorState": "Outdoors"
 }
