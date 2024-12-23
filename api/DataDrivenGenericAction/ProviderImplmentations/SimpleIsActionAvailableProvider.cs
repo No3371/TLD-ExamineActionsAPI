@@ -1,5 +1,6 @@
 // #define VERY_VERBOSE
 using Il2Cpp;
+using MelonLoader.TinyJSON;
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
@@ -11,99 +12,101 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
             MaxStackSize = 999;
         }
 
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public List<string>? ValidGearNames { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public float MinNormalizedCondition { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public float MaxNormalizedCondition { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public int MinStackSize { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public int MaxStackSize { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
 
         public bool? GunItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? BowItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? AmmoItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? BaitItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? FoodItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? LureItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? RopeItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? ArrowItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? FlareItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? SnareItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? StoneItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? ToolsItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? TorchItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? EvolveItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? ForageItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? LiquidItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? PowderItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? RecipeItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? HeatPadItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? MatchesItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? CharcoalItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? ClothingItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? FirstAidItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? ResearchItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? WildlifeItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? BearSpearItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? BreakDownItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? ForceLockItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? SmashableItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? StackableItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? AmmoCasingItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? CanOpeningItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? CookingPotItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? FlashlightItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? FuelSourceItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? NoiseMakerItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? FireStarterItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? KeroseneLampItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? FlareGunRoundItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? HandheldShortwaveItemFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [Include]
         public bool? NarrativeCollectibleItemFilter { get; set; }
+        [Include]
+        public bool? RepairableFilter { get; set; }
 
         public bool IsActionAvailable(GearItem item)
         {
@@ -268,6 +271,9 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 
             if (NarrativeCollectibleItemFilter != null)
                 available &= (item.m_NarrativeCollectibleItem != null) == NarrativeCollectibleItemFilter.Value;
+
+            if (RepairableFilter != null)
+                available &= (item.m_Repairable != null) == RepairableFilter.Value;
 
             return available;
         }
