@@ -43,10 +43,10 @@ namespace ExamineActionsAPI
 			// }));
 
 			uConsole.RegisterCommand("output_action_json", new Action(() => {
-				DataDrivenGenericAction.DataDrivenGenericAction.LogJsonTemplate();
+				DataDrivenGenericAction.ExampleJsonGen.LogJsonTemplate();
 			}));
 			uConsole.RegisterCommand("output_action_json_minimal", new Action(() => {
-				DataDrivenGenericAction.DataDrivenGenericAction.LogMinimalJsonTemplate();
+				DataDrivenGenericAction.ExampleJsonGen.LogMinimalJsonTemplate();
 			}));
 			// ModComponentCompatibility.PatchModComponent(this);
 

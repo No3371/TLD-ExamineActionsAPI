@@ -270,7 +270,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 
         /// <value>NotSet, Outdoors, Indoors</value>
         [Include]
-        Weather.IndoorState RequiredInDoorState { get; set; }
+        public Weather.IndoorState RequiredInDoorState { get; set; }
 
         int IExamineAction.GetDurationMinutes(ExamineActionState state)
 		=> DurationMinuteProvider?.GetDurationMinutes(state) ?? 10;
@@ -403,8 +403,13 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 
         public ActionsToBlock? GetLightRequirementType(ExamineActionState state)
         => LightRequirementTypeProvider?.GetLightRequirementType(state);
+    }
 
-                public static void LogJsonTemplate ()
+    static class ExampleJsonGen
+    {
+        
+
+        public static void LogJsonTemplate ()
         {
             var action = new DataDrivenGenericAction()
             {
@@ -518,6 +523,34 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
                 AudioNameBySubAction = new [] {
                     "Play_CraftingLeatherHide",
                 }
+            };
+            MelonLoader.MelonLogger.Msg(MelonLoader.TinyJSON.JSON.Dump(action, MelonLoader.TinyJSON.EncodeOptions.EnforceHierarchyOrder | MelonLoader.TinyJSON.EncodeOptions.IncludePublicProperties));
+        }
+
+        public static void LogHammerCan ()
+        {
+            var action = new DataDrivenGenericAction()
+            {
+                Id = "Json_HammerCan",
+                MenuItemLocalizationKey = "Hammer",
+                ActionButtonLocalizedStringKey = "Hammer",
+            };
+            action.IsActionAvailableProvider = new SimpleIsActionAvailableProvider() {
+                ValidGearNames = new () { "GEAR_RecycledCan" }
+            };
+            action.DurationMinuteProvider = new SimpleDurationMinutesProvider() {
+                BaseDurationMinutes = 10
+            };
+            action.ProgressSecondProvider = new SimpleProgressSecondProvider() {
+                BaseProgressSeconds = 3
+            };
+            action.ProductItemProvider = new SimpleProductItemProvider() {
+                Items = new () {
+                    new (new ("GEAR_ScrapMetal", 1, 75), 0, 0)
+                }
+            };
+            action.ToolOptionsProvider = new SimpleToolOptionsProvider() {
+                CuttingToolTypeFilter = ToolsItem.CuttingToolType.Hammer
             };
             MelonLoader.MelonLogger.Msg(MelonLoader.TinyJSON.JSON.Dump(action, MelonLoader.TinyJSON.EncodeOptions.EnforceHierarchyOrder | MelonLoader.TinyJSON.EncodeOptions.IncludePublicProperties));
         }
