@@ -4,7 +4,7 @@ namespace ExamineActionsAPI
 {
     public struct MaterialOrProductPowderConf
 	{
-        public MaterialOrProductPowderConf(PowderType type, float kgs, byte chance)
+        public MaterialOrProductPowderConf(PowderType type, float kgs, float chance)
         {
             Type = type;
             Kgs = kgs;
@@ -14,8 +14,9 @@ namespace ExamineActionsAPI
         public PowderType Type { get; set; }
 		public float Kgs { get; set; }
         /// <summary>
-        /// 0-100% chance to consume/yield
+        /// Chance to consume/yield
         /// </summary>
-		public byte Chance { get; set; }
+        /// <value>0-100</value>
+		public float Chance { get; set; }
 	}
 }

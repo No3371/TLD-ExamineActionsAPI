@@ -704,10 +704,10 @@ namespace ExamineActionsAPI
 			if (items == null) return;
             for (int i = 0; i < items.Count; i++)
 			{
-                byte chance = items[i].Chance;
-                if (chance < 100)
+                var chance = items[i].Chance;
+                if (chance < 100f)
 				{
-					if (UnityEngine.Random.Range(0, 100) <= chance)
+					if (UnityEngine.Random.Range(0, 100f) <= chance)
 					{
 						SafeRemoveFromInventory(items[i].GearName, items[i].Units);
 					}
@@ -815,9 +815,9 @@ namespace ExamineActionsAPI
             for (int i = 0; i < powders.Count; i++)
 			{
                 var conf = powders[i];
-                if (conf.Chance < 100)
+                if (conf.Chance < 100f)
 				{
-					if (UnityEngine.Random.Range(0, 100) <= conf.Chance)
+					if (UnityEngine.Random.Range(0, 100f) <= conf.Chance)
 					{
 						RemovePowderFromInventory(conf.Type, conf.Kgs);
 						VeryVerboseLog($"{conf.Type.name} x{conf.Kgs}kg is yielded.");
@@ -869,9 +869,9 @@ namespace ExamineActionsAPI
 			{
 				GearItem prefab = act.OverrideProductPrefab(State, pi);
 				if (prefab == null) prefab = GearItem.LoadGearItemPrefab(products[pi].GearName);
-                if (products[pi].Chance < 100)
+                if (products[pi].Chance < 100f)
 				{
-					if (UnityEngine.Random.Range(0, 100) <= (byte)products[pi].Chance)
+					if (UnityEngine.Random.Range(0, 100f) <= (byte)products[pi].Chance)
 					{
 						var p = pm.InstantiateItemInPlayerInventory(prefab, products[pi].Units, 1, PlayerManager.InventoryInstantiateFlags.EnableNotificationFlag);
 						act.PostProcessProduct(State, pi, p);
@@ -897,10 +897,10 @@ namespace ExamineActionsAPI
             for (int pi = 0; pi < liquids.Count; pi++)
 			{
                 MaterialOrProductLiquidConf conf = liquids[pi];
-                byte chance = conf.Chance;
-                if (chance < 100)
+                var chance = conf.Chance;
+                if (chance < 100f)
 				{
-					if (UnityEngine.Random.Range(0, 100) <= chance)
+					if (UnityEngine.Random.Range(0, 100f) <= chance)
 					{
 						AddLiquidToInventory(conf.Liters, conf.Type);
                         VeryVerboseLog($"{conf.Type.name} {conf.Liters}l is yielded because the {conf.Chance} roll passed.");
@@ -950,10 +950,10 @@ namespace ExamineActionsAPI
             for (int pi = 0; pi < powders.Count; pi++)
 			{
                 MaterialOrProductPowderConf conf = powders[pi];
-                byte chance = conf.Chance;
-                if (chance < 100)
+                var chance = conf.Chance;
+                if (chance < 100f)
 				{
-					if (UnityEngine.Random.Range(0, 100) <= chance)
+					if (UnityEngine.Random.Range(0, 100f) <= chance)
 					{
 						var p = pm.AddPowderToInventory(ItemWeight.FromKilograms(conf.Kgs), conf.Type);
                         VeryVerboseLog($"{conf.Type.name} {conf.Kgs}kg is yielded because the {conf.Chance} roll passed.");

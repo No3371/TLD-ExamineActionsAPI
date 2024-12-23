@@ -4,7 +4,7 @@ namespace ExamineActionsAPI
 {
     public struct MaterialOrProductLiquidConf
 	{
-        public MaterialOrProductLiquidConf(LiquidType type, float liters, byte chance)
+        public MaterialOrProductLiquidConf(LiquidType type, float liters, float chance)
         {
             Type = type;
             Liters = liters;
@@ -16,6 +16,6 @@ namespace ExamineActionsAPI
         /// <summary>
         /// 0-100% chance to consume/yield
         /// </summary>
-		public byte Chance { get; set; }
+		public float Chance { get; set; }
 	}
 }

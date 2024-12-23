@@ -7,7 +7,7 @@ namespace ExamineActionsAPI
         /// </summary>
         /// <param name="gearName">GEAR_NNN</param>
         /// <param name="chance">0 ~ 100</param>
-        public MaterialOrProductItemConf(string gearName, int units, byte chance)
+        public MaterialOrProductItemConf(string gearName, int units, float chance)
         {
             GearName = gearName;
             Units = units;
@@ -18,8 +18,9 @@ namespace ExamineActionsAPI
         public string GearName { get; set; }
 		public int Units { get; set; }
         /// <summary>
-        /// 0-100% chance to consume/yield
+        /// Chance to consume/yield
         /// </summary>
-		public byte Chance { get; set; }
+        /// <value>0-100</value>
+		public float Chance { get; set; }
 	}
 }

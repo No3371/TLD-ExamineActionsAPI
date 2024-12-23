@@ -2,7 +2,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction;
 
 public struct MaterialOrProductDef
 {
-    public MaterialOrProductDef(string name, float size, byte chance)
+    public MaterialOrProductDef(string name, float size, float chance)
     {
         Name = name;
         Size = size;
@@ -15,7 +15,7 @@ public struct MaterialOrProductDef
     [MelonLoader.TinyJSON.Include]
     public float Size { get; set; }
     [MelonLoader.TinyJSON.Include]
-    public byte Chance { get; set; }
+    public float Chance { get; set; }
     public MaterialOrProductLiquidConf ToLiquidConf (ExamineActionState state)
     {
         var conf = new MaterialOrProductLiquidConf

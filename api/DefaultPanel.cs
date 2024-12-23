@@ -434,9 +434,9 @@ namespace ExamineActionsAPI
                     if (prefab == null)
                         MelonLogger.Error($"Invalid material: {conf.GearName}. There will be exception following this line of log. Check do you have the item mod installed or contact the mod providing this action or this action recipe.");
 
-                    if (conf.Chance < 100)
+                    if (conf.Chance < 100f)
                     {
-                        this.materialChances[configured].text = $"{conf.Chance}%";
+                        this.materialChances[configured].text = $"{conf.Chance:0.0}%";
                         this.materialChances[configured].gameObject.SetActive(true);
                     }
                     else this.materialChances[configured].gameObject.SetActive(false);
@@ -522,9 +522,9 @@ namespace ExamineActionsAPI
                     if (prefab == null)
                         MelonLogger.Error($"Invalid prodcut: {conf.GearName}. There will be exception following this line of log. Contact mod providing this action or this action recipe.");
 
-                    if (conf.Chance < 100)
+                    if (conf.Chance < 100f)
                     {
-                        this.productChances[configured].text = $"{conf.Chance}%";
+                        this.productChances[configured].text = $"{conf.Chance:0.0}%";
                         this.productChances[configured].gameObject.SetActive(true);
                     }
                     else this.productChances[configured].gameObject.SetActive(false);
