@@ -1,8 +1,7 @@
 // #define VERY_VERBOSE
-namespace ExamineActionsAPI.DataDrivenGenericAction
+namespace ExamineActionsAPI.DataDrivenGenericAction;
+
+public interface IDurationMinutesProvider
 {
-    public interface IDurationMinutesProvider
-	{
-		int GetDurationMinutes(ExamineActionState state);
-	}
+	int GetDurationMinutes(ExamineActionState state);
 }

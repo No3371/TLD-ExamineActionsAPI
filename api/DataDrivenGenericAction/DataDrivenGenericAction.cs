@@ -145,9 +145,6 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         [Include]
         public bool ShouldConsumeOnSuccess                                        { get; set; }
         /// <summary>
-        /// Please refer to IExamineActionRequireTool
-        /// </summary>
-        /// <summary>
         /// Check for class files named ...SubActionCountProvider for available provider implmentations.
         /// </summary>
         [Include]
