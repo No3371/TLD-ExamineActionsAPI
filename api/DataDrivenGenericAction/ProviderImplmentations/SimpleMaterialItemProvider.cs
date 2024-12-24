@@ -3,7 +3,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 {
     public class SimpleMaterialItemProvider : IMaterialItemProvider
     {
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
 		public List<MaterialOrProductSizedBySubActionDef> Item { get; set; }
 
         public void GetMaterialItems(ExamineActionState state, List<MaterialOrProductItemConf> materials)

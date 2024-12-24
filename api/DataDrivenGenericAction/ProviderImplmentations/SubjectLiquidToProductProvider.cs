@@ -3,9 +3,9 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 {
     public class SubjectLiquidToProductProvider : IProductLiquidProvider
 	{
-		[MelonLoader.TinyJSON.Include]
+		[TinyJSON2.Include]
 		public float LitersScale { get; set; }
-		[MelonLoader.TinyJSON.Include]
+		[TinyJSON2.Include]
 		public float LitersOffset { get; set; }
 		public void GetProductLiquid(ExamineActionState state, List<MaterialOrProductLiquidConf> Liquid)
 		{

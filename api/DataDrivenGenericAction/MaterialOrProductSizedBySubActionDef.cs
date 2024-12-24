@@ -2,19 +2,19 @@ namespace ExamineActionsAPI.DataDrivenGenericAction;
 
 public struct MaterialOrProductSizedBySubActionDef 
 {
-
+    public MaterialOrProductSizedBySubActionDef() {}
     public MaterialOrProductSizedBySubActionDef(MaterialOrProductDef def, float sizeExtraMultiplierPerSubAction, float sizeOffsetPerSubAction)
     {
         Def = def;
         SizeExtraMultiplierPerSubAction = sizeExtraMultiplierPerSubAction;
         SizeOffsetPerSubAction = sizeOffsetPerSubAction;
     }
-    [MelonLoader.TinyJSON.Include]
+    [TinyJSON2.Include]
     public MaterialOrProductDef Def { get; set; }
 
-    [MelonLoader.TinyJSON.Include]
+    [TinyJSON2.Include]
     public float SizeExtraMultiplierPerSubAction { get; set; } = 0;
-    [MelonLoader.TinyJSON.Include]
+    [TinyJSON2.Include]
     public float SizeOffsetPerSubAction { get; set; } = 0;
 
     public MaterialOrProductLiquidConf ToLiquidConf (ExamineActionState state)

@@ -6,11 +6,11 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
     public class SimpleProgressSecondProvider : IProgressSecondProvider
 	{
         public SimpleProgressSecondProvider() {}
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
 		public float BaseProgressSeconds { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
 		public float ProgressSecondsOffsetPerSubAction { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
 		public float? MaxProgressSeconds { get; set; }
 		public float GetProgressSeconds(ExamineActionState state)
 		{

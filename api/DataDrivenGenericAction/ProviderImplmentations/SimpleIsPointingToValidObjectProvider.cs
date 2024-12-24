@@ -6,21 +6,21 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
     public class SimpleIsPointingToValidObjectProvider : IIsPointingToValidObjectProvider
     {
         public SimpleIsPointingToValidObjectProvider() {}
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
 		public List<string>? ValidObjectNames { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public bool? WorkbenchFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public bool? AmmoWorkbenchFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public bool? BedFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public bool? WoodStoveFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public bool? CookingSlotFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public bool? HarvestableFilter { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public bool? ForgeFilter { get; set; }
         public bool IsPointingToValidObject(ExamineActionState state, GameObject pointedObject)
         {

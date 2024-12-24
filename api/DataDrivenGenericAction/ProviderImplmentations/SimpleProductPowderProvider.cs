@@ -4,7 +4,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
     public class SimpleProductPowderProvider : IProductPowderProvider
     {
         public SimpleProductPowderProvider() {}
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public List<MaterialOrProductDef>? Powder { get; set; }
         public void GetProductPowder(ExamineActionState state, List<MaterialOrProductPowderConf> products)
         {

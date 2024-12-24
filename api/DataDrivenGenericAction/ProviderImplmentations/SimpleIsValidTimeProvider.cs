@@ -3,15 +3,15 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
     public class SimpleIsValidTimeProvider : IIsValidTimeProvider
     {
         public SimpleIsValidTimeProvider() {}
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public int? MinDay { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public int? MaxDay { get; set;}
         /// <value>0.0 ~ 23.59</value>
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public float MinTime { get; set; }
         /// <value>0.0 ~ 23.59</value>
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public float MaxTime { get; set; }
 
 

@@ -18,9 +18,9 @@ namespace ExamineActionsAPI
             Minute = minute;
         }
 
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public int Day { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public int Hour
         {
             get => hour;
@@ -44,7 +44,7 @@ namespace ExamineActionsAPI
                     hour = value;
             }
         }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public int Minute
         {
             get => minute;

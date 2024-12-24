@@ -2,9 +2,9 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 {
     public class SimpleConsumingUnitsProvider : IConsumingUnitsProvider
     {
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
 		public int BaseConsumingUnits { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
 		public int ConsumingUnitsOffsetPerSubAction { get; set; }
         public int GetConsumingUnits(ExamineActionState state)
         {

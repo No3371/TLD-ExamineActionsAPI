@@ -5,7 +5,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction;
 
 public class LogicAndIsActionAvailableProvider : IIsActionAvailableProvider
 {
-		[MelonLoader.TinyJSON.Include]
+		[TinyJSON2.Include]
 		public IIsActionAvailableProvider[] Providers { get; set; }
     public bool IsActionAvailable(GearItem item)
     {

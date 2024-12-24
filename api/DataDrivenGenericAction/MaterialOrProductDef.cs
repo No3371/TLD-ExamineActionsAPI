@@ -2,19 +2,20 @@ namespace ExamineActionsAPI.DataDrivenGenericAction;
 
 public struct MaterialOrProductDef
 {
+    public MaterialOrProductDef() {}
     public MaterialOrProductDef(string name, float size, float chance)
     {
         Name = name;
         Size = size;
         Chance = chance;
     }
-    [MelonLoader.TinyJSON.Include]
+    [TinyJSON2.Include]
     public string Name { get; set; }
 
 
-    [MelonLoader.TinyJSON.Include]
+    [TinyJSON2.Include]
     public float Size { get; set; }
-    [MelonLoader.TinyJSON.Include]
+    [TinyJSON2.Include]
     public float Chance { get; set; }
     public MaterialOrProductLiquidConf ToLiquidConf (ExamineActionState state)
     {

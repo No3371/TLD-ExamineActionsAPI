@@ -4,7 +4,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction;
 
 public class ClampSubjectCondition : ICallbackProvider
 {
-    [MelonLoader.TinyJSON.Include]
+    [TinyJSON2.Include]
     public float NormalizedConditionMin { get; set; } = 0;
     public float NormalizedConditionMax { get; set; } = 1;
     public void Run(ExamineActionState state)

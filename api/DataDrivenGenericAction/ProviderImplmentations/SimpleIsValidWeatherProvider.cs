@@ -5,25 +5,25 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
     public class SimpleIsValidWeatherProvider : IIsValidWeatherProvider
     {
         public SimpleIsValidWeatherProvider() {}
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public float MinTemperature { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public float MaxTemperature { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public bool? IsSnowing { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public bool? IsLightSnow { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public bool? IsHeavySnow { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public bool? IsClear { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public bool? IsDenseFog { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public bool? IsFoggy { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public bool? IsElectrostaticFog { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public bool? IsBlizzard { get; set; }
 
         public bool IsValidWeather(ExamineActionState state, Weather weather)

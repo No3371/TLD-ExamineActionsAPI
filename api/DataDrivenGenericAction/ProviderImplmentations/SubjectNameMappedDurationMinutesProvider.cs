@@ -3,9 +3,9 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 {
     public class SubjectNameMappedDurationMinutesProvider : IDurationMinutesProvider
     {
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
 		public Dictionary<string, int> Map { get; set;}
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
 		public int? DefaultDurationMinutes { get; set; }
         public int GetDurationMinutes(ExamineActionState state)
         {

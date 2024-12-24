@@ -3,7 +3,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction;
 
 public class LogicAndCanPerformProvider : ICanPerformProvider
 {
-    [MelonLoader.TinyJSON.Include]
+    [TinyJSON2.Include]
     public ICanPerformProvider[] Providers { get; set; }
     public bool CanPerform(ExamineActionState state)
     {

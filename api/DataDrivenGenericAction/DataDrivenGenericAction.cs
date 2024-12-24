@@ -1,5 +1,5 @@
 using Il2Cpp;
-using MelonLoader.TinyJSON;
+using TinyJSON2;
 using UnityEngine;
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
@@ -18,6 +18,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
                                            IExamineActionHasExternalConstraints,
                                            IExamineActionHasDependendency
     {
+        static List<Variant> Decoded { get; set; } = new();
         public DataDrivenGenericAction ()
         {
             Id = "!!!ACTION_ID_UNSET!!!";
@@ -27,11 +28,12 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         }
         public static DataDrivenGenericAction? NewWithJson (string json)
         {
-            var j = MelonLoader.TinyJSON.Decoder.Decode(json) as ProxyObject;
+            var j = JSON.Load(json);
             if (j == null)
             {
                 throw new ArgumentException("Invalid json");
             }
+            Decoded.Add(j);
             DataDrivenGenericAction action = j.Make<DataDrivenGenericAction>();
             return action;
         }
@@ -453,7 +455,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
             action.ConsumingUnitsProvider = new SimpleConsumingUnitsProvider();
             action.AudioNameProvider = new SimpleAudioNameProvider();
             action.RequiredInDoorState = Weather.IndoorState.Outdoors;
-            MelonLoader.MelonLogger.Msg(MelonLoader.TinyJSON.JSON.Dump(action, MelonLoader.TinyJSON.EncodeOptions.EnforceHierarchyOrder | EncodeOptions.IncludePublicProperties));
+            MelonLoader.MelonLogger.Msg(TinyJSON2.JSON.Dump(action, TinyJSON2.EncodeOptions.EnforceHierarchyOrder | EncodeOptions.IncludePublicProperties));
         }
 
         public static void LogMinimalJsonTemplate ()
@@ -465,7 +467,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
                 ActionButtonLocalizedStringKey = "EXAMPLE_JSON_ACTION_MINIMAL",
             };
             action.MenuItemSpriteName = "LOADED_SPRITE_ASSET_NAME";
-            MelonLoader.MelonLogger.Msg(MelonLoader.TinyJSON.JSON.Dump(action, MelonLoader.TinyJSON.EncodeOptions.EnforceHierarchyOrder | MelonLoader.TinyJSON.EncodeOptions.IncludePublicProperties));
+            MelonLoader.MelonLogger.Msg(TinyJSON2.JSON.Dump(action, TinyJSON2.EncodeOptions.EnforceHierarchyOrder | TinyJSON2.EncodeOptions.IncludePublicProperties));
         }
 
         public static void LogCampingToolExample ()
@@ -515,7 +517,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
                     "Play_CraftingLeatherHide",
                 }
             };
-            MelonLoader.MelonLogger.Msg(MelonLoader.TinyJSON.JSON.Dump(action, MelonLoader.TinyJSON.EncodeOptions.EnforceHierarchyOrder | MelonLoader.TinyJSON.EncodeOptions.IncludePublicProperties));
+            MelonLoader.MelonLogger.Msg(TinyJSON2.JSON.Dump(action, TinyJSON2.EncodeOptions.EnforceHierarchyOrder | TinyJSON2.EncodeOptions.IncludePublicProperties));
         }
 
         public static void LogHammerCan ()
@@ -543,7 +545,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
             action.ToolOptionsProvider = new SimpleToolOptionsProvider() {
                 CuttingToolTypeFilter = ToolsItem.CuttingToolType.Hammer
             };
-            MelonLoader.MelonLogger.Msg(MelonLoader.TinyJSON.JSON.Dump(action, MelonLoader.TinyJSON.EncodeOptions.IncludePublicProperties));
+            MelonLoader.MelonLogger.Msg(JSON.Dump(action, TinyJSON2.EncodeOptions.IncludePublicProperties));
         }
     }
 }

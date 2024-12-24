@@ -4,23 +4,23 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
     public class SimpleCanPerformProvider : ICanPerformProvider
 	{
 		public SimpleCanPerformProvider() { }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
 		public List<string>? ValidGearNames { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
 		public float MinGearNormalizedCondition { get; set;}
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
 		public float MaxGearNormalizedCondition { get; set;}
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
 		public float MinOffsetPerSubAction { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
 		public float MaxOffsetPerSubAction { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
 		public int MinStackSize { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
 		public int MaxStackSize { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
 		public int MinStackSizeOffsetPerSubAction { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
 		public int MaxStackSizeOffsetPerSubAction { get; set; }
 		public bool CanPerform(ExamineActionState state)
 		{

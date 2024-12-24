@@ -5,9 +5,9 @@ namespace ExamineActionsAPI.DataDrivenGenericAction;
 
 public class SubjectNameAndStackSizeBasedIsActionAvailableProvider : IIsActionAvailableProvider
 {
-		[MelonLoader.TinyJSON.Include]
+		[TinyJSON2.Include]
 		int DefaultStackSizeRequired { get; set; } = 99999;
-		[MelonLoader.TinyJSON.Include]
+		[TinyJSON2.Include]
 		public Dictionary<string, int> Map { get; set;}
 
     public bool IsActionAvailable(GearItem item)

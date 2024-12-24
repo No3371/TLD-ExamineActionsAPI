@@ -1,6 +1,6 @@
 // #define VERY_VERBOSE
 using Il2Cpp;
-using MelonLoader.TinyJSON;
+using TinyJSON2;
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {

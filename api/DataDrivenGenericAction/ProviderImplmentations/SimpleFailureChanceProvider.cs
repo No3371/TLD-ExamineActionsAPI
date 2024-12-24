@@ -4,9 +4,9 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
     public class SimpleFailureChanceProvider : IFailureChanceProvider
     {
         public SimpleFailureChanceProvider() {}
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
 		public int BaseFailureChance { get; set; }
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
 		public int FailureChanceOffsetPerSubAction { get; set; }
         public float GetFailureChance(ExamineActionState state)
         {

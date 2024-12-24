@@ -2,9 +2,9 @@ namespace ExamineActionsAPI.DataDrivenGenericAction;
 
 public class SimpleConsumingLiquidLitersProvider : IConsumingLiquidLitersProvider
 {
-    [MelonLoader.TinyJSON.Include]
+    [TinyJSON2.Include]
 		public float BaseConsumingLiquidLiters { get; set; }
-    [MelonLoader.TinyJSON.Include]
+    [TinyJSON2.Include]
 		public float ConsumingLiquidLitersOffsetPerSubAction { get; set; }
 
     float IConsumingLiquidLitersProvider.GetConsumingLiquidLiters(ExamineActionState state)

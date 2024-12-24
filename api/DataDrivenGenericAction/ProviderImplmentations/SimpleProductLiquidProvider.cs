@@ -3,7 +3,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
     public class SimpleProductLiquidProvider : IProductLiquidProvider
     {
         public SimpleProductLiquidProvider() {}
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public List<MaterialOrProductSizedBySubActionDef>? Liquid { get; set; }
         public void GetProductLiquid(ExamineActionState state, List<MaterialOrProductLiquidConf> products)
         {

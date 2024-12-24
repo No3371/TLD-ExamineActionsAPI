@@ -4,7 +4,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
     public class SubjectNameMappedProductPowderProvider : IProductPowderProvider
     {
         public SubjectNameMappedProductPowderProvider() {}
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
         public Dictionary<string, MaterialOrProductDef>? Map { get; set; }
 
         public void GetProductPowder(ExamineActionState state, List<MaterialOrProductPowderConf> products)

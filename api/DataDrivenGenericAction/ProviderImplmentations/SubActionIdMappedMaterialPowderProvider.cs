@@ -3,7 +3,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 {
     public class SubActionIdMappedMaterialPowderProvider : IMaterialPowderProvider
     {
-        [MelonLoader.TinyJSON.Include]
+        [TinyJSON2.Include]
 		public List<List<MaterialOrProductDef>?> PowderBySubActionId { get; set; }
 
         public void GetMaterialPowder(ExamineActionState state, List<MaterialOrProductPowderConf> materials)

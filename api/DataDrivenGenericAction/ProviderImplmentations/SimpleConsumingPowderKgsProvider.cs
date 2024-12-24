@@ -2,9 +2,9 @@ namespace ExamineActionsAPI.DataDrivenGenericAction;
 
 public class SimpleConsumingPowderKgsProvider : IConsumingPowderKgsProvider
 {
-    [MelonLoader.TinyJSON.Include]
+    [TinyJSON2.Include]
 		public float BaseConsumingPowderKgs { get; set; }
-    [MelonLoader.TinyJSON.Include]
+    [TinyJSON2.Include]
 		public float ConsumingPowderKgsOffsetPerSubAction { get; set; }
 
     float IConsumingPowderKgsProvider.GetConsumingPowderKgs(ExamineActionState state)
