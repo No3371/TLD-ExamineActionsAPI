@@ -186,8 +186,8 @@ namespace ExamineActionsAPI
                 return false;
 
             if (act.ShouldConsumeOnSuccess(this) && act.GetConsumingUnits(this) > (Subject.m_StackableItem?.m_Units ?? 1)
-             || this.Action.GetConsumingPowderKgs(this) > (this.Subject.m_PowderItem?.m_Weight.ToQuantity(1f) ?? 0f)
-             || this.Action.GetConsumingLiquidLiters(this) > (this.Subject.m_LiquidItem?.m_Liquid.ToQuantity(1f) ?? 0f))
+             || act.GetConsumingPowderKgs(this) > (this.Subject.m_PowderItem?.m_Weight.ToQuantity(1f) ?? 0f)
+             || act.GetConsumingLiquidLiters(this) > (this.Subject.m_LiquidItem?.m_Liquid.ToQuantity(1f) ?? 0f))
             {
                 return false;
             }
