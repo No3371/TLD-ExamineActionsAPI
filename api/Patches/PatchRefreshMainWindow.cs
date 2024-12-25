@@ -64,7 +64,8 @@ namespace ExamineActionsAPI
                     __instance.SelectButton(i + ExamineActionsAPI.Instance.OfficialActionMenuItems.Count);
 				}
 			}
-			__instance.m_Item_Label.text = ExamineActionsAPI.Instance.State.Subject?.DisplayName; // Somehow if the subject has no available vanilla actions, this label gets turned to ""
+			if (ExamineActionsAPI.Instance.State.Action != null)
+				__instance.m_Item_Label.text = ExamineActionsAPI.Instance.State.Subject?.DisplayName; // Somehow if the subject has no available vanilla actions, this label gets turned to ""
 			ExamineActionsAPI.VeryVerboseLog($"-POST RefreshMainWindow");
         }
     }
