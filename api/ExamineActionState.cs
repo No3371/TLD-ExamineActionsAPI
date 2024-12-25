@@ -60,7 +60,9 @@ namespace ExamineActionsAPI
 				if (cache != value)
 				{
 					ExamineActionsAPI.VeryVerboseLog($"Selected tool changed: {value?.name} ({value?.GetInstanceID()})");
-					if (Action != null) OnToolChanged();
+                    // This may be called when Examine UI is not opened yet
+					if (Action != null && Action.IsActionAvailable(Subject))
+                        OnToolChanged();
 				}
             }
         }
