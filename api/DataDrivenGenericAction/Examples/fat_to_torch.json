@@ -69,9 +69,16 @@
                     "Name": "GEAR_Cloth",
                     "Size": 1,
                     "Chance": 100
-                },
-                "SizeExtraMultiplierPerSubAction": 0,
-                "SizeOffsetPerSubAction": 0
+                }
+            },
+            {
+                "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductSizedBySubActionDef",
+                "Def": {
+                    "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductDef",
+                    "Name": "GEAR_Stick",
+                    "Size": 1,
+                    "Chance": 100
+                }
             }
         ]
     },

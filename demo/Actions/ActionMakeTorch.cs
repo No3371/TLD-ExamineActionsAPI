@@ -76,6 +76,7 @@ namespace ExamineActionsAPIDemo
         void IExamineActionRequireItems.GetMaterialItems(ExamineActionState state, List<MaterialOrProductItemConf> items)
         {
             items.Add(new MaterialOrProductItemConf("GEAR_Cloth", 1, 100));
+            items.Add(new MaterialOrProductItemConf("GEAR_Stick", 1, 100));
         }
 
         void IExamineActionProduceItems.GetProducts(ExamineActionState state, List<MaterialOrProductItemConf> products)
@@ -240,7 +241,8 @@ namespace ExamineActionsAPIDemo
         //     {
         //         Item = new List<MaterialOrProductSizedBySubActionDef>()
         //         {
-        //             new MaterialOrProductSizedBySubActionDef(new MaterialOrProductDef("GEAR_Cloth", 1, 100), 0, 0)
+        //             new MaterialOrProductSizedBySubActionDef(new MaterialOrProductDef("GEAR_Cloth", 1, 100), 0, 0),
+        //             new MaterialOrProductSizedBySubActionDef(new MaterialOrProductDef("GEAR_Stick", 1, 100), 0, 0)
         //         }
         //     };
 
