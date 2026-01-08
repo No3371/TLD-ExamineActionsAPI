@@ -80,7 +80,8 @@ Once you know which provider you want to use, writing the JSON is just filling i
 ```json
 "CanPerformProvider": {
     "$type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleCanPerformProvider, ExamineActionsAPI",
-    "MinGearNormalizedCondition": 0.5
+    "MinGearNormalizedCondition": 0.5,
+    "MaxGearNormalizedCondition": 1.0
 }
 ```
 
