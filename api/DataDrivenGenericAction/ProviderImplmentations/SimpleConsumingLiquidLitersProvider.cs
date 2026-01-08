@@ -1,5 +1,9 @@
 namespace ExamineActionsAPI.DataDrivenGenericAction;
 
+/// <summary>
+/// Calculates the amount of liquid to consume in liters.
+/// ConsumingLiquidLiters = BaseConsumingLiquidLiters + (SubActionId * ConsumingLiquidLitersOffsetPerSubAction)
+/// </summary>
 public class SimpleConsumingLiquidLitersProvider : IConsumingLiquidLitersProvider
 {
     [TinyJSON2.Include]

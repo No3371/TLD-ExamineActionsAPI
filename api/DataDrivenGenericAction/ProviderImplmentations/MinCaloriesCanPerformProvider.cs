@@ -1,6 +1,9 @@
 // #define VERY_VERBOSE
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Checks if the subject (food item) has at least the minimum required calories.
+    /// </summary>
     public class MinCaloriesCanPerformProvider : ICanPerformProvider
     {
         [TinyJSON2.Include]

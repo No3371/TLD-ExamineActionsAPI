@@ -4,6 +4,9 @@ using TinyJSON2;
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Checks if the liquid item matches valid types and has sufficient volume.
+    /// </summary>
     public class LiquidLitersIsActionAvailableProvider : IIsActionAvailableProvider
     {
         [Include]

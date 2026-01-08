@@ -1,8 +1,13 @@
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Checks if the current game time is within valid ranges.
+    /// Can restrict by day number and time of day (hours).
+    /// </summary>
     public class SimpleIsValidTimeProvider : IIsValidTimeProvider
     {
         public SimpleIsValidTimeProvider() {}
+
         [TinyJSON2.Include]
         public int? MinDay { get; set; }
         [TinyJSON2.Include]

@@ -3,6 +3,10 @@ using Il2Cpp;
 
 namespace ExamineActionsAPI.DataDrivenGenericAction;
 
+/// <summary>
+/// Returns true if all of the provided IIsActionAvailableProvider instances return true.
+/// Essentially performs a logical AND operation on the results of the sub-providers.
+/// </summary>
 public class LogicAndIsActionAvailableProvider : IIsActionAvailableProvider
 {
 	[TinyJSON2.Include]

@@ -1,6 +1,10 @@
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Requires powder materials based on the current sub-action ID.
+    /// Index matches SubActionId.
+    /// </summary>
     public class SubActionIdMappedMaterialPowderProvider : IMaterialPowderProvider
     {
         [TinyJSON2.Include]

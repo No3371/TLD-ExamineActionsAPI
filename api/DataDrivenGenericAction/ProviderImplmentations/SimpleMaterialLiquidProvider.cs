@@ -3,7 +3,8 @@ using System.Text.Json.Serialization;
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
     /// <summary>
-    /// The provider simply requires the specified liquids as material items
+    /// The provider simply requires the specified liquids as material items.
+    /// Supports scaling quantities based on sub-action ID.
     /// </summary>
     public class SimpleMaterialLiquidProvider : IMaterialLiquidProvider
     {

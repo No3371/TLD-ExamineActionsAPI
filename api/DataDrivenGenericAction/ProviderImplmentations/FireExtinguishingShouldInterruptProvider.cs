@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Checks if the action should be interrupted because the target fire has extinguished.
+    /// </summary>
     public class FireExtinguishingShouldInterruptProvider : IShouldInterruptProvider
     {
         public bool ShouldInterrupt(ExamineActionState state, ref string? message)

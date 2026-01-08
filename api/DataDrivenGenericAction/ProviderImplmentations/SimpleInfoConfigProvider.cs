@@ -3,6 +3,10 @@ using Il2Cpp;
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Provides a list of info items to display in the UI.
+    /// Supports standard and custom colors for titles and content.
+    /// </summary>
     public class SimpleInfoConfigProvider : IInfoConfigProvider
     {
         public struct InfoItem
@@ -21,6 +25,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
             [TinyJSON2.Include]
             public UnityEngine.Color? CustomContentColor { get; set; }
         }
+
         [TinyJSON2.Include]
         public List<InfoItem>? InfoItems { get; set; }
         public void GetInfoConfigs(ExamineActionState state, List<InfoItemConfig> configs)

@@ -1,5 +1,9 @@
 namespace ExamineActionsAPI.DataDrivenGenericAction;
 
+/// <summary>
+/// Provides liquid products based on the current sub-action ID.
+/// Index matches SubActionId.
+/// </summary>
 public class SubActionIdMappedProductLiquidProvider : IProductLiquidProvider
 {
     [TinyJSON2.Include]

@@ -3,9 +3,14 @@ using UnityEngine;
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Checks if the player is pointing at a valid object.
+    /// Validates against object names and various component types (Workbench, Bed, etc.).
+    /// </summary>
     public class SimpleIsPointingToValidObjectProvider : IIsPointingToValidObjectProvider
     {
         public SimpleIsPointingToValidObjectProvider() {}
+
         [TinyJSON2.Include]
 		public List<string>? ValidObjectNames { get; set; }
         [TinyJSON2.Include]

@@ -1,6 +1,10 @@
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Provides item products based on the current sub-action ID.
+    /// Index matches SubActionId.
+    /// </summary>
     public class SubActionIdMappedProductItemProvider : IProductItemProvider
     {
         [TinyJSON2.Include]

@@ -2,6 +2,9 @@ using TinyJSON2;
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Maps the subject item's name to an audio event name.
+    /// </summary>
     public class SubjectNameMappedAudioNameProvider : IAudioNameProvider
     {
         [Include]

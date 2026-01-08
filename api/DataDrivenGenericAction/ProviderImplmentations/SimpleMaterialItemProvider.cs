@@ -2,7 +2,8 @@
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
     /// <summary>
-    /// The provider simply requires the specified items as material
+    /// The provider simply requires the specified items as material.
+    /// Supports scaling quantities based on sub-action ID.
     /// </summary>
     public class SimpleMaterialItemProvider : IMaterialItemProvider
     {

@@ -1,15 +1,14 @@
 namespace ExamineActionsAPI.DataDrivenGenericAction;
 
 /// <summary>
-/// Executes a list of callbacks in sequence.
+/// Executes a random callback from the list of callbacks.
 /// </summary>
-public class MultiCallbackProvider : ICallbackProvider
+public class RandomCallbackProvider : ICallbackProvider
 {
     [TinyJSON2.Include]
     public ICallbackProvider[] Providers { get; set; }
     public void Run(ExamineActionState state)
     {
-        foreach (var provider in Providers)
-            provider.Run(state);
+        Providers[UnityEngine.Random.Range(0, Providers.Length)].Run(state);
     }
 }

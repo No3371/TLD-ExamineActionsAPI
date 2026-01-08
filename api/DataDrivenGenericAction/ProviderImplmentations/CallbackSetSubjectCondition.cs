@@ -1,6 +1,9 @@
 namespace ExamineActionsAPI.DataDrivenGenericAction;
 
-public partial class CallbackSetSubjectCondition : ICallbackProvider
+/// <summary>
+/// Sets the subject item's condition to a specific value based on the current sub-action ID.
+/// </summary>
+public class CallbackSetSubjectCondition : ICallbackProvider
 {
     [TinyJSON2.Include]
     public float[] NormalizedConditionBySubActionId { get; set; }

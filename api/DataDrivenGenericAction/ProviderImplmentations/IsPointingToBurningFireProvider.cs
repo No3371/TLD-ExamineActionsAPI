@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Validates that the player is pointing at a burning fire.
+    /// </summary>
     public class IsPointingToBurningFireProvider : IIsPointingToValidObjectProvider
     {
         public bool IsPointingToValidObject(ExamineActionState state, GameObject pointedObject)

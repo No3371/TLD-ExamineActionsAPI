@@ -4,9 +4,14 @@ using UnityEngine;
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Filters available tools from the player's inventory.
+    /// Can filter by generic ToolType or specific CuttingToolType.
+    /// </summary>
     public class SimpleToolOptionsProvider : IToolOptionsProvider
 	{
         public SimpleToolOptionsProvider() {}
+
         [TinyJSON2.Include]
 		public ToolsItem.ToolType? ToolTypeFilter { get; set; }
         [TinyJSON2.Include]

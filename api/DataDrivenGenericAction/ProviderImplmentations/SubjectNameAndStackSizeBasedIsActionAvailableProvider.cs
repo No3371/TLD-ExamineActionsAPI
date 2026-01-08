@@ -3,6 +3,10 @@ using Il2Cpp;
 
 namespace ExamineActionsAPI.DataDrivenGenericAction;
 
+/// <summary>
+/// Checks if the action is available based on the item's stack size.
+/// Requirements are mapped by item name.
+/// </summary>
 public class SubjectNameAndStackSizeBasedIsActionAvailableProvider : IIsActionAvailableProvider
 {
 		[TinyJSON2.Include]

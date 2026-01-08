@@ -1,6 +1,11 @@
 // #define VERY_VERBOSE
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Converts the subject's liquid content into a product liquid.
+    /// Useful for pouring actions.
+    /// ProductLiters = SubjectLiters * LitersScale + LitersOffset.
+    /// </summary>
     public class SubjectLiquidToProductProvider : IProductLiquidProvider
 	{
 		[TinyJSON2.Include]

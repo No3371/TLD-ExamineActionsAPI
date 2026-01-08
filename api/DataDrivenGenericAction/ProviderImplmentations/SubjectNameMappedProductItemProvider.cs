@@ -1,9 +1,13 @@
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Maps the subject item's name to a specific item product definition.
+    /// </summary>
     public class SubjectNameMappedProductItemProvider : IProductItemProvider
     {
         public SubjectNameMappedProductItemProvider() {}
+
         [TinyJSON2.Include]
         public Dictionary<string, MaterialOrProductDef>? Map { get; set; }
         

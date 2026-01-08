@@ -1,6 +1,9 @@
 // #define VERY_VERBOSE
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Maps the subject item's name to the action duration in minutes.
+    /// </summary>
     public class SubjectNameMappedDurationMinutesProvider : IDurationMinutesProvider
     {
         [TinyJSON2.Include]

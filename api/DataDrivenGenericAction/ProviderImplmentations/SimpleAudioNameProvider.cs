@@ -2,6 +2,9 @@ using TinyJSON2;
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Returns an audio event name based on the current sub-action index.
+    /// </summary>
     public class SimpleAudioNameProvider : IAudioNameProvider
     {
         [Include]

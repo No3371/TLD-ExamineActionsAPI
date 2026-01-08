@@ -1,6 +1,10 @@
 // #define VERY_VERBOSE
 namespace ExamineActionsAPI.DataDrivenGenericAction;
 
+/// <summary>
+/// Checks if the subject item has sufficient stack size to perform the action.
+/// Requirements are mapped by subject name.
+/// </summary>
 public class SubjectNameAndStackSizeBasedCanPerformProvider : ICanPerformProvider
 {
 	[TinyJSON2.Include]

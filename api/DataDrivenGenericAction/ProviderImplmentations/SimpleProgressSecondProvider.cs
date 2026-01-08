@@ -3,9 +3,15 @@ using UnityEngine;
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Calculates the duration of the progress bar in seconds.
+    /// ProgressSeconds = BaseProgressSeconds + (ProgressSecondsOffsetPerSubAction * SubActionId)
+    /// Clamped between 0.5s and MaxProgressSeconds (default 600s).
+    /// </summary>
     public class SimpleProgressSecondProvider : IProgressSecondProvider
 	{
         public SimpleProgressSecondProvider() {}
+
         [TinyJSON2.Include]
 		public float BaseProgressSeconds { get; set; }
         [TinyJSON2.Include]

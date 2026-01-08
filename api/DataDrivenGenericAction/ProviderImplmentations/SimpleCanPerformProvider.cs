@@ -1,9 +1,16 @@
 // #define VERY_VERBOSE
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Checks if the action can be performed based on:
+    /// 1. Subject name match (if ValidGearNames is provided)
+    /// 2. Subject condition range (Base + Offset * SubActionId)
+    /// 3. Subject stack size (Base + Offset * SubActionId)
+    /// </summary>
     public class SimpleCanPerformProvider : ICanPerformProvider
 	{
 		public SimpleCanPerformProvider() { }
+
         [TinyJSON2.Include]
 		public List<string>? ValidGearNames { get; set; }
         [TinyJSON2.Include]

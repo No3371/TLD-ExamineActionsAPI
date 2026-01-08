@@ -2,9 +2,14 @@ using Il2Cpp;
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Checks if the current weather conditions match the requirements.
+    /// Can filter by temperature range and specific weather states (Snowing, Foggy, Blizzard, etc.).
+    /// </summary>
     public class SimpleIsValidWeatherProvider : IIsValidWeatherProvider
     {
         public SimpleIsValidWeatherProvider() {}
+
         [TinyJSON2.Include]
         public float MinTemperature { get; set; }
         [TinyJSON2.Include]

@@ -4,6 +4,10 @@ using TinyJSON2;
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Checks if the action is available for the given item based on various filters.
+    /// For the compoenent filters, all types whose filter is set to true must be present on the item.
+    /// </summary>
     public class SimpleIsActionAvailableProvider : IIsActionAvailableProvider
     {
         public SimpleIsActionAvailableProvider()

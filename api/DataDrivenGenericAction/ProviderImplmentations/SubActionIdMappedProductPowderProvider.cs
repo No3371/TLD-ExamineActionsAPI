@@ -1,6 +1,10 @@
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Provides powder products based on the current sub-action ID.
+    /// Index matches SubActionId.
+    /// </summary>
     public class SubActionIdMappedProductPowderProvider : IProductPowderProvider
     {
         [TinyJSON2.Include]

@@ -1,5 +1,9 @@
 namespace ExamineActionsAPI.DataDrivenGenericAction;
 
+/// <summary>
+/// Calculates the amount of powder to consume in kilograms.
+/// ConsumingPowderKgs = BaseConsumingPowderKgs + (SubActionId * ConsumingPowderKgsOffsetPerSubAction)
+/// </summary>
 public class SimpleConsumingPowderKgsProvider : IConsumingPowderKgsProvider
 {
     [TinyJSON2.Include]

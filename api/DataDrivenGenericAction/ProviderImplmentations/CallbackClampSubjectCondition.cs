@@ -2,7 +2,10 @@ using UnityEngine;
 
 namespace ExamineActionsAPI.DataDrivenGenericAction;
 
-public class ClampSubjectCondition : ICallbackProvider
+/// <summary>
+/// Clamps the subject item's condition between a minimum and maximum normalized value (0-1).
+/// </summary>
+public class CallbackClampSubjectCondition : ICallbackProvider
 {
     [TinyJSON2.Include]
     public float NormalizedConditionMin { get; set; } = 0;

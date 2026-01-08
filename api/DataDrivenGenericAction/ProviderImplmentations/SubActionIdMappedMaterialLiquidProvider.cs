@@ -1,5 +1,9 @@
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Defines liquid material requirements for each sub-action ID.
+    /// Index of the outer list corresponds to the SubActionId.
+    /// </summary>
     public class SubActionIdMappedMaterialLiquidProvider : IMaterialLiquidProvider
     {
         [TinyJSON2.Include]

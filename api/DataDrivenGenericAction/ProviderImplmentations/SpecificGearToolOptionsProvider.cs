@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Filters available tools from the player's inventory by exact gear name.
+    /// </summary>
     public class SpecificGearToolOptionsProvider : IToolOptionsProvider
     {
         [TinyJSON2.Include]

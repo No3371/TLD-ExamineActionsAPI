@@ -4,6 +4,9 @@ using TinyJSON2;
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Checks if the item is a valid powder type and has enough weight.
+    /// </summary>
     public class PowderKgsIsActionAvailableProvider : IIsActionAvailableProvider
     {
         [Include]

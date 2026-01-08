@@ -1,6 +1,10 @@
 // #define VERY_VERBOSE
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// Requires item materials based on the current sub-action ID.
+    /// Index matches SubActionId.
+    /// </summary>
     public class SubActionIdMappedMaterialItemProvider : IMaterialItemProvider
     {
         [TinyJSON2.Include]
