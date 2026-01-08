@@ -1,10 +1,12 @@
-# Data Driven Generic Action Examples
+# Data Driven Generic Action
 
-Here are some examples of Data Driven Generic Actions:
+In the [Examples](./Examples/) folder you may find the following
 - `hammercan.json` demonstrate an action that allows players to turn recycled cans into scrap metals with hammers. Just like the one provided by ThingsToDo.
-- `ct.json` is a 1:1 mirror of the actions implemented in *CampingTools* mod by Jods. While this action is useless now because the mod itself is not working at the moment, this is a good example of how to create a Data Driven Generic Action.
+- `campingtools.json` is a 1:1 replication of the EAAPI actions implemented in *CampingTools* mod by Jods. While this action is useless now because the mod itself is not working at the moment, this is a good example of how to create a Data Driven Generic Action.
+- `fat_to_torch.json` is a 1:1 replication of the Make Torch action in Things To Do.
+- `empty.json` is a raw and primitve action json that can be used as a starting point.
 
-The `example.eaapi` zip file contains the json files, try drop it into `/Mods` and see the example action start working right away.
+The `examples.eaapi` zip file contains the json files, try drop it into `/Mods` and see the example action start working right away.
 
 --- ↓　LLM write English better than me ↓　---
 
