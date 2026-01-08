@@ -9,6 +9,10 @@ namespace ExamineActionsAPI
     public interface IExamineActionInterruptable
 	{
 		/// <summary>
+		/// Can the action be interrupted? This serves as a main switch, still does prevent system interruptions
+		/// </summary>
+		bool CanBeInterrupted (ExamineActionState state) => true;
+		/// <summary>
 		/// Action not finished, for example: light goes out during during the process.
 		/// Note that you may want to call this in IExamineAction.OnActionInterruptedBySystem so both types of interruption results the same
 		/// </summary>

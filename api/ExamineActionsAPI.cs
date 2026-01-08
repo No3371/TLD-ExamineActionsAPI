@@ -6,6 +6,7 @@ using Il2CppTLD.Gear;
 using System.Diagnostics;
 using Il2CppTLD.IntBackedUnit;
 using System.Collections;
+using System.Collections.Concurrent;
 
 namespace ExamineActionsAPI
 {
@@ -13,8 +14,9 @@ namespace ExamineActionsAPI
     {
 		public static ExamineActionsAPI Instance { get; private set; }
 		internal List<IExamineAction> RegisteredExamineActions = new List<IExamineAction>();
-		internal List<IExamineAction> PendingActionsToRetryRegistration = new List<IExamineAction>();
-		object retryTask;
+		internal ConcurrentQueue<IExamineAction> PendingActionsToRetryRegistration = new ConcurrentQueue<IExamineAction>();
+		object taskLock = new object();
+		object? retryTask;
 		public const bool DISABLE_CUSTOM_INFO = false; // Custom info can be simply disabled because it's pure UI thing (in case it's broken by updates)
 		public static readonly  Color BRIGHT_WHITE = new Color(1f, 1f, 1f, 1f);
 		public static readonly  Color SHALLOW_WHITE = new Color(1f, 1f, 1f, 0.6275f);
@@ -88,23 +90,29 @@ namespace ExamineActionsAPI
 			}
 		}
 
+		/// <summary>
+		/// Register an action, if it has dependencies, it will be added to the pending list and retried later.
+		/// </summary>
+		/// <param name="action"></param>
+		/// <returns>True if the action is registered successfully, false if it failed or is delayed</returns>
         public static bool Register (IExamineAction action)
 		{
 			if (action is IExamineActionHasDependendency ahd)
 			{
-				if (!CheckDependency(action.Id, ahd))
-				{
-					Instance.PendingActionsToRetryRegistration.Add(action);
-					Instance.LoggerInstance.Warning($"Will retry registering {action.Id} once later.");
-					return false;
-				}
+				Instance.PendingActionsToRetryRegistration.Enqueue(action);
 			}
-			Instance.RegisteredExamineActions.Add(action);
-			Instance.LoggerInstance.Msg($"Action registered: {action.Id}");
-
-			if (Instance.PendingActionsToRetryRegistration.Count > 0 && Instance.retryTask == null)
+			else
 			{
-				Instance.retryTask = MelonLoader.MelonCoroutines.Start(RetryRegistration());
+				Instance.RegisteredExamineActions.Add(action);
+				Instance.LoggerInstance.Msg($"Action registered: {action.Id}");
+			}
+
+			lock (Instance.taskLock)
+			{
+				if (Instance.PendingActionsToRetryRegistration.Count > 0 && Instance.retryTask == null)
+				{
+					Instance.retryTask = MelonLoader.MelonCoroutines.Start(DelayRegistration());
+				}
 			}
 			return true;
 		}
@@ -138,10 +146,16 @@ namespace ExamineActionsAPI
 			if (action.GearNameDependency != null)
 			foreach (var dep in action.GearNameDependency)
 			{
-				if (GearItem.LoadGearItemPrefab(dep) == null)
+				try {
+					if (GearItem.LoadGearItemPrefab(dep) == null)
+					{
+						Instance.LoggerInstance.Warning($"Action {id} not registered because its dependency gear {dep} can not be loaded.");
+						return false;
+					}
+				}
+				catch (Exception e)
 				{
-					Instance.LoggerInstance.Warning($"Action {id} not registered because its dependency gear {dep} can not be loaded.");
-					return false;
+					throw new Exception($"TLD exploded when trying to load the prefab of {dep} as a dependency of {id}");
 				}
 			}
 
@@ -158,20 +172,51 @@ namespace ExamineActionsAPI
 			return true;
 		}
 
+		static IEnumerator DelayRegistration ()
+		{
+			yield return new WaitForSeconds(5f);
+			int pending = Instance.PendingActionsToRetryRegistration.Count;
+			for (int i = 0; i < pending; i++)
+			{
+				if (!Instance.PendingActionsToRetryRegistration.TryDequeue(out var action))
+					continue;
+				if (action is IExamineActionHasDependendency ahd && !CheckDependency(action.Id, ahd))
+				{
+					Instance.PendingActionsToRetryRegistration.Enqueue(action);
+					Instance.LoggerInstance.Warning($"Will retry registering {action.Id} once later.");
+				}
+				else
+				{
+					Instance.RegisteredExamineActions.Add(action);
+					Instance.LoggerInstance.Msg($"Action registered: {action.Id}");
+				}
+			}
+
+			lock (Instance.taskLock)
+			{	
+				if (Instance.PendingActionsToRetryRegistration.Count > 0)
+				{
+					Instance.retryTask = MelonLoader.MelonCoroutines.Start(RetryRegistration());
+				}
+				else Instance.retryTask = null;
+			}
+		}
         static IEnumerator RetryRegistration ()
 		{
-			yield return new WaitForSeconds(30f);
-			foreach (var act in Instance.PendingActionsToRetryRegistration)
+			yield return new WaitForSeconds(25f);
+			while (Instance.PendingActionsToRetryRegistration.TryDequeue(out var act))
 			{
-				if (!CheckDependency(act.Id, act as IExamineActionHasDependendency))
-				{
+				if (act is IExamineActionHasDependendency ahd && !CheckDependency(act.Id, ahd))
 					continue;
-				}
-				Instance.LoggerInstance.Msg($"Retry to register action: {act.Id} is successful.");
+
 				Instance.RegisteredExamineActions.Add(act);
+				Instance.LoggerInstance.Msg($"Retry to register action: {act.Id} is successful.");
 			}
 			Instance.PendingActionsToRetryRegistration.Clear();
-			Instance.retryTask = null;
+			lock (Instance.taskLock)
+			{
+				Instance.retryTask = null;
+			}
 		}
 
 		public static void TryRegisterWithJson (params string[] jsons)
@@ -284,7 +329,7 @@ namespace ExamineActionsAPI
 			PerformingBlockedReason? reason = null;
 			if (!State.Action.CanPerform(State))
 			{
-				VeryVerboseLog($"Action not performable");
+				VeryVerboseLog($"Action can not be performed");
 				reason = PerformingBlockedReason.Action;
 				goto fastforward;
 			}
@@ -294,8 +339,11 @@ namespace ExamineActionsAPI
 				if (State.Action.GetConsumingUnits(State) > (State.Subject.m_StackableItem?.m_Units ?? 1)
 				 || State.Action.GetConsumingPowderKgs(State) > (State.Subject.m_PowderItem?.m_Weight.ToQuantity(1f) ?? 0f)
 				 || State.Action.GetConsumingLiquidLiters(State) > (State.Subject.m_LiquidItem?.m_Liquid.ToQuantity(1f) ?? 0f))
-				reason = PerformingBlockedReason.SubjectShortage;
-				goto fastforward;
+				{
+					reason = PerformingBlockedReason.SubjectShortage;
+					VeryVerboseLog($"  Not enough subject to consume");
+					goto fastforward;
+				}
             }
 
 			if (State.Action is IExamineActionHasExternalConstraints constraints)
@@ -309,10 +357,14 @@ namespace ExamineActionsAPI
 					reason = PerformingBlockedReason.WeatherConstraint;
 				if (!constraints.IsPointingToValidObject(State, GameManager.GetPlayerManagerComponent().GetInteractiveObjectUnderCrosshairs(2)))
 					reason = PerformingBlockedReason.PointedObjectConstraint;
-				goto fastforward;
+				
+				if (reason != null)
+					goto fastforward;
 			}
 	
-			if (State.Action is IExamineActionInterruptable interruptable && ExamineActionsAPI.Instance.ShouldInterrupt(interruptable))
+			if (State.Action is IExamineActionInterruptable interruptable
+			 && interruptable.CanBeInterrupted(State)
+			 && ExamineActionsAPI.Instance.ShouldInterrupt(interruptable))
 			{
 				reason = PerformingBlockedReason.Interruption;
 				goto fastforward;
@@ -519,7 +571,7 @@ namespace ExamineActionsAPI
 				return;
 			}
 
-			// VeryVerboseLog($"+OnActionSucceed");
+			VeryVerboseLog($"+OnActionSucceed");
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 
 			OnActionFinished();
@@ -547,13 +599,13 @@ namespace ExamineActionsAPI
 				pie.OnBack();
 			}
 			else pie.SelectWindow(pie.m_MainWindow);
-			// VeryVerboseLog($"-OnActionSucceed");
+			VeryVerboseLog($"-OnActionSucceed");
 		}
 
 		internal void OnActionFailed ()
 		{
 			
-			// VeryVerboseLog($"+OnActionFailed");
+			VeryVerboseLog($"+OnActionFailed");
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 			OnActionFinished();
 			if (State.Action is IExamineActionRequireItems arm) ConsumeItems(arm, ActionResult.Failure);
@@ -589,13 +641,13 @@ namespace ExamineActionsAPI
 		}
 		internal void OnActionInterrupted (bool system)
 		{
+			VeryVerboseLog($"+OnActionInterrupted");
 			if (State.Action == null)
 			{
-				MelonLogger.Error("OnActionInterrupted called with no action selected");
+				LoggerInstance.Error("OnActionInterrupted called with no action selected");
 				return;
 			}
 
-			VeryVerboseLog($"+OnActionInterrupted");
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 
 			OnActionFinished();
@@ -771,7 +823,8 @@ namespace ExamineActionsAPI
 					var it = inv.GearInInventory(name, units);
 					if (it == null)
 					{
-						MelonLogger.Error($"Failed to consume all materilas, remaining: {units}...");
+						MelonLogger.Error($"Failed to consume all materilas, remaining: {name} x{units}...");
+						MelonLogger.Error($"This is not supposed to happen, please report to the author of the action mod or author of EAAPI.");
 						break;
 					}
 					if (it == State.Subject) continue;

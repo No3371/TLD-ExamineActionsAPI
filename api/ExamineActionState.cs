@@ -191,8 +191,8 @@ namespace ExamineActionsAPI
         static Il2CppSystem.Collections.Generic.List<GameObject> temp = new ();
         public bool CheckCanPerformSelectedAction (IExamineAction act)
         {
-            var mats = CheckMaterials(this, act);
-			if (!mats)
+            ExamineActionsAPI.VeryVerboseLog($"+CheckCanPerformSelectedAction");
+			if (!CheckMaterials(this, act))
                 return false;
             
             if (!act.CanPerform(this))
@@ -226,6 +226,7 @@ namespace ExamineActionsAPI
                     return false;
             }
 
+            ExamineActionsAPI.VeryVerboseLog($"-CheckCanPerformSelectedAction: true");
             return true;
         }
 

@@ -631,7 +631,7 @@ namespace ExamineActionsAPI
         void UpdateStopLabel (ExamineActionState state)
         {
             var cancellable = state.Action is IExamineActionCancellable examineActionCancellable && examineActionCancellable.CanBeCancelled(state);
-            var interruptable = state.Action is IExamineActionInterruptable;
+            var interruptable = state.Action is IExamineActionInterruptable examineActionInterruptable && examineActionInterruptable.CanBeInterrupted(state);
             cancellableLabel.gameObject.SetActive(true);
 
             if (cancellable && interruptable)

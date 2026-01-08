@@ -373,6 +373,17 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
             return ShouldInterruptProvider?.ShouldInterrupt(state, ref message) ?? false;
         }
 
+        bool IExamineActionInterruptable.CanBeInterrupted(ExamineActionState state)
+        {
+            return InterruptOnDehydrated
+                || InterruptOnFreezing
+                || InterruptOnExhausted
+                || InterruptOnStarving
+                || InterruptOnNonRiskAffliction
+                || NormalizedConditionInterruptThreshold < 1f
+                || ShouldInterruptProvider != null;
+        }
+
         void IExamineAction.OnPerforming(ExamineActionState state)
         {
             if (OnPerformingCallbackProviders != null)

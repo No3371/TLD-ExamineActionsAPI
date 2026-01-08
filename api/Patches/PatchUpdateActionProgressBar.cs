@@ -1,5 +1,6 @@
 using HarmonyLib;
 using Il2Cpp;
+using Il2CppAK.Wwise;
 using MelonLoader;
 using UnityEngine;
 
@@ -21,7 +22,7 @@ namespace ExamineActionsAPI
             ExamineActionState state = ExamineActionsAPI.Instance.State;
             if (state.ActionInProgress)
 			{
-				// MelonLogger.Msg($"+UpdateActionProgressBar");
+				MelonLogger.Msg($"+UpdateActionProgressBar");
 				// UpdateActionProgressBar early returns if official actions are not in progress
 				// Must replciate the statements ↓
 				if (selected is IExamineActionCancellable cancellable && cancellable.CanBeCancelled(state))
@@ -33,8 +34,8 @@ namespace ExamineActionsAPI
 						Cursor.visible = true;
 						Cursor.lockState = CursorLockMode.Confined;
 					}
-					if (InputManager.GetEscapePressed(__instance))
-						ExamineActionsAPI.Instance.OnActionCancelled();
+					// if (InputManager.GetEscapePressed(__instance))
+					// 	__instance.OnProgressBarCancel();
 				}
 				else
 				{
@@ -42,7 +43,9 @@ namespace ExamineActionsAPI
 					Cursor.lockState = CursorLockMode.Locked;
 				}
 
-				if (selected is IExamineActionInterruptable interruptable && ExamineActionsAPI.Instance.ShouldInterrupt(interruptable))
+				if (selected is IExamineActionInterruptable interruptable
+				 && interruptable.CanBeInterrupted(state)
+				 && ExamineActionsAPI.Instance.ShouldInterrupt(interruptable))
 				{
 					state.InterruptionFlag = true;
 					__instance.m_GenericProgressBar.GetPanel().Cancel();
