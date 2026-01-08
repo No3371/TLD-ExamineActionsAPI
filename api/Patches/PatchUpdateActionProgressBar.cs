@@ -22,7 +22,7 @@ namespace ExamineActionsAPI
             ExamineActionState state = ExamineActionsAPI.Instance.State;
             if (state.ActionInProgress)
 			{
-				MelonLogger.Msg($"+UpdateActionProgressBar");
+				// ExamineActionsAPI.VeryVerboseLog($"+UpdateActionProgressBar");
 				// UpdateActionProgressBar early returns if official actions are not in progress
 				// Must replciate the statements ↓
 				if (selected is IExamineActionCancellable cancellable && cancellable.CanBeCancelled(state))
