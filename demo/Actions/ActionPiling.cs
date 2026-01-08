@@ -24,14 +24,14 @@ namespace ExamineActionsAPIDemo
         {
             return item.name switch
             {
-                "GEAR_Stick" => true && item.m_StackableItem.m_Units >= 10,
-                "GEAR_Stone" => true && item.m_StackableItem.m_Units >= 10,
-                "GEAR_Coal" => true && item.m_StackableItem.m_Units >= 4,
-                "GEAR_Charcoal" => true && item.m_StackableItem.m_Units >= 10,
-                "GEAR_CattailStalk" => true && item.m_StackableItem.m_Units >= 5,
-                "GEAR_Softwood" => true && item.m_StackableItem.m_Units >= 5,
-                "GEAR_Hardwood" => true && item.m_StackableItem.m_Units >= 5,
-                "GEAR_ScrapMetal" => true && item.m_StackableItem.m_Units >= 10,
+                "GEAR_Stick"          => true && item.m_StackableItem.m_Units >= 10,
+                "GEAR_Stone"          => true && item.m_StackableItem.m_Units >= 10,
+                "GEAR_Coal"           => true && item.m_StackableItem.m_Units >= 4,
+                "GEAR_Charcoal"       => true && item.m_StackableItem.m_Units >= 10,
+                "GEAR_CattailStalk"   => true && item.m_StackableItem.m_Units >= 5,
+                "GEAR_Softwood"       => true && item.m_StackableItem.m_Units >= 5,
+                "GEAR_Hardwood"       => true && item.m_StackableItem.m_Units >= 5,
+                "GEAR_ScrapMetal"     => true && item.m_StackableItem.m_Units >= 10,
                 "GEAR_ReclaimedWoodB" => true && item.m_StackableItem.m_Units >= 10,
                 _ => false
             };
@@ -42,14 +42,14 @@ namespace ExamineActionsAPIDemo
         {
             return state.Subject.name switch
             {
-                "GEAR_Stick" => state.Subject.m_StackableItem.m_Units >= 10 * (state.SubActionId + 1),
-                "GEAR_Stone" => state.Subject.m_StackableItem.m_Units >= 10 * (state.SubActionId + 1),
-                "GEAR_Coal" => state.Subject.m_StackableItem.m_Units >= 4 * (state.SubActionId + 1),
-                "GEAR_Charcoal" => state.Subject.m_StackableItem.m_Units >= 10 * (state.SubActionId + 1),
-                "GEAR_CattailStalk" => state.Subject.m_StackableItem.m_Units >= 5 * (state.SubActionId + 1),
-                "GEAR_Softwood" => true && state.Subject.m_StackableItem.m_Units >= 5 * (state.SubActionId + 1),
-                "GEAR_Hardwood" => true && state.Subject.m_StackableItem.m_Units >= 5 * (state.SubActionId + 1),
-                "GEAR_ScrapMetal" => true && state.Subject.m_StackableItem.m_Units >= 10 * (state.SubActionId + 1),
+                "GEAR_Stick"          => state.Subject.m_StackableItem.m_Units >= 10 * (state.SubActionId + 1),
+                "GEAR_Stone"          => state.Subject.m_StackableItem.m_Units >= 10 * (state.SubActionId + 1),
+                "GEAR_Coal"           => state.Subject.m_StackableItem.m_Units >= 4 * (state.SubActionId + 1),
+                "GEAR_Charcoal"       => state.Subject.m_StackableItem.m_Units >= 10 * (state.SubActionId + 1),
+                "GEAR_CattailStalk"   => state.Subject.m_StackableItem.m_Units >= 5 * (state.SubActionId + 1),
+                "GEAR_Softwood"       => true && state.Subject.m_StackableItem.m_Units >= 5 * (state.SubActionId + 1),
+                "GEAR_Hardwood"       => true && state.Subject.m_StackableItem.m_Units >= 5 * (state.SubActionId + 1),
+                "GEAR_ScrapMetal"     => true && state.Subject.m_StackableItem.m_Units >= 10 * (state.SubActionId + 1),
                 "GEAR_ReclaimedWoodB" => true && state.Subject.m_StackableItem.m_Units >= 10 * (state.SubActionId + 1),
                 _ => false
             };
@@ -76,14 +76,14 @@ namespace ExamineActionsAPIDemo
         {
             return state.Subject.name switch
             {
-                "GEAR_Stick" => (state.SubActionId + 1) * 10,
-                "GEAR_Stone" => (state.SubActionId + 1) * 10,
-                "GEAR_Coal" => (state.SubActionId + 1) * 4,
-                "GEAR_Charcoal" => (state.SubActionId + 1) * 10,
-                "GEAR_CattailStalk" => (state.SubActionId + 1) * 5,
-                "GEAR_Softwood" => (state.SubActionId + 1) * 5,
-                "GEAR_Hardwood" => (state.SubActionId + 1) * 5,
-                "GEAR_ScrapMetal" => (state.SubActionId + 1) * 10,
+                "GEAR_Stick"          => (state.SubActionId + 1) * 10,
+                "GEAR_Stone"          => (state.SubActionId + 1) * 10,
+                "GEAR_Coal"           => (state.SubActionId + 1) * 4,
+                "GEAR_Charcoal"       => (state.SubActionId + 1) * 10,
+                "GEAR_CattailStalk"   => (state.SubActionId + 1) * 5,
+                "GEAR_Softwood"       => (state.SubActionId + 1) * 5,
+                "GEAR_Hardwood"       => (state.SubActionId + 1) * 5,
+                "GEAR_ScrapMetal"     => (state.SubActionId + 1) * 10,
                 "GEAR_ReclaimedWoodB" => (state.SubActionId + 1) * 10,
                 _ => 1
             };
@@ -93,14 +93,14 @@ namespace ExamineActionsAPIDemo
         {
             return state.Subject.name switch
             {
-                "GEAR_Stick" => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 10, 1, 5),
-                "GEAR_Stone" => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 10, 1, 5),
-                "GEAR_Coal" => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 4, 1, 5),
-                "GEAR_Charcoal" => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 10, 1, 5),
-                "GEAR_CattailStalk" => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 5, 1, 5),
-                "GEAR_Softwood" => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 5, 1, 5),
-                "GEAR_Hardwood" => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 5, 1, 5),
-                "GEAR_ScrapMetal" => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 10, 1, 5),
+                "GEAR_Stick"          => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 10, 1, 5),
+                "GEAR_Stone"          => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 10, 1, 5),
+                "GEAR_Coal"           => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 4, 1, 5),
+                "GEAR_Charcoal"       => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 10, 1, 5),
+                "GEAR_CattailStalk"   => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 5, 1, 5),
+                "GEAR_Softwood"       => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 5, 1, 5),
+                "GEAR_Hardwood"       => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 5, 1, 5),
+                "GEAR_ScrapMetal"     => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 10, 1, 5),
                 "GEAR_ReclaimedWoodB" => Mathf.Clamp(state.Subject.m_StackableItem.m_Units / 10, 1, 5),
                 _ => 1
             };

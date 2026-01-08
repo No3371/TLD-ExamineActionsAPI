@@ -10,6 +10,8 @@ namespace ExamineActionsAPI
     {
         private static void Prefix(Panel_Inventory_Examine __instance)
         {
+	
+			ExamineActionsAPI.VeryVerboseLog($"+RefreshMainWindow");
 			ExamineActionsAPI.Instance.State.Subject = __instance.m_GearItem;
 			ExamineActionsAPI.Instance.AvailableCustomActions.Clear();
 			foreach (var mi in ExamineActionsAPI.Instance.CustomActionMenuItems)
@@ -24,7 +26,7 @@ namespace ExamineActionsAPI
 				return;
 			}
 	
-			ExamineActionsAPI.VeryVerboseLog($"+=======+++PRE RefreshMainWindow");
+			ExamineActionsAPI.VeryVerboseLog($"++RefreshMainWindow");
 
 
 			foreach (var a in ExamineActionsAPI.Instance.RegisteredExamineActions)
@@ -48,7 +50,7 @@ namespace ExamineActionsAPI
 				mi.m_ButtonSpriteRef.normalSprite = a.MenuItemSpriteName ?? "Empty";
 				mi.gameObject.SetActive(true);
 			}
-			ExamineActionsAPI.VeryVerboseLog($"-PRE RefreshMainWindow");
+			ExamineActionsAPI.VeryVerboseLog($"-PRRefreshMainWindow");
         }
         private static void Postfix(Panel_Inventory_Examine __instance)
         {
@@ -60,7 +62,7 @@ namespace ExamineActionsAPI
 
                 if (ExamineActionsAPI.Instance.LastTriedToPerformedCache == ExamineActionsAPI.Instance.AvailableCustomActions[i])
 				{
-					ExamineActionsAPI.VeryVerboseLog($"Selecting selected");
+					ExamineActionsAPI.VeryVerboseLog($"Selecting just performed");
                     __instance.SelectButton(i + ExamineActionsAPI.Instance.OfficialActionMenuItems.Count);
 				}
 			}

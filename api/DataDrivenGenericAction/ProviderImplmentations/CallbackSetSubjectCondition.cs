@@ -1,6 +1,6 @@
 namespace ExamineActionsAPI.DataDrivenGenericAction;
 
-public class CallbackSetSubjectCondition : ICallbackProvider
+public partial class CallbackSetSubjectCondition : ICallbackProvider
 {
     [TinyJSON2.Include]
     public float[] NormalizedConditionBySubActionId { get; set; }

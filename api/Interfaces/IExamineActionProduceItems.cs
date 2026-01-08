@@ -13,18 +13,16 @@ namespace ExamineActionsAPI
 		/// <value>("GEAR_XXX", number, chance)</value>
 		void GetProducts(ExamineActionState state, List<MaterialOrProductItemConf> products);
 		/// <summary>
-		/// Use this to decide what GearItem to be used as the prefab. Otherwise by default EAAPI get a prefab by the item name.
+		/// Use this to force a GearItem to be used as the prefab. Otherwise by default EAAPI get a prefab by the item name.
 		/// </summary>
 		GearItem OverrideProductPrefab(ExamineActionState state, int index) => null;
 		/// <summary>
-		/// Implement this to do something to the actual products
+		/// Implement this to do something to the actual products.
 		/// </summary>
 		void PostProcessProduct (ExamineActionState state, int index, GearItem product) {}
 		/// <summary>
-		/// <para> Override consumption of each material with this.</para>
-		/// <para> If the material is not guaranteed to be consumed (<100%), this only get called when the it's rolled to be consumed.</para>
-		/// <para> It's recommended to only override this for interruption and cancellation to compensate long actions.</para>
+		/// Implement this to do something to the preview gear item on the panel. For example, without setting the current HP, raw meat seems stale in the preview.
 		/// </summary>
-		// int OverrideProductItemYield(ExamineActionState state, int index, MaterialOrProductItemConf conf, ActionResult result) => conf.Units;
+		void PostProcessProductPreview (ExamineActionState state, int index, GearItem product) {}
 	}
 }

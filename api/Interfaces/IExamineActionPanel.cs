@@ -10,7 +10,7 @@ namespace ExamineActionsAPI
 		void OnActionSelected (ExamineActionState state);
 		void OnActionDeselected (ExamineActionState state);
 		void OnPerformingAction (ExamineActionState state);
-		void OnPerformingBlocked (ExamineActionState state, PerformingBlockedReased reason);
+		void OnPerformingBlocked (ExamineActionState state, PerformingBlockedReason reason);
 		void OnActionSucceed(ExamineActionState state);
 		void OnActionFailed(ExamineActionState state);
 		void OnActionCancelled(ExamineActionState state);
@@ -22,7 +22,7 @@ namespace ExamineActionsAPI
 		void SetBottomWarning (string message);
 	}
 
-	public enum PerformingBlockedReased
+	public enum PerformingBlockedReason
 	{
 		Action,
 		SubjectShortage,

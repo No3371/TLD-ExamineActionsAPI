@@ -36,6 +36,6 @@ namespace ExamineActionsAPI
 		/// </summary>
 		/// <param name="state"></param>
 		/// <returns></returns>
-		bool ShouldInterrupt (ExamineActionState state) => false;
+		bool ShouldInterrupt (ExamineActionState state, ref string? message) => false;
 	}
 }

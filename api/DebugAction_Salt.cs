@@ -106,7 +106,8 @@ namespace ExamineActionsAPI
 
         public void GetInfoConfigs(ExamineActionState state, List<InfoItemConfig> configs)
         {
-            configs.Add(Info1);
+            if (Info1 != null)
+                configs.Add(Info1);
         }
 
         public void OnInterrupted(ExamineActionState state)
@@ -257,8 +258,10 @@ namespace ExamineActionsAPI
 
         public void GetInfoConfigs(ExamineActionState state, List<InfoItemConfig> configs)
         {
-            configs.Add(Info1);
-            configs.Add(Info2);
+            if (Info1 != null)
+                configs.Add(Info1);
+            if (Info2 != null)
+                configs.Add(Info2);
         }
 
         public void OnInterrupted(ExamineActionState state)

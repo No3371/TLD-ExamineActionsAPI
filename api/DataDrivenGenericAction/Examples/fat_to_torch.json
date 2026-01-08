@@ -1,0 +1,128 @@
+{
+    "@type": "ExamineActionsAPI.DataDrivenGenericAction.DataDrivenGenericAction",
+    "GearNameDependency": [
+        "GEAR_AnimalFat"
+    ],
+    "Id": "Json_MakeTorch",
+    "MenuItemLocalizationKey": "Make Torch",
+    "MenuItemSpriteName": "ico_Crafting",
+    "ActionButtonLocalizedStringKey": "Make Torch",
+    "InterruptOnStarving": true,
+    "InterruptOnExhausted": true,
+    "InterruptOnFreezing": true,
+    "InterruptOnDehydrated": true,
+    "InterruptOnNonRiskAffliction": false,
+    "NormalizedConditionInterruptThreshold": 0,
+    "ShouldInterruptProvider": {
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.FireExtinguishingShouldInterruptProvider"
+    },
+    "CanBeCancelled": true,
+    "ShouldConsumeOnCancellation": false,
+    "ShouldConsumeOnFailure": false,
+    "ShouldConsumeOnSuccess": true,
+    "DurationMinuteProvider": {
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleDurationMinutesProvider",
+        "BaseDurationMinutes": 10,
+        "DurationMinutesOffsetPerSubAction": 0
+    },
+    "ProgressSecondProvider": {
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleProgressSecondProvider",
+        "BaseProgressSeconds": 10,
+        "ProgressSecondsOffsetPerSubAction": 0,
+        "MaxProgressSeconds": null
+    },
+    "CanPerformProvider": {
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.LogicAndCanPerformProvider",
+        "Providers": [
+            {
+                "@type": "ExamineActionsAPI.DataDrivenGenericAction.MinCaloriesCanPerformProvider",
+                "MinCalories": 900,
+                "BlockedMessage": "Requires full block of fat"
+            },
+            {
+                "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleCanPerformProvider",
+                "MinGearNormalizedCondition": 0.5,
+                "MaxGearNormalizedCondition": 1,
+                "MinStackSize": 0,
+                "MaxStackSize": 999
+            }
+        ]
+    },
+    "IsActionAvailableProvider": {
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleIsActionAvailableProvider",
+        "ValidGearNames": [
+            "GEAR_AnimalFat"
+        ],
+        "MinNormalizedCondition": 0,
+        "MaxNormalizedCondition": 1,
+        "MinStackSize": 0,
+        "MaxStackSize": 999,
+        "RepairableFilter": null
+    },
+    "MaterialItemProvider": {
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleMaterialItemProvider",
+        "Item": [
+            {
+                "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductSizedBySubActionDef",
+                "Def": {
+                    "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductDef",
+                    "Name": "GEAR_Cloth",
+                    "Size": 1,
+                    "Chance": 100
+                },
+                "SizeExtraMultiplierPerSubAction": 0,
+                "SizeOffsetPerSubAction": 0
+            }
+        ]
+    },
+    "ProductItemProvider": {
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleProductItemProvider",
+        "Items": [
+            {
+                "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductSizedBySubActionDef",
+                "Def": {
+                    "@type": "ExamineActionsAPI.DataDrivenGenericAction.MaterialOrProductDef",
+                    "Name": "GEAR_Torch",
+                    "Size": 1,
+                    "Chance": 100
+                },
+                "SizeExtraMultiplierPerSubAction": 0,
+                "SizeOffsetPerSubAction": 0
+            }
+        ]
+    },
+    "ToolOptionsProvider": {
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SpecificGearToolOptionsProvider",
+        "ValidGearNames": [
+            "GEAR_RecycledCan",
+            "GEAR_CookingPot"
+        ]
+    },
+    "IsPointingToValidObjectProvider": {
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.IsPointingToBurningFireProvider"
+    },
+    "AudioNameProvider": {
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleAudioNameProvider",
+        "AudioNameBySubAction": [
+            "Play_CraftingGeneric"
+        ]
+    },
+    "RequiredInDoorState": "NotSet",
+    "InfoConfigProvider": {
+        "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleInfoConfigProvider",
+        "InfoItems": [
+            {
+                "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleInfoConfigProvider+InfoItem",
+                "Title": "Required",
+                "Content": "900 cal",
+                "ContentLocalized": false
+            },
+            {
+                "@type": "ExamineActionsAPI.DataDrivenGenericAction.SimpleInfoConfigProvider+InfoItem",
+                "Title": "Required",
+                "Content": "50+% fresh",
+                "ContentLocalized": false
+            }
+        ]
+    }
+}

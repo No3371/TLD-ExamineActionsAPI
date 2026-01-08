@@ -24,11 +24,26 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 		public int MaxStackSizeOffsetPerSubAction { get; set; }
 		public bool CanPerform(ExamineActionState state)
 		{
-			return ValidGearNames?.Contains(state.Subject.name) ?? true
-			    && state.Subject.GetNormalizedCondition() >= MinGearNormalizedCondition + (state.SubActionId * MinOffsetPerSubAction)
-			    && state.Subject.GetNormalizedCondition() <= MaxGearNormalizedCondition + (state.SubActionId * MaxOffsetPerSubAction)
-			    && (state.Subject.GetStackableItem()?.m_Units ?? 0) >= MinStackSize + (state.SubActionId * MinStackSizeOffsetPerSubAction)
-			    && (state.Subject.GetStackableItem()?.m_Units ?? 0) <= MaxStackSize + (state.SubActionId * MaxStackSizeOffsetPerSubAction);
+			if ((ValidGearNames?.Contains(state.Subject.name) ?? true) == false)
+			{
+				state.CustomWarningMessageOnBlocked = "Invalid gear";
+				return false;
+			}
+
+			if (state.Subject.GetNormalizedCondition() < MinGearNormalizedCondition + (state.SubActionId * MinOffsetPerSubAction)
+			 || state.Subject.GetNormalizedCondition() > MaxGearNormalizedCondition + (state.SubActionId * MaxOffsetPerSubAction))
+			{
+				state.CustomWarningMessageOnBlocked = "Invalid condition";
+				return false;
+			}
+			
+			if ((state.Subject.GetStackableItem()?.m_Units ?? 0) > MaxStackSize + (state.SubActionId * MaxStackSizeOffsetPerSubAction))
+			{
+				state.CustomWarningMessageOnBlocked = "Invalid stack size";
+				return false;
+			}
+
+			return true;
 		}
 	}
 }

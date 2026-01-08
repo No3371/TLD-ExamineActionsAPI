@@ -47,10 +47,10 @@
         </Reference>
     </ItemDefinitionGroup>
     <ItemGroup>
-        <Reference Include="MelonLoader" />
+        <Reference Include="System.IO.Compression.FileSystem" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="STBlade.Modding.TLD.Il2CppAssemblies.Windows" Version="2.33.0" />
+        <PackageReference Include="STBlade.Modding.TLD.Il2CppAssemblies.Windows" Version="2.51" />
     </ItemGroup>
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
         <Exec Command="xcopy /y /d  &quot;$(TargetPath)&quot; &quot;$(TheLongDarkPath)\Mods&quot;" />

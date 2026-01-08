@@ -9,6 +9,6 @@ public class CallbackChangeSubjectCondition : ICallbackProvider
     public void Run(ExamineActionState state)
     {
         var change = BaseNormalizedConditionChange + NormalizedConditionChangeOffsetBySubActionId * state.SubActionId;
-        state.Subject.SetNormalizedHP(state.Subject.GetNormalizedCondition() + change);
+        state.Subject!.SetNormalizedHP(state.Subject.GetNormalizedCondition() + change);
     }
 }

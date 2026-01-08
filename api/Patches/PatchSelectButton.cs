@@ -27,28 +27,7 @@ namespace ExamineActionsAPI
 				
 				ExamineActionsAPI.Instance.OnCustomActionSelected(index - ExamineActionsAPI.Instance.OfficialActionMenuItems.Count);
 
-				// __instance.GetActionToolSelect().gameObject.SetActive(false);sw
-				// __instance.m_Tool_ConfirmButtonLabel.parent.gameObject.SetActive(false);
-
-			}
-			else
-			{
-				// __instance.GetActionToolSelect().gameObject.SetActive(true);
-				// __instance.m_Tool_ConfirmButtonLabel.parent.gameObject.SetActive(true);
 			}
         }
     }
-    // [HarmonyPatch(typeof(Panel_Inventory_Examine), nameof(Panel_Inventory_Examine.CheckSelectedButton))]
-    // internal class PatchCheckSelectedButton
-    // {
-    //     private static bool Prefix(Panel_Inventory_Examine __instance)
-	// 	{
-	// 		if (PatchUseInventoryItem.LastUsedAndNotSelectedAction != null)
-	// 		{
-	// 			ExamineActionsAPI.VeryVerboseLog($"Cancelling CheckSelectedButton ({ __instance.m_SelectedButtonIndex }) ");
-	// 			return false;
-	// 		}
-	// 		return true;
-	// 	}
-	// }
 }

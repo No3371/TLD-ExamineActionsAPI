@@ -1,6 +1,7 @@
 // #define VERY_VERBOSE
 using System.Security.Cryptography;
 using System.Text;
+using System.IO.Compression;
 using MelonLoader.ICSharpCode.SharpZipLib.Zip;
 using MelonLoader.Utils;
 using UnityEngine;
@@ -58,43 +59,14 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 			string fileName = Path.GetFileName(filePath);
 			string fileNameNoExt = Path.GetFileNameWithoutExtension(filePath);
 
-			using (FileStream fileStream = File.OpenRead(filePath))
+			using (ZipArchive archive = System.IO.Compression.ZipFile.OpenRead(filePath))
 			{
-				string? zipType = FileUtils.DetectZipFileType(fileStream);
-				if (string.IsNullOrEmpty(zipType))
-				{
-					ExamineActionsAPI.Instance.LoggerInstance.Error($"Unknown file compression {fileName}");
-					fileStream.Dispose();
-					return;
-				}
-
-				hashes.Add(SHA256.Create().ComputeHash(fileStream));
-				fileStream.Seek(0, 0);
-
-				switch (zipType)
-				{
-					case "zip":
-						ExamineActionsAPI.Instance.LoggerInstance.Msg($"Reading zip file: '{fileName}'");
-						LoadZipFile(filePath, fileStream);
-						break;
-					default:
-						ExamineActionsAPI.Instance.LoggerInstance.Error($"Unsupported compression type '{zipType}' for '{fileName}'");
-						return;
-				}
-
-			}
-		}
-
-		private static void LoadZipFile(string filePath, FileStream fileStream)
-		{
-			using (ZipInputStream zipInputStream = new ZipInputStream(fileStream))
-			{
-				ZipEntry entry;
-				while ((entry = zipInputStream.GetNextEntry()) != null)
+				foreach (ZipArchiveEntry entry in archive.Entries)
 				{
 					string internalPath = entry.Name;
 					string filename = Path.GetFileName(internalPath);
 
+					using Stream zipInputStream = entry.Open();
 					using MemoryStream unzippedFileStream = new MemoryStream();
 					int size = 0;
 					byte[] buffer = new byte[4096];
@@ -123,6 +95,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 				}
 			}
 		}
+
 		private static string ReadToJsonString(MemoryStream memoryStream)
 		{
 			const byte leftCurlyBracket = (byte)'{';

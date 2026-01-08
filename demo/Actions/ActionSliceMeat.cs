@@ -28,7 +28,9 @@ namespace ExamineActionsAPIDemo
 
         bool IExamineAction.CanPerform(ExamineActionState state)
         {
-            return state.Subject.m_FoodItem.m_CaloriesRemaining > 100;
+            if (state.Subject.m_FoodItem.m_CaloriesRemaining > 100) return true;
+            state.CustomWarningMessageOnBlocked = "Too small to slice";
+            return false;
         }
 
         void IExamineAction.OnPerforming(ExamineActionState state)
@@ -71,9 +73,13 @@ namespace ExamineActionsAPIDemo
         void IExamineActionProduceItems.PostProcessProduct(ExamineActionState state, int index, GearItem product)
         {
             float ratio = (float) state.Temp[0];
-			// MelonLogger.Msg($"==PostProcessProduct#{index} {product.name} {product.m_FoodItem.m_CaloriesRemaining}cal {product.WeightKG}kg {state.Subject.WeightKG}kg ratio={ratio}");
-            product.m_FoodItem.m_CaloriesRemaining = ratio * state.Subject.m_FoodItem.m_CaloriesRemaining;
-			// MelonLogger.Msg($"--PostProcessProduct#{index} {product.name} {product.m_FoodItem.m_CaloriesRemaining}cal {product.WeightKG}kg {state.Subject.WeightKG}kg ratio={ratio}");
+			product.m_FoodItem.m_CaloriesRemaining = ratio * state.Subject.m_FoodItem.m_CaloriesRemaining;
+            product.CurrentHP = state.Subject.CurrentHP;
+        }
+
+        void IExamineActionProduceItems.PostProcessProductPreview(ExamineActionState state, int index, GearItem product)
+        {
+            product.CurrentHP = state.Subject.CurrentHP;
         }
 
         void IExamineActionRequireTool.GetToolOptions(ExamineActionState state, Il2CppSystem.Collections.Generic.List<GameObject> tools)

@@ -34,7 +34,12 @@ namespace ExamineActionsAPIDemo
 
         bool IExamineAction.CanPerform(ExamineActionState state)
         {
-            return state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters.m_Units > 0;
+            if (state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters.m_Units == 0)
+            {
+                state.CustomWarningMessageOnBlocked = "The lamp is dry.";
+                return false;
+            }
+            return true;
         }
         void IExamineAction.OnPerforming(ExamineActionState state)
         {
@@ -64,8 +69,11 @@ namespace ExamineActionsAPIDemo
 
         public void GetInfoConfigs(ExamineActionState state, List<InfoItemConfig> configs)
         {
-            info.Content = $"{state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters}L";
+            info.Content = $"{state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters.ToQuantity(1)}L";
+            info.ContentColor = state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters.ToQuantity(1) == 0 ? ExamineActionsAPI.ExamineActionsAPI.DISABLED_COLOR : ExamineActionsAPI.ExamineActionsAPI.BRIGHT_WHITE;
             configs.Add(info);
         }
     }
+
+    
 }

@@ -23,7 +23,7 @@ namespace ExamineActionsAPI
 				var cache = subject;
                 subject = value;
                 subjectInteraction = null;
-				ResetActionMeta();
+				Reset();
 				if (cache != value) ExamineActionsAPI.VeryVerboseLog($"Subject changed: {value?.name}");
             }
         }
@@ -35,7 +35,7 @@ namespace ExamineActionsAPI
 				var cache = subjectInteraction;
                 subjectInteraction = value;
                 subject = null;
-				ResetActionMeta();
+				Reset();
 				if (cache != value) ExamineActionsAPI.VeryVerboseLog($"SubjectInteraction changed: {value?.name}");
             }
         }
@@ -46,7 +46,7 @@ namespace ExamineActionsAPI
             {
 				var cache = action;
                 action = value;
-				ResetActionMeta();
+				Reset();
 				if (cache != value) ExamineActionsAPI.VeryVerboseLog($"Action changed: {value?.Id}");
             }
         }
@@ -61,7 +61,7 @@ namespace ExamineActionsAPI
 				{
 					ExamineActionsAPI.VeryVerboseLog($"Selected tool changed: {value?.name} ({value?.GetInstanceID()})");
                     // This may be called when Examine UI is not opened yet
-					if (Action != null && Action.IsActionAvailable(Subject))
+					if (Action != null && Subject != null && Action.IsActionAvailable(Subject))
                         OnToolChanged();
 				}
             }
@@ -123,7 +123,7 @@ namespace ExamineActionsAPI
 		/// </summary>
 		/// <value></value>
 		public float? NormalizedProgress { get; internal set; }
-		public void ResetActionMeta ()
+		public void Reset ()
 		{
 			ExamineActionsAPI.VeryVerboseLog($"ResetActionMeta");
 			ActionInProgress = false;
@@ -144,13 +144,24 @@ namespace ExamineActionsAPI
 			StartedAtRealtime = null;
 			StartedAtGameTime = null;
 			NormalizedProgress = null;
+			CustomWarningMessageOnBlocked = null;
 		}
 
 		public void OnToolChanged ()
 		{
+            if (Action == null)
+            {
+                MelonLogger.Error("OnToolChanged called with no action selected");
+                return;
+            }
+
 			ActiveActionDurationMinutes = Action.GetDurationMinutes(this);
             MaybeUpdateSuccessChance();
-			if (SelectingTool) Panel.OnSelectingToolChanged(this);
+			if (SelectingTool)
+            {
+                Panel.OnSelectingToolChanged(this);
+                PanelExtension?.OnSelectingToolChanged(this);
+            }
 		}
 
 		public void Recalculate ()
@@ -226,6 +237,8 @@ namespace ExamineActionsAPI
                 successChance = Mathf.Clamp(successChance, 0f, 100f);
                 ActiveSuccessChance = successChance;
             }
+            else
+                ActiveSuccessChance = 100f;
         }
 
         internal static bool CheckMaterials (ExamineActionState state, IExamineAction act)
@@ -369,5 +382,7 @@ namespace ExamineActionsAPI
         {
             return GameManager.GetPlayerManagerComponent().GetInteractiveObjectUnderCrosshairs(2);
         }
+
+        public string? CustomWarningMessageOnBlocked { get; set; }
 	}
 }

@@ -16,7 +16,7 @@ namespace ExamineActionsAPI
 		}
         private static void Postfix(Panel_Inventory_Examine __instance)
         {
-			// MelonLogger.Msg($"++UpdateActionProgressBar");
+			ExamineActionsAPI.VeryVerboseLog($"+ Patch: UpdateActionProgressBar");
             IExamineAction? selected = ExamineActionsAPI.Instance.State.Action;
             ExamineActionState state = ExamineActionsAPI.Instance.State;
             if (state.ActionInProgress)
@@ -26,8 +26,10 @@ namespace ExamineActionsAPI
 				// Must replciate the statements ↓
 				if (selected is IExamineActionCancellable cancellable && cancellable.CanBeCancelled(state))
 				{
+					ExamineActionsAPI.VeryVerboseLog($"+ Patch: UpdateActionProgressBar: Cancellable");
 					if (!Cursor.visible || Cursor.lockState == CursorLockMode.Locked)
 					{
+						ExamineActionsAPI.VeryVerboseLog($"+ Patch: UpdateActionProgressBar: Cancellable: Cursor.visible = true");
 						Cursor.visible = true;
 						Cursor.lockState = CursorLockMode.Confined;
 					}
@@ -45,8 +47,8 @@ namespace ExamineActionsAPI
 					state.InterruptionFlag = true;
 					__instance.m_GenericProgressBar.GetPanel().Cancel();
 				}
-				// MelonLogger	.Msg($"-UpdateActionProgressBar");
 			}
+			ExamineActionsAPI.VeryVerboseLog($"- Patch: UpdateActionProgressBar");
         }
     }
 }

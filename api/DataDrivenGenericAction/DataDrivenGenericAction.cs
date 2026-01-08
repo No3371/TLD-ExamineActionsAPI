@@ -16,15 +16,18 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
                                            IExamineActionInterruptable,
                                            IExamineActionFailable,
                                            IExamineActionHasExternalConstraints,
-                                           IExamineActionHasDependendency
+                                           IExamineActionHasDependendency,
+                                           IExamineActionDisplayInfo
     {
         static List<Variant> Decoded { get; set; } = new();
         public DataDrivenGenericAction ()
         {
-            Id = "!!!ACTION_ID_UNSET!!!";
+            Id = "[!ACTION_ID]";
             RequiredInDoorState = Weather.IndoorState.NotSet;
             CanBeCancelled = true;
             ShouldConsumeOnSuccess = true;
+            MenuItemLocalizationKey = "[!LOCALIZATION_KEY]";
+            ActionButtonLocalizedStringKey = "[!LOCALIZATION_KEY]";
         }
         public static DataDrivenGenericAction? NewWithJson (string json)
         {
@@ -82,7 +85,7 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         [Include]
         public string ActionButtonLocalizedStringKey { get; set; }
         [Exclude]
-        private LocalizedString actionButtonLocalizedString;
+        private LocalizedString? actionButtonLocalizedString;
         [Exclude]
         public LocalizedString ActionButtonLocalizedString
         {
@@ -126,6 +129,8 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         /// </summary>
         [Include]
         public float NormalizedConditionInterruptThreshold                        { get; set; }
+        [Include]
+        public IShouldInterruptProvider? ShouldInterruptProvider                  { get; set; }
         /// <summary>
         /// Please refer to IExamineActionCancellable
         /// </summary>
@@ -268,6 +273,9 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
         [Include]
         public Weather.IndoorState RequiredInDoorState { get; set; }
 
+        [Include]
+        public IInfoConfigProvider? InfoConfigProvider { get; set; }
+
         int IExamineAction.GetDurationMinutes(ExamineActionState state)
 		=> DurationMinuteProvider?.GetDurationMinutes(state) ?? 10;
 
@@ -360,6 +368,11 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
             }
         }
 
+        bool IExamineActionInterruptable.ShouldInterrupt(ExamineActionState state, ref string? message)
+        {
+            return ShouldInterruptProvider?.ShouldInterrupt(state, ref message) ?? false;
+        }
+
         void IExamineAction.OnPerforming(ExamineActionState state)
         {
             if (OnPerformingCallbackProviders != null)
@@ -399,6 +412,11 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 
         public ActionsToBlock? GetLightRequirementType(ExamineActionState state)
         => LightRequirementTypeProvider?.GetLightRequirementType(state);
+
+        public void GetInfoConfigs(ExamineActionState state, List<InfoItemConfig> configs)
+        {
+            InfoConfigProvider?.GetInfoConfigs(state, configs);
+        }
     }
 
     static class ExampleJsonGen

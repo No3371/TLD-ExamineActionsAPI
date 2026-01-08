@@ -28,6 +28,10 @@ namespace ExamineActionsAPI
 			const bool DEBUG = false;
 			if (DEBUG)
 			{
+				
+				var json = TinyJSON2.JSON.Dump(new DataDrivenGenericAction.DataDrivenGenericAction(), TinyJSON2.EncodeOptions.EnforceHierarchyOrder | TinyJSON2.EncodeOptions.IncludePublicProperties);
+				LoggerInstance.Msg(json);
+				TryRegisterWithJson(json);
 				Register(new DebugAction_Wear());
 				Register(new DebugAction_Cancel());
 				Register(new DebugAction_Materials());
@@ -37,10 +41,18 @@ namespace ExamineActionsAPI
 				Register(new DebugAction_Tool());
 			}
 
-			PowderAndLiquidTypesLocator.PreLoad();
-			// uConsole.RegisterCommand("eaapi_tool", new Action(() => {
-			// 	uConsole.Log(InterfaceManager.GetPanel<Panel_Inventory_Examine>().GetSelectedTool().name);
-			// }));
+			// Trigger loading via getters
+			// I suspect this cause instability on launch, so we delay it by 5 seconds
+			IEnumerator DelayedRegistration () {
+				yield return new WaitForSeconds(5f);
+				MelonLogger.Msg($"Preloading official powder: { PowderAndLiquidTypesLocator.GunPowderType?.name}");
+				MelonLogger.Msg($"Preloading official liquid: { PowderAndLiquidTypesLocator.WaterPottableType?.name}");
+				MelonLogger.Msg($"Preloading official liquid: { PowderAndLiquidTypesLocator.WaterNonPottableType?.name}");
+				MelonLogger.Msg($"Preloading official liquid: { PowderAndLiquidTypesLocator.AntisepticType?.name}");
+				MelonLogger.Msg($"Preloading official liquid: { PowderAndLiquidTypesLocator.KeroseneType?.name}");
+				MelonLogger.Msg($"Preloading official liquid: { PowderAndLiquidTypesLocator.AccelerantType?.name}");
+			}
+			MelonCoroutines.Start(DelayedRegistration());
 
 			uConsole.RegisterCommand("output_action_json", new Action(() => {
 				DataDrivenGenericAction.ExampleJsonGen.LogJsonTemplate();
@@ -76,26 +88,15 @@ namespace ExamineActionsAPI
 			}
 		}
 
-        public static void Register (IExamineAction action)
+        public static bool Register (IExamineAction action)
 		{
-			// Filter out unsupported/bugged interface here
-			bool filtered = false;
-			// if (action is IExamineActionRequireLiquid) filtered = true;
-			// else if (action is IExamineActionProduceLiquid) filtered = true;
-
-			if (filtered)
-			{
-				MelonLogger.Warning($"{action.Id} is not registered because it uses some features that is still being fixed or worked on.");
-				return;
-			}
-
 			if (action is IExamineActionHasDependendency ahd)
 			{
 				if (!CheckDependency(action.Id, ahd))
 				{
 					Instance.PendingActionsToRetryRegistration.Add(action);
-					MelonLogger.Warning($"Will retry registering {action.Id} once later.");
-					return;
+					Instance.LoggerInstance.Warning($"Will retry registering {action.Id} once later.");
+					return false;
 				}
 			}
 			Instance.RegisteredExamineActions.Add(action);
@@ -105,6 +106,7 @@ namespace ExamineActionsAPI
 			{
 				Instance.retryTask = MelonLoader.MelonCoroutines.Start(RetryRegistration());
 			}
+			return true;
 		}
 
 		static bool CheckDependency (string id, IExamineActionHasDependendency action)
@@ -119,7 +121,7 @@ namespace ExamineActionsAPI
 					var name = depSpan.Slice(depSpan.IndexOf('.') + 1);
 					if (MelonMod.FindMelon(name.ToString(), author.ToString())?.Registered != true)
 					{
-						Instance.LoggerInstance.Error($"Action {id} not registered because its dependency melon {author}.{name} is not loaded.");
+						Instance.LoggerInstance.Warning($"Action {id} not registered because its dependency melon {author}.{name} is not loaded.");
 						return false;
 					}
 				}
@@ -127,7 +129,7 @@ namespace ExamineActionsAPI
 				{
 					if (!MelonMod.RegisteredMelons.Any(m => m.Info.Name == dep))
 					{
-						Instance.LoggerInstance.Error($"Action {id} not registered because its dependency melon {dep} is not loaded.");
+						Instance.LoggerInstance.Warning($"Action {id} not registered because its dependency melon {dep} is not loaded.");
 						return false;
 					}
 				}
@@ -138,7 +140,7 @@ namespace ExamineActionsAPI
 			{
 				if (GearItem.LoadGearItemPrefab(dep) == null)
 				{
-					Instance.LoggerInstance.Error($"Action {id} not registered because its dependency gear {dep} can not be loaded.");
+					Instance.LoggerInstance.Warning($"Action {id} not registered because its dependency gear {dep} can not be loaded.");
 					return false;
 				}
 			}
@@ -148,7 +150,7 @@ namespace ExamineActionsAPI
 			{
 				if (Type.GetType(dep) == null)
 				{
-					Instance.LoggerInstance.Error($"Action {id} not registered because its dependency CSharp type {dep} can not be loaded.");
+					Instance.LoggerInstance.Warning($"Action {id} not registered because its dependency C# type {dep} can not be loaded.");
 					return false;
 				}
 			}
@@ -274,22 +276,17 @@ namespace ExamineActionsAPI
 			// VeryVerboseLog($"-OnPreviousSubAction {State.SubActionId}");
 		}
 
-		public void TryPerformSelectedAction ()
-		{
-			if (State?.Action != null)
-			{
-				OnPerformSelectedAction();
-			}
-		}
-
 		public void OnPerformSelectedAction ()
 		{
+			VeryVerboseLog($"+OnPerformSelectedAction");
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 			
-			PerformingBlockedReased? reason = null;
+			PerformingBlockedReason? reason = null;
 			if (!State.Action.CanPerform(State))
 			{
-				reason = PerformingBlockedReased.Action;
+				VeryVerboseLog($"Action not performable");
+				reason = PerformingBlockedReason.Action;
+				goto fastforward;
 			}
 
             if (State.Action.ShouldConsumeOnSuccess(State))
@@ -297,64 +294,75 @@ namespace ExamineActionsAPI
 				if (State.Action.GetConsumingUnits(State) > (State.Subject.m_StackableItem?.m_Units ?? 1)
 				 || State.Action.GetConsumingPowderKgs(State) > (State.Subject.m_PowderItem?.m_Weight.ToQuantity(1f) ?? 0f)
 				 || State.Action.GetConsumingLiquidLiters(State) > (State.Subject.m_LiquidItem?.m_Liquid.ToQuantity(1f) ?? 0f))
-				reason = PerformingBlockedReased.SubjectShortage;
+				reason = PerformingBlockedReason.SubjectShortage;
+				goto fastforward;
             }
 
 			if (State.Action is IExamineActionHasExternalConstraints constraints)
 			{
 				var indoorStateConstraints = constraints.GetRequiredIndoorState(State);
 				if (indoorStateConstraints != Weather.IndoorState.NotSet && indoorStateConstraints != GameManager.GetWeatherComponent().m_IsIndoors)
-					reason = PerformingBlockedReased.IndoorStateConstraint;
+					reason = PerformingBlockedReason.IndoorStateConstraint;
 				if (!constraints.IsValidTime(State, new (GameManager.m_TimeOfDay.GetDayNumber(), GameManager.m_TimeOfDay.GetHour(), GameManager.m_TimeOfDay.GetMinutes())))
-				    reason = PerformingBlockedReased.TimeConstraint;
+				    reason = PerformingBlockedReason.TimeConstraint;
 				if (!constraints.IsValidWeather(State, GameManager.GetWeatherComponent()))
-					reason = PerformingBlockedReased.WeatherConstraint;
+					reason = PerformingBlockedReason.WeatherConstraint;
 				if (!constraints.IsPointingToValidObject(State, GameManager.GetPlayerManagerComponent().GetInteractiveObjectUnderCrosshairs(2)))
-					reason = PerformingBlockedReased.PointedObjectConstraint;
+					reason = PerformingBlockedReason.PointedObjectConstraint;
+				goto fastforward;
 			}
 	
 			if (State.Action is IExamineActionInterruptable interruptable && ExamineActionsAPI.Instance.ShouldInterrupt(interruptable))
 			{
-				reason = PerformingBlockedReased.Interruption;
+				reason = PerformingBlockedReason.Interruption;
+				goto fastforward;
 			}
 
 			if (!State.ActiveActionMaterialRequirementsMet.Value)
 			{
-				reason = PerformingBlockedReased.MaterialRequirement;
+				VeryVerboseLog($"MaterialRequirement not met");
+				reason = PerformingBlockedReason.MaterialRequirement;
+				goto fastforward;
 			}
 			if (!State.ActiveActionToolRequirementsMet.Value)
 			{
-				reason = PerformingBlockedReased.ToolRequirement;
+				VeryVerboseLog($"ToolRequirement not met");
+				reason = PerformingBlockedReason.ToolRequirement;
+				goto fastforward;
 			}
 	
 			if (State.Action is IExamineActionRequireTool)
 			{
-				if (State.SelectingTool && State.SelectedTool != null && State.SelectedTool.GetNormalizedCondition() <= 0)
+				VeryVerboseLog($"Checking tool requirement");
+				if (pie.m_RepairToolsList.m_Tools.Count == 0) {
+					reason = PerformingBlockedReason.ToolRequirement;
+				}
+
+				if (!State.SelectingTool)
 				{
-					reason = PerformingBlockedReased.ToolRequirement;
-					return;
-				}
-				else if (pie.m_RepairToolsList.m_Tools.Count == 0) {
-					reason = PerformingBlockedReased.ToolRequirement;
-					return;
-				}
-				else {
 					State.SelectingTool = true;
 					State.Panel.OnSelectingTool(State);
 					State.PanelExtension?.OnSelectingTool(State);
 					pie.SelectWindow(pie.GetActionToolSelect());
-					return;
+					return;	 // Not blocking but entering tool selection
+				}
+				else if (State.SelectedTool != null && State.SelectedTool.GetNormalizedCondition() <= 0)
+				{
+					reason = PerformingBlockedReason.ToolRequirement;
 				}
 			}
 			
+			fastforward: // I know, I know... (Forgive my sins)
 			if (reason != null)
 			{
+				VeryVerboseLog($"Performing blocked for reason: {reason.Value}");
 				GameAudioManager.PlayGUIError();
 				State.Panel.OnPerformingBlocked(State, reason.Value);
 				State.PanelExtension?.OnPerformingBlocked(State, reason.Value);
 				return;
 			}
 
+			VeryVerboseLog($"Performing action");
 			LastTriedToPerformedCache = State.Action;
 			if (State.Action is IExamineActionRequireTool && State.SelectingTool)
 			{
@@ -375,6 +383,12 @@ namespace ExamineActionsAPI
 
 		internal void PerformAction ()
 		{
+			if (State.Action == null)
+			{
+				MelonLogger.Error("PerformAction called with no action selected");
+				return;
+			}
+		
 			// VeryVerboseLog($"+PerformAction");
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 
@@ -407,7 +421,7 @@ namespace ExamineActionsAPI
 				gpb.Launch(
 					State.Action.ActionButtonLocalizedString.Text(),
 					State.Action.GetProgressSeconds(State),
-					State.ActiveActionDurationMinutes.Value,
+					State.ActiveActionDurationMinutes!.Value,
 					State.ActiveResult.Value == ActionResult.Success? 1 : UnityEngine.Random.Range(0.2f, 0.8f),
 					audio,
 					null,
@@ -419,7 +433,7 @@ namespace ExamineActionsAPI
 				gpb.Launch(
 					State.Action.ActionButtonLocalizedString.Text(),
 					State.Action.GetProgressSeconds(State),
-					State.ActiveActionDurationMinutes.Value,
+					State.ActiveActionDurationMinutes!.Value,
 					State.ActiveResult.Value == ActionResult.Success? 1 : UnityEngine.Random.Range(0.2f, 0.8f),
 					true,
 					new System.Action<bool, bool, float>(ActionCallback)
@@ -468,7 +482,7 @@ namespace ExamineActionsAPI
 			{
 				GameObject selectedTool = pie.m_RepairToolsList.GetSelectedTool();
 				var degrade = selectedTool?.GetComponent<GearItem>()?.m_DegradeOnUse;
-				if (degrade)
+				if (degrade != null)
 				{
 					var cache = degrade.m_DegradeHP;
 					degrade.m_DegradeHP *= toolUser.GetDegradingScale(State);
@@ -499,6 +513,12 @@ namespace ExamineActionsAPI
 
 		internal void OnActionSucceed ()
 		{
+			if (State.Action == null)
+			{
+				MelonLogger.Error("OnActionSucceed called with no action selected");
+				return;
+			}
+
 			// VeryVerboseLog($"+OnActionSucceed");
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 
@@ -532,6 +552,7 @@ namespace ExamineActionsAPI
 
 		internal void OnActionFailed ()
 		{
+			
 			// VeryVerboseLog($"+OnActionFailed");
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 			OnActionFinished();
@@ -542,15 +563,16 @@ namespace ExamineActionsAPI
 			HUDMessage.AddMessage(Localization.Get("GAMEPLAY_Failed"), false, false);
 			GameAudioManager.PlayGUIError();
 
-            IExamineActionFailable? eaf = (State.Action as IExamineActionFailable);
+			// Technically if it fails it gotta be a failable action, so we assert it here
+            IExamineActionFailable failable = (State.Action as IExamineActionFailable)!;
 			var consumed = false;
 			var destroyed = false;
-			if (eaf.ShouldConsumeOnFailure(State))
+			if (failable.ShouldConsumeOnFailure(State))
 			{
 				consumed = true;
 				destroyed = ConsumeSubject();
 			}
-            eaf.OnActionFailure(State);
+            failable.OnActionFailure(State);
 			State.Panel.OnActionFailed(State);
 			State.PanelExtension?.OnActionFailed(State);
 			PostActionFinished();
@@ -567,6 +589,12 @@ namespace ExamineActionsAPI
 		}
 		internal void OnActionInterrupted (bool system)
 		{
+			if (State.Action == null)
+			{
+				MelonLogger.Error("OnActionInterrupted called with no action selected");
+				return;
+			}
+
 			VeryVerboseLog($"+OnActionInterrupted");
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 
@@ -604,16 +632,17 @@ namespace ExamineActionsAPI
 			if (destroyed)
 			{
 				State.Subject = null;
-				pie.OnBack();
+				// pie.OnBack(); // In favor of CloseSelf down there
 			}
 			else pie.SelectWindow(pie.m_MainWindow);
+			pie.CloseSelf();
 			// AkSoundEngine.StopPlayingID(this.m_ProgressBarAudio, GameManager.GetGameAudioManagerComponent().m_StopAudioFadeOutMicroseconds);
 			VeryVerboseLog($"-OnActionInterrupted");
 		}
 
 		internal void OnActionCancelled ()
 		{
-			// VeryVerboseLog($"+OnActionCancelled");
+			VeryVerboseLog($"+OnActionCancelled");
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 
 			OnActionFinished();
@@ -621,7 +650,8 @@ namespace ExamineActionsAPI
 
 			GameAudioManager.PlayGUIError();
 
-            IExamineActionCancellable? cancellable = State.Action as IExamineActionCancellable;
+			// Technically if it cancels it gotta be a cancellable action, so we assert it here
+            IExamineActionCancellable cancellable = (State.Action as IExamineActionCancellable)!;
 			var consumed = false;
 			var destroyed = false;
 			if (cancellable.ShouldConsumeOnCancellation(State))
@@ -641,11 +671,22 @@ namespace ExamineActionsAPI
 				pie.OnBack();
 			}
 			else pie.SelectWindow(pie.m_MainWindow);
-			// VeryVerboseLog($"-OnActionCancelled");
+			VeryVerboseLog($"-OnActionCancelled");
 		}
 
 		internal bool ConsumeSubject ()
 		{
+			if (State.Action == null)
+			{
+				MelonLogger.Error("ConsumeSubject called with no action selected");
+				return false;
+			}
+			if (State.Subject == null)
+			{
+				MelonLogger.Error("ConsumeSubject called with no subject");
+				return false;
+			}
+
 			// VeryVerboseLog($"+ConsumeSubject");
 			Inventory inv = GameManager.GetInventoryComponent();
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
@@ -869,6 +910,7 @@ namespace ExamineActionsAPI
 			{
 				GearItem prefab = act.OverrideProductPrefab(State, pi);
 				if (prefab == null) prefab = GearItem.LoadGearItemPrefab(products[pi].GearName);
+				if (prefab == null) LoggerInstance.Error($"Failed to load prefab for {products[pi].GearName}, is the gear name valid?");
                 if (products[pi].Chance < 100f)
 				{
 					if (UnityEngine.Random.Range(0, 100f) <= (byte)products[pi].Chance)
@@ -1006,8 +1048,10 @@ namespace ExamineActionsAPI
 				HUDMessage.AddMessage(Localization.Get("GAMEPLAY_CannotReadWithAfflictions"), false, false);
 				return true;
 			}
-			if (act.ShouldInterrupt(State))
+			string? msg = null;
+			if (act.ShouldInterrupt(State, ref msg))
 			{
+				if (msg != null) HUDMessage.AddMessage(msg, false, false);
 				return true;
 			}
 

@@ -52,7 +52,7 @@
         <Exec Command="xcopy /y /d  &quot;$(TargetPath)&quot; &quot;$(TheLongDarkPath)\Mods&quot;" />
     </Target>
     <ItemGroup>
-        <PackageReference Include="STBlade.Modding.TLD.Il2CppAssemblies.Windows" Version="2.33.0" />
+        <PackageReference Include="STBlade.Modding.TLD.Il2CppAssemblies.Windows" Version="2.51" />
         <Reference Include="ExamineActionsAPI" />
     </ItemGroup>
 </Project>

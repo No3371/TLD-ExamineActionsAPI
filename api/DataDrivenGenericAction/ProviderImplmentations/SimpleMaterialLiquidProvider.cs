@@ -2,6 +2,9 @@ using System.Text.Json.Serialization;
 
 namespace ExamineActionsAPI.DataDrivenGenericAction
 {
+    /// <summary>
+    /// The provider simply requires the specified liquids as material items
+    /// </summary>
     public class SimpleMaterialLiquidProvider : IMaterialLiquidProvider
     {
         public SimpleMaterialLiquidProvider() {}

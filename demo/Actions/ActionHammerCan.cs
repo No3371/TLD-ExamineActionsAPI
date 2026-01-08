@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ExamineActionsAPIDemo
 {
-    class ActionHammerCan : IExamineAction, IExamineActionProduceItems, IExamineActionRequireTool
+    class ActionHammerCan : IExamineAction, IExamineActionProduceItems, IExamineActionRequireTool, IExamineActionCancellable
     {
         public ActionHammerCan() {}
         IExamineActionPanel? IExamineAction.CustomPanel => null;
@@ -71,6 +71,13 @@ namespace ExamineActionsAPIDemo
         string? IExamineAction.GetAudioName(ExamineActionsAPI.ExamineActionState state)
         {
             return state.SelectedTool.GearItemData.PutBackAudio.Name;
+        }
+
+        public void OnActionCancellation(ExamineActionState state) {}
+
+        public bool ShouldConsumeOnCancellation(ExamineActionState state)
+        {
+            return false;
         }
     }
 }

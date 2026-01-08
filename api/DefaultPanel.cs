@@ -12,13 +12,13 @@ namespace ExamineActionsAPI
     {
 		internal GameObject repairPanelClone/*, toolSelectionClone*/, materialsClone, yieldsClone, chanceClone, durationClone, buttonClone, buttonRoot;
 		internal List<HarvestRepairMaterial> Materials, Products;
-		internal List<UILabel> materialChances, productChances;
+		internal List<UILabel> matChanceLabels, productChanceLabels;
 		internal List<InfoItemConfig> infoCache;
 		internal InfoBlock info1, info2, info3, infoChance, infoDuration;
 		internal UISprite bg1, bg2;
 		Vector2 info1Pos, info2Pos, info3Pos;
 		internal UIButton buttonContinue, buttonSubLeft, buttonSubRight;
-		internal UILabel buttonLabel, materiaslLabel, bottomWarningLabel, consumeLabel, stopLabel;
+		internal UILabel buttonLabel, materiaslLabel, bottomWarningLabel, consumableLabel, cancellableLabel;
 		public Panel_Inventory_Examine PIE { get; }
 		public Panel_Repair PR { get; set; }
 		public bool IsExtension => false;
@@ -108,24 +108,24 @@ namespace ExamineActionsAPI
                 Products[i].gameObject.name = $"Item{i+1}";
             }
 
-			materialChances = new (Materials.Count);
+			matChanceLabels = new (Materials.Count);
 			for (int i = 0; i < Materials.Count; i++)
 			{
-				materialChances.Add(GameObject.Instantiate(Materials[0].m_StackLabel, Materials[i].transform));
-                materialChances[i].name = "ChanceLabel";
-				materialChances[i].transform.localPosition = new Vector2(0, -40);
-				materialChances[i].color = ExamineActionsAPI.WARNING_COLOR;
-				Materials[i].m_StackLabel.transform.localPosition = new Vector2(40, -40);
+				matChanceLabels.Add(GameObject.Instantiate(Materials[0].m_StackLabel, Materials[i].transform));
+                matChanceLabels[i].name = "ChanceLabel";
+				matChanceLabels[i].transform.localPosition = new Vector2(0, -48);
+				matChanceLabels[i].color = ExamineActionsAPI.WARNING_COLOR;
+				Materials[i].m_StackLabel.transform.localPosition = new Vector2(40, -48);
 			}
 
-			productChances = new (Products.Count);
+			productChanceLabels = new (Products.Count);
 			for (int i = 0; i < Products.Count; i++)
 			{
-				productChances.Add(GameObject.Instantiate(Products[0].m_StackLabel, Products[i].transform));
-                productChances[i].name = "ChanceLabel";
-				productChances[i].transform.localPosition = new Vector2(0, -40);
-				productChances[i].color = ExamineActionsAPI.WARNING_COLOR;
-				Products[i].m_StackLabel.transform.localPosition = new Vector2(40, -40);
+				productChanceLabels.Add(GameObject.Instantiate(Products[0].m_StackLabel, Products[i].transform));
+                productChanceLabels[i].name = "ChanceLabel";
+				productChanceLabels[i].transform.localPosition = new Vector2(0, -48);
+				productChanceLabels[i].color = ExamineActionsAPI.WARNING_COLOR;
+				Products[i].m_StackLabel.transform.localPosition = new Vector2(40, -48);
                 Products[i].m_StackLabel.color = Color.white;
 			}
 
@@ -141,13 +141,14 @@ namespace ExamineActionsAPI
             // MelonLogger.Msg($"3");
 
             buttonRoot = FindChildWrapper(repairPanelClone.transform, "RepairPanel_Buttons").gameObject;
+            buttonRoot.name = "Buttons";
             buttonRoot.transform.localPosition = new (buttonRoot.transform.localPosition.x, buttonRoot.transform.localPosition.y - 50, buttonRoot.transform.localPosition.z);
             buttonRoot.GetComponentInChildren<UIControllerScheme>().enabled = false;
 			buttonRoot.gameObject.SetActive(true);
-            buttonClone = FindChildWrapper(repairPanelClone.transform, "RepairPanel_Buttons/Mouse/ButtonRepair").gameObject;
+            buttonClone = FindChildWrapper(buttonRoot.transform, "Mouse/ButtonRepair").gameObject;
 			foreach (var b in buttonClone.GetComponents<UIButton>())
 			{
-				if (b.onClick.Count == 0) continue;
+				if (b.onClick.Count == 0) continue; // Skip the visual only comps
 				b.onClick.Clear();
 				EventDelegate.Add(b.onClick, new System.Action(ExamineActionsAPI.Instance.OnPerformSelectedAction));
 
@@ -166,15 +167,17 @@ namespace ExamineActionsAPI
             buttonSubLeft.onClick[0] = new EventDelegate(new System.Action(ExamineActionsAPI.Instance.OnPreviousSubAction));
             buttonSubRight.onClick[0] = new EventDelegate(new System.Action(ExamineActionsAPI.Instance.OnNextSubAction));
 
-            consumeLabel = GameObject.Instantiate(bottomWarningLabel, buttonClone.transform.parent).GetComponent<UILabel>();
-            MonoBehaviour.Destroy(consumeLabel.GetComponent<UIAnchor>());
-            consumeLabel.transform.localPosition = buttonClone.transform.localPosition + new Vector3(0, -24);
-            consumeLabel.color += new Color(0f, 0.3f, -0.1f);
+            consumableLabel = GameObject.Instantiate(bottomWarningLabel, buttonClone.transform.parent).GetComponent<UILabel>();
+            consumableLabel.gameObject.name = "Label: Consumable";
+            MonoBehaviour.Destroy(consumableLabel.GetComponent<UIAnchor>());
+            consumableLabel.transform.localPosition = buttonClone.transform.localPosition + new Vector3(0, -24);
+            consumableLabel.color += new Color(0f, 0.3f, -0.1f);
 
-            stopLabel = GameObject.Instantiate(bottomWarningLabel, buttonClone.transform.parent).GetComponent<UILabel>();
-            MonoBehaviour.Destroy(stopLabel.GetComponent<UIAnchor>());
-            stopLabel.transform.localPosition = buttonClone.transform.localPosition + new Vector3(0, -44);
-            stopLabel.color += new Color(0f, 0.3f, -0.1f);
+            cancellableLabel = GameObject.Instantiate(bottomWarningLabel, buttonClone.transform.parent).GetComponent<UILabel>();
+            cancellableLabel.gameObject.name = "Label: Cancellable";
+            MonoBehaviour.Destroy(cancellableLabel.GetComponent<UIAnchor>());
+            cancellableLabel.transform.localPosition = buttonClone.transform.localPosition + new Vector3(0, -44);
+            cancellableLabel.color += new Color(0f, 0.3f, -0.1f);
 
 			Toggle(false);
             PIE = pie;
@@ -210,7 +213,10 @@ namespace ExamineActionsAPI
             return target;
         }
 
-        void IExamineActionPanel.OnActionDeselected(ExamineActionState state) {}
+        void IExamineActionPanel.OnActionDeselected(ExamineActionState state)
+        {
+            PIE.m_Tool_ConfirmButtonLabel.transform.parent.transform.parent.gameObject.SetActive(true);
+        }
 
         void IExamineActionPanel.OnActionSelected(ExamineActionState state)
         {
@@ -223,6 +229,7 @@ namespace ExamineActionsAPI
             ExamineActionsAPI.VeryVerboseLog($"Sub {state.SubActionId + 1} / {subs}");
             buttonSubLeft.gameObject.SetActive(state.SubActionId > 0);
             buttonSubRight.gameObject.SetActive(state.SubActionId < subs - 1);
+            PIE.m_Tool_ConfirmButtonLabel.transform.parent.transform.parent.gameObject.SetActive(false);
             bool extendInfoBlock = false;
             UpdateConsumeLabel(state);
             UpdateStopLabel(state);
@@ -258,7 +265,7 @@ namespace ExamineActionsAPI
             infoDuration.label2.text = Utils.GetExpandedDurationString(state.ActiveActionDurationMinutes.Value);
 
             bool showingChance = false;
-            if (state.Action is IExamineActionFailable eaf)
+            if (state.Action is IExamineActionFailable eaf && state.ActiveSuccessChance != 100f)
             {
                 infoChance.label2.color = state.ActiveSuccessChance < 0.7f? ExamineActionsAPI.DISABLED_COLOR : state.ActiveSuccessChance < 0.9f ? ExamineActionsAPI.WARNING_COLOR : ExamineActionsAPI.BRIGHT_WHITE;
                 infoChance.label2.text = string.Format("{0:0.0}%", state.ActiveSuccessChance);
@@ -304,19 +311,19 @@ namespace ExamineActionsAPI
 
         private void MaybeSetupMaterials(ExamineActionState state)
         {
-            List<MaterialOrProductItemConf> materials = null;
+            List<MaterialOrProductItemConf>? materials = null;
             if (state.Action is IExamineActionRequireItems erm)
             {
                 materials = new (1);
                 erm.GetMaterialItems(state, materials);
             }
-            List<MaterialOrProductLiquidConf> liquids = null;
+            List<MaterialOrProductLiquidConf>? liquids = null;
             if (state.Action is IExamineActionRequireLiquid erl)
             {
                 liquids = new(1);
                 erl.GetMaterialLiquid(state, liquids);
             }
-            List<MaterialOrProductPowderConf> powders = null;
+            List<MaterialOrProductPowderConf>? powders = null;
             if (state.Action is IExamineActionRequirePowder erp)
             {
                 powders = new(1);
@@ -356,15 +363,15 @@ namespace ExamineActionsAPI
                 {
 					ExamineActionsAPI.VeryVerboseLog($"- Powder");
 					int pIdx = configured - (matCount + liqCount);
-                    var conf = powders[pIdx];
+                    var conf = powders![pIdx];
                     ExamineActionsAPI.VeryVerboseLog($"Showing {conf.Type.name} {conf.Kgs}kg");
                     
                     if (conf.Chance < 100)
                     {
-                        this.materialChances[configured].text = $"{conf.Chance}%";
-                        this.materialChances[configured].gameObject.SetActive(true);
+                        this.matChanceLabels[configured].text = $"{conf.Chance}%";
+                        this.matChanceLabels[configured].gameObject.SetActive(true);
                     }
-                    else this.materialChances[configured].gameObject.SetActive(false);
+                    else this.matChanceLabels[configured].gameObject.SetActive(false);
 
                     slot.ShowPowder(conf.Type, ItemWeight.FromKilograms(conf.Kgs));
 
@@ -382,32 +389,32 @@ namespace ExamineActionsAPI
                 {
 					ExamineActionsAPI.VeryVerboseLog($"- Liquid");
 					int idx = configured - matCount;
-                    var conf = liquids[idx];
+                    var conf = liquids![idx];
                     ExamineActionsAPI.VeryVerboseLog($"Showing {conf.Type.name} {conf.Liters}l");
                     
                     if (conf.Chance < 100)
                     {
-                        this.materialChances[configured].text = $"{conf.Chance}%";
-                        this.materialChances[configured].gameObject.SetActive(true);
+                        this.matChanceLabels[configured].text = $"{conf.Chance}%";
+                        this.matChanceLabels[configured].gameObject.SetActive(true);
                     }
-                    else this.materialChances[configured].gameObject.SetActive(false);
+                    else this.matChanceLabels[configured].gameObject.SetActive(false);
 
                     GearItem? containerPrefab = conf.Type?.DefaultContainer?.PrefabReference?.GetOrLoadTypedAsset();
                     if (containerPrefab == null)
                         containerPrefab = conf.Type?.DefaultContainer?.PrefabReference?.GetOrLoadTypedAsset();
                     if (containerPrefab == null)
                     {
-                        if (conf.Type.DefaultContainer == null)
+                        if (conf.Type!.DefaultContainer == null)
                             MelonLogger.Error($"No default container set for liquid {conf.Type.name}.");
                         else if (conf.Type?.DefaultContainer?.PrefabReference == null)
-                            MelonLogger.Error($"No prefab preference of default container set for liquid {conf.Type.name}.");
+                            MelonLogger.Error($"No prefab preference of default container set for liquid {conf.Type!.name}.");
                         MelonLogger.Error($"Failed to load prefab for container of liquid {conf.Type.name}, contact the author of EAAPI.");
                     }
                     slot.ShowItem(containerPrefab, 1, true);
                     slot.m_StackLabel.text = $"{conf.Liters:0.00}L";
                     slot.m_StackLabel.gameObject.SetActive(true);
 
-                    ExamineActionsAPI.VeryVerboseLog($"Showing {conf.Type.name} {conf.Liters}L");
+                    ExamineActionsAPI.VeryVerboseLog($"Showing {conf.Type!.name} {conf.Liters}L");
                     ItemLiquidVolume owned = GameManager.m_Inventory.GetTotalLiquidVolume(conf.Type);
                     LiquidItem? subjectLiquidItem = state.Subject?.m_LiquidItem;
                     if (subjectLiquidItem != null
@@ -423,7 +430,7 @@ namespace ExamineActionsAPI
                 else
                 {
 					ExamineActionsAPI.VeryVerboseLog($"- Other ?");
-					var conf = materials[configured];
+					var conf = materials![configured];
                     int stackNum = conf.Units;
                     int checkingStackNum = conf.Units;
                     if (state.Subject.name == conf.GearName) checkingStackNum += state.Subject.m_StackableItem?.m_Units?? 1;
@@ -436,10 +443,10 @@ namespace ExamineActionsAPI
 
                     if (conf.Chance < 100f)
                     {
-                        this.materialChances[configured].text = $"{conf.Chance:0.0}%";
-                        this.materialChances[configured].gameObject.SetActive(true);
+                        this.matChanceLabels[configured].text = $"{conf.Chance:0.0}%";
+                        this.matChanceLabels[configured].gameObject.SetActive(true);
                     }
-                    else this.materialChances[configured].gameObject.SetActive(false);
+                    else this.matChanceLabels[configured].gameObject.SetActive(false);
                     slot.ShowItem(prefab, conf.Units, invItem != null);
                 }
             }
@@ -451,9 +458,9 @@ namespace ExamineActionsAPI
 
         private void MaybeSetupProducts(ExamineActionState state)
         {
-            List<MaterialOrProductItemConf> items;
-            List<MaterialOrProductLiquidConf> liquids;
-            List<MaterialOrProductPowderConf> powders;
+            List<MaterialOrProductItemConf>? items;
+            List<MaterialOrProductLiquidConf>? liquids;
+            List<MaterialOrProductPowderConf>? powders;
             state.GetAllProducts(out items, out liquids, out powders);
 
             int matCount = items?.Count ?? 0;
@@ -484,27 +491,27 @@ namespace ExamineActionsAPI
 
                 if (configured >= matCount + liqCount) // Powder
                 {
-                    var conf = powders[configured - (matCount + liqCount)];
+                    var conf = powders![configured - (matCount + liqCount)];
 
                     if (conf.Chance < 100)
                     {
-                        this.productChances[configured].text = $"{conf.Chance}%";
-                        this.productChances[configured].gameObject.SetActive(true);
+                        this.productChanceLabels[configured].text = $"{conf.Chance}%";
+                        this.productChanceLabels[configured].gameObject.SetActive(true);
                     }
-                    else this.productChances[configured].gameObject.SetActive(false);
+                    else this.productChanceLabels[configured].gameObject.SetActive(false);
 
                     slot.ShowPowder(conf.Type, ItemWeight.FromKilograms(conf.Kgs));
                 }
                 else if (configured >= matCount) // Liquid
                 {
-                    var conf = liquids[configured - matCount];
+                    var conf = liquids![configured - matCount];
 
                     if (conf.Chance < 100)
                     {
-                        this.productChances[configured].text = $"{conf.Chance}%";
-                        this.productChances[configured].gameObject.SetActive(true);
+                        this.productChanceLabels[configured].text = $"{conf.Chance}%";
+                        this.productChanceLabels[configured].gameObject.SetActive(true);
                     }
-                    else this.productChances[configured].gameObject.SetActive(false);
+                    else this.productChanceLabels[configured].gameObject.SetActive(false);
 
 
                     GearItem? containerPrefab = conf.Type?.DefaultContainer?.PrefabReference?.GetOrLoadTypedAsset();
@@ -513,21 +520,23 @@ namespace ExamineActionsAPI
                     slot.ShowItem(containerPrefab, 1, true);
                     slot.m_StackLabel.text = $"{conf.Liters:0.00} L";
                     slot.m_StackLabel.gameObject.SetActive(true);
-                    ExamineActionsAPI.VeryVerboseLog($"Showing {conf.Type.name} {conf.Liters}L");
+                    ExamineActionsAPI.VeryVerboseLog($"Showing {conf.Type!.name} {conf.Liters}L");
                 }
                 else
                 {
-                    var conf = items[configured];
-                    GearItem prefab = GearItem.LoadGearItemPrefab(conf.GearName);
-                    if (prefab == null)
-                        MelonLogger.Error($"Invalid prodcut: {conf.GearName}. There will be exception following this line of log. Contact mod providing this action or this action recipe.");
+                    var conf = items![configured];
+                    var act = state.Action as IExamineActionProduceItems;                    
+                    GearItem prefab = act!.OverrideProductPrefab(state, configured);
+                    if (prefab == null) prefab = GearItem.LoadGearItemPrefab(conf.GearName);
+                    if (prefab == null) ExamineActionsAPI.Instance.LoggerInstance.Error($"Failed to load prefab for {conf.GearName}, is the gear name valid?\nThings will break. Contact mod providing this action or this action recipe.");
 
+                    act!.PostProcessProductPreview(state, configured, prefab);
                     if (conf.Chance < 100f)
                     {
-                        this.productChances[configured].text = $"{conf.Chance:0.0}%";
-                        this.productChances[configured].gameObject.SetActive(true);
+                        this.productChanceLabels[configured].text = $"{conf.Chance:0.0}%";
+                        this.productChanceLabels[configured].gameObject.SetActive(true);
                     }
-                    else this.productChances[configured].gameObject.SetActive(false);
+                    else this.productChanceLabels[configured].gameObject.SetActive(false);
                     slot.ShowItem(prefab, conf.Units);
                 }
             }
@@ -595,6 +604,7 @@ namespace ExamineActionsAPI
 
 				PIE.m_ToolScrollList.CleanUp();
 				PIE.m_ToolScrollList.CreateList(PIE.m_RepairToolsList.m_Tools.Count);
+                PIE.m_ToolScrollList.RefreshAll();
                 for (int k = 0; k < PIE.m_RepairToolsList.m_Tools.Count; k++)
                 {
                     UITexture componentInChildren = Utils.GetComponentInChildren<UITexture>(PIE.m_ToolScrollList.m_ScrollObjects[k]);
@@ -622,65 +632,77 @@ namespace ExamineActionsAPI
         {
             var cancellable = state.Action is IExamineActionCancellable examineActionCancellable && examineActionCancellable.CanBeCancelled(state);
             var interruptable = state.Action is IExamineActionInterruptable;
-            stopLabel.gameObject.SetActive(true);
+            cancellableLabel.gameObject.SetActive(true);
 
             if (cancellable && interruptable)
-                stopLabel.text = "Can be cancelled (ESC) / May be interrupted";
+                cancellableLabel.text = "Can be cancelled (ESC) / May be interrupted";
             else if (!cancellable && interruptable)
-                stopLabel.text = "Can not cancelled / May be interrupted";
+                cancellableLabel.text = "Can not cancelled / May be interrupted";
             else if (cancellable && !interruptable)
-                stopLabel.text = "Can be cancelled (ESC)";
+                cancellableLabel.text = "Can be cancelled (ESC)";
             else if (!cancellable && !interruptable)
-                stopLabel.text = "Must be finished";
+                cancellableLabel.text = "Must be finished";
 
         }
 
         void UpdateConsumeLabel (ExamineActionState state)
         {
+            if (state.Action == null)
+            {
+                MelonLogger.Error("UpdateConsumeLabel called with no action selected");
+                return;
+            }
+            if (state.Subject == null)
+            {
+                MelonLogger.Error("UpdateConsumeLabel called with no subject");
+                return;
+            }
+
+
             var consumeS = state.Action.ShouldConsumeOnSuccess(state);
             var consumeF = (state.Action as IExamineActionFailable)?.ShouldConsumeOnFailure(state) ?? false; // null means anyway not possible to happens
             var consumeC = (state.Action as IExamineActionCancellable)?.ShouldConsumeOnCancellation(state) ?? false;
             var consumeI = (state.Action as IExamineActionInterruptable)?.ShouldConsumeOnInterruption(state) ?? false;
             
             if (!consumeS && !consumeF && !consumeC && !consumeI)
-                consumeLabel.text = "Never consume";
+                consumableLabel.text = "Never consume";
             if (consumeS && consumeF && consumeC && consumeI)
-                consumeLabel.text = "Always consume";
+                consumableLabel.text = "Always consume";
             else if (consumeS && consumeF && consumeC)
-                consumeLabel.text = "Consume on: Success / Failure / Cancellation";
+                consumableLabel.text = "Consume on: Success / Failure / Cancellation";
             else if (consumeF && consumeC && consumeI)
-                consumeLabel.text = "Consume on: Failure / Cancellation / Interruption";
+                consumableLabel.text = "Consume on: Failure / Cancellation / Interruption";
             else if (consumeS && consumeC && consumeI)
-                consumeLabel.text = "Consume on: Success / Cancellation / Interruption";
+                consumableLabel.text = "Consume on: Success / Cancellation / Interruption";
             else if (consumeS && consumeF && consumeI)
-                consumeLabel.text = "Consume on: Success / Failure / Interruption";
+                consumableLabel.text = "Consume on: Success / Failure / Interruption";
             else if (consumeS && consumeF)
-                consumeLabel.text = "Consume on: Success / Failure";
+                consumableLabel.text = "Consume on: Success / Failure";
             else if (consumeS && consumeC)
-                consumeLabel.text = "Consume on: Success / Cancellation";
+                consumableLabel.text = "Consume on: Success / Cancellation";
             else if (consumeS && consumeI)
-                consumeLabel.text = "Consume on: Success / Interruption";
+                consumableLabel.text = "Consume on: Success / Interruption";
             else if (consumeF && consumeC)
-                consumeLabel.text = "Consume on: Failure / Cancellation";
+                consumableLabel.text = "Consume on: Failure / Cancellation";
             else if (consumeF && consumeI)
-                consumeLabel.text = "Consume on: Failure / Interruption";
+                consumableLabel.text = "Consume on: Failure / Interruption";
             else if (consumeC && consumeI)
-                consumeLabel.text = "Consume on: Cancellation / Interruption";
+                consumableLabel.text = "Consume on: Cancellation / Interruption";
             else if (consumeS)
-                consumeLabel.text = "Consume on: Success";
+                consumableLabel.text = "Consume on: Success";
             else if (consumeF)
-                consumeLabel.text = "Consume on: Failure";
+                consumableLabel.text = "Consume on: Failure";
             else if (consumeC)
-                consumeLabel.text = "Consume on: Cancellation";
+                consumableLabel.text = "Consume on: Cancellation";
             else if (consumeI)
-                consumeLabel.text = "Consume on: Interruption";
+                consumableLabel.text = "Consume on: Interruption";
 
             if (state.Subject.m_LiquidItem != null && state.Action.GetConsumingLiquidLiters(state) > 0f)
-                consumeLabel.text += $" ({state.Action.GetConsumingLiquidLiters(state)}L)";
+                consumableLabel.text += $" ({state.Action.GetConsumingLiquidLiters(state)}L)";
             else if (state.Subject.m_PowderItem != null && state.Action.GetConsumingPowderKgs(state) > 0f)
-                consumeLabel.text += $" ({state.Action.GetConsumingPowderKgs(state)}KG)";
+                consumableLabel.text += $" ({state.Action.GetConsumingPowderKgs(state)}KG)";
             else if (state.Action.GetConsumingUnits(state) > 0)
-                consumeLabel.text += $" (x{state.Action.GetConsumingUnits(state)})";
+                consumableLabel.text += $" (x{state.Action.GetConsumingUnits(state)})";
         }
 
         void SetInfoBlock1Row ()
@@ -713,22 +735,27 @@ namespace ExamineActionsAPI
             UpdateInfoBlock(state);
         }
 
-        void IExamineActionPanel.OnPerformingBlocked(ExamineActionState state, PerformingBlockedReased reason)
+        void IExamineActionPanel.OnPerformingBlocked(ExamineActionState state, PerformingBlockedReason reason)
         {
-            bottomWarningLabel.gameObject.SetActive(true);
-            bottomWarningLabel.text = reason switch
+            if (state.CustomWarningMessageOnBlocked != null)
             {
-                PerformingBlockedReased.Interruption => Localization.Get("Action will be interrupted (Sick/Hurt/Cold/Hungry...)"),
-                PerformingBlockedReased.SubjectShortage => Localization.Get("Not enough in the stack"),
-                PerformingBlockedReased.Action => Localization.Get("Action blocked by design"),
-                PerformingBlockedReased.MaterialRequirement => Localization.Get("Action requirements not satisfied"),
-                PerformingBlockedReased.ToolRequirement => Localization.Get("GAMEPLAY_ToolRequired"),
-                PerformingBlockedReased.WeatherConstraint => Localization.Get("Action requires specific weather"),
-                PerformingBlockedReased.PointedObjectConstraint => Localization.Get("Action requires looking at some specific object"),
-                PerformingBlockedReased.TimeConstraint => Localization.Get("Action requires specific time"),
-                PerformingBlockedReased.IndoorStateConstraint => GameManager.GetWeatherComponent().m_IsIndoors == Weather.IndoorState.Indoors? Localization.Get("Action requires outdoor") : Localization.Get("Action requires indoor"),
+                bottomWarningLabel.text = state.CustomWarningMessageOnBlocked;
+                state.CustomWarningMessageOnBlocked = null;
+            }
+            else bottomWarningLabel.text = reason switch
+            {
+                PerformingBlockedReason.Interruption => Localization.Get("Action will be interrupted (Sick/Hurt/Cold/Hungry...)"),
+                PerformingBlockedReason.SubjectShortage => Localization.Get("Not enough in the stack"),
+                PerformingBlockedReason.Action => Localization.Get("Action blocked by design"),
+                PerformingBlockedReason.MaterialRequirement => Localization.Get("Action requirements not satisfied"),
+                PerformingBlockedReason.ToolRequirement => Localization.Get("GAMEPLAY_ToolRequired"),
+                PerformingBlockedReason.WeatherConstraint => Localization.Get("Action requires specific weather"),
+                PerformingBlockedReason.PointedObjectConstraint => Localization.Get("Action requires looking at some specific object"),
+                PerformingBlockedReason.TimeConstraint => Localization.Get("Action requires specific time"),
+                PerformingBlockedReason.IndoorStateConstraint => GameManager.GetWeatherComponent().m_IsIndoors == Weather.IndoorState.Indoors? Localization.Get("Action requires outdoor") : Localization.Get("Action requires indoor"),
                 _ => reason.ToString()
             };
+            bottomWarningLabel.gameObject.SetActive(true);
         }
 
         public void SetBottomWarning(string message)

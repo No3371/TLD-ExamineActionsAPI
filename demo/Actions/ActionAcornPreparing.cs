@@ -32,7 +32,7 @@ namespace ExamineActionsAPIDemo
             // For this action, we are using the sub action feature as "how many acorn to prepare"
             // So the SubAction#0 would be "prepare 1 acorn"
             // SubActionId is 0-based so we add 1 to it to properly calculate the time
-            return (state.SubActionId + 1) * 10;
+            return (state.SubActionId + 1) * 16;
         }
 
         float IExamineAction.GetProgressSeconds(ExamineActionState state)

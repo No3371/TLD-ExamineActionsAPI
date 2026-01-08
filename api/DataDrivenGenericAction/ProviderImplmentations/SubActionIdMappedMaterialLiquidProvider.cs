@@ -7,15 +7,18 @@ namespace ExamineActionsAPI.DataDrivenGenericAction
 
         public void GetMaterialLiquid(ExamineActionState state, List<MaterialOrProductLiquidConf> materials)
         {
+            if (LiquidBySubActionId == null)
+                return;
+
             if (LiquidBySubActionId.Count <= state.SubActionId)
                 return;
 
             if (LiquidBySubActionId[state.SubActionId] == null)
                 return;
 
-            for (int i = 0; i < LiquidBySubActionId[state.SubActionId].Count; i++)
+            for (int i = 0; i < LiquidBySubActionId[state.SubActionId]!.Count; i++)
             {
-                var conf = LiquidBySubActionId[state.SubActionId][i].ToLiquidConf(state);
+                var conf = LiquidBySubActionId[state.SubActionId]![i].ToLiquidConf(state);
                 materials.Add(conf);
             }
         }
