@@ -22,9 +22,9 @@ Please refer to its [readme](/demo/README.md) for more information.
 
 ## Data Driven Generic Action
 
-The API supports auto registering actions in json files. ([Examples](/api/DataDrivenGenericAction//Examples))
+The API supports creating actions with json files (no-code).
 
-To supply action definition jsons, compress them into a zip file named as `eaapi` files (for example: `mymod.eaapi`), then put the zip into `Mods` folder.
+Please refer to its [readme](./api/DataDrivenGenericAction/README.md).
 
 ## Usage
 
