@@ -1,3 +1,4 @@
+#define VERY_VERBOSE
 using HarmonyLib;
 using Il2Cpp;
 using MelonLoader;
@@ -10,6 +11,8 @@ namespace ExamineActionsAPI
     {
         private static void Postfix(Panel_Inventory_Examine __instance, int index)
         {
+			// ISSUE: This happens during a short window where the state is reset after Back button is pressed
+			// Resulting callbacks not being called
 			ExamineActionsAPI.Instance.DeselectActiveCustomAction();
 
 			ExamineActionsAPI.VeryVerboseLog($"POST SelectButton {__instance.m_SelectedButtonIndex} ({index}?)");

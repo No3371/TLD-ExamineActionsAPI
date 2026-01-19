@@ -215,7 +215,8 @@ namespace ExamineActionsAPI
 
         void IExamineActionPanel.OnActionDeselected(ExamineActionState state)
         {
-            PIE.m_Tool_ConfirmButtonLabel.transform.parent.transform.parent.gameObject.SetActive(true);
+            ExamineActionsAPI.VeryVerboseLog($"OnActionDeselected: Show tool select button");
+            PIE.m_Tool_ConfirmButtonLabel.transform.parent.transform.parent.gameObject.SetActive(true); // Show the tool select button for official actions
         }
 
         void IExamineActionPanel.OnActionSelected(ExamineActionState state)
@@ -229,7 +230,8 @@ namespace ExamineActionsAPI
             ExamineActionsAPI.VeryVerboseLog($"Sub {state.SubActionId + 1} / {subs}");
             buttonSubLeft.gameObject.SetActive(state.SubActionId > 0);
             buttonSubRight.gameObject.SetActive(state.SubActionId < subs - 1);
-            PIE.m_Tool_ConfirmButtonLabel.transform.parent.transform.parent.gameObject.SetActive(false);
+            ExamineActionsAPI.VeryVerboseLog($"OnActionSelected: Hide tool select button");
+            PIE.m_Tool_ConfirmButtonLabel.transform.parent.transform.parent.gameObject.SetActive(false); // Hide the tool select button in favor of the custom action button
             bool extendInfoBlock = false;
             UpdateConsumeLabel(state);
             UpdateStopLabel(state);

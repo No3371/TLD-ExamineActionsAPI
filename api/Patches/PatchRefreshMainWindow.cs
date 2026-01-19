@@ -1,4 +1,4 @@
-// #define VERY_VERBOSE
+#define VERY_VERBOSE
 using HarmonyLib;
 using Il2Cpp;
 using MelonLoader;
@@ -10,8 +10,8 @@ namespace ExamineActionsAPI
     {
         private static void Prefix(Panel_Inventory_Examine __instance)
         {
-	
-			ExamineActionsAPI.VeryVerboseLog($"+RefreshMainWindow");
+			ExamineActionsAPI.Instance.DeselectActiveCustomAction(); // For back button
+			ExamineActionsAPI.VeryVerboseLog($"+PRE RefreshMainWindow {__instance.m_GearItem?.name}");
 			ExamineActionsAPI.Instance.State.Subject = __instance.m_GearItem;
 			ExamineActionsAPI.Instance.AvailableCustomActions.Clear();
 			foreach (var mi in ExamineActionsAPI.Instance.CustomActionMenuItems)
@@ -25,8 +25,6 @@ namespace ExamineActionsAPI
 				ExamineActionsAPI.VeryVerboseLog($"Null subject");
 				return;
 			}
-	
-			ExamineActionsAPI.VeryVerboseLog($"++RefreshMainWindow");
 
 
 			foreach (var a in ExamineActionsAPI.Instance.RegisteredExamineActions)
@@ -50,7 +48,7 @@ namespace ExamineActionsAPI
 				mi.m_ButtonSpriteRef.normalSprite = a.MenuItemSpriteName ?? "Empty";
 				mi.gameObject.SetActive(true);
 			}
-			ExamineActionsAPI.VeryVerboseLog($"-PRRefreshMainWindow");
+			ExamineActionsAPI.VeryVerboseLog($"-PRE RefreshMainWindow");
         }
         private static void Postfix(Panel_Inventory_Examine __instance)
         {
@@ -60,11 +58,11 @@ namespace ExamineActionsAPI
 			{
 				ExamineActionsAPI.Instance.RefreshCustomActionMenuItemState(i);
 
-                if (ExamineActionsAPI.Instance.LastTriedToPerformedCache == ExamineActionsAPI.Instance.AvailableCustomActions[i])
-				{
-					ExamineActionsAPI.VeryVerboseLog($"Selecting just performed");
-                    __instance.SelectButton(i + ExamineActionsAPI.Instance.OfficialActionMenuItems.Count);
-				}
+                // if (ExamineActionsAPI.Instance.LastTriedToPerformedCache == ExamineActionsAPI.Instance.AvailableCustomActions[i])
+				// {
+				// 	ExamineActionsAPI.VeryVerboseLog($"Selecting just performed"); // NOT VANILLA BEHAVIOR
+                //     __instance.SelectButton(i + ExamineActionsAPI.Instance.OfficialActionMenuItems.Count);
+				// }
 			}
 			if (ExamineActionsAPI.Instance.State.Action != null)
 				__instance.m_Item_Label.text = ExamineActionsAPI.Instance.State.Subject?.DisplayName; // Somehow if the subject has no available vanilla actions, this label gets turned to ""

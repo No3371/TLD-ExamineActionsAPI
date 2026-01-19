@@ -1,3 +1,4 @@
+#define VERY_VERBOSE
 using HarmonyLib;
 using Il2Cpp;
 using MelonLoader;
@@ -14,7 +15,12 @@ namespace ExamineActionsAPI
         }
         private static void Postfix(ToolsList __instance)
         {
+            if (ExamineActionsAPI.Instance.State.Action is not IExamineActionRequireTool)
+            {
+                return;
+            }
 			// MelonLogger.Msg($"POST RefreshSelectedActionTool ({__instance.m_ActionToolSelect.gameObject.activeInHierarchy} / { __instance.m_ToolScrollList.m_TargetIndex } / { __instance.m_ToolScrollList.m_SelectedIndex })");
+            ExamineActionsAPI.VeryVerboseLog($"POST RefreshSelectedActionTool");
             GearItem? gearItem = __instance.GetSelectedTool()?.GetComponent<GearItem>();
             if (gearItem != ExamineActionsAPI.Instance.State.SelectedTool)
                 ExamineActionsAPI.Instance.State.SelectedTool = gearItem;
