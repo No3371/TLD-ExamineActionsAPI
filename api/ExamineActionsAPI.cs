@@ -597,7 +597,7 @@ namespace ExamineActionsAPI
 			if (destroyed)
 			{
 				State.Subject = null;
-				pie.OnBack();
+				pie.CloseSelf();
 			}
 			else pie.SelectWindow(pie.m_MainWindow);
 			VeryVerboseLog($"-OnActionSucceed");
@@ -634,7 +634,7 @@ namespace ExamineActionsAPI
 			if (destroyed)
 			{
 				State.Subject = null;
-				pie.OnBack();
+				pie.CloseSelf();
 			}
 			else pie.SelectWindow(pie.m_MainWindow);
 			VeryVerboseLog($"-OnActionFailed");
@@ -721,7 +721,7 @@ namespace ExamineActionsAPI
 			if (destroyed)
 			{
 				State.Subject = null;
-				pie.OnBack();
+				pie.CloseSelf();
 			}
 			else pie.SelectWindow(pie.m_MainWindow);
 			VeryVerboseLog($"-OnActionCancelled");
