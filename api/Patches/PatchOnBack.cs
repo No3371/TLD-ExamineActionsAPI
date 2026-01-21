@@ -1,4 +1,4 @@
-#define VERY_VERBOSE
+// #define VERY_VERBOSE
 using HarmonyLib;
 using Il2Cpp;
 using MelonLoader;
