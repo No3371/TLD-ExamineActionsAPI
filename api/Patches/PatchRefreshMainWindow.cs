@@ -1,4 +1,4 @@
-#define VERY_VERBOSE
+// #define VERY_VERBOSE
 using HarmonyLib;
 using Il2Cpp;
 using MelonLoader;
@@ -10,7 +10,6 @@ namespace ExamineActionsAPI
     {
         private static void Prefix(Panel_Inventory_Examine __instance)
         {
-			ExamineActionsAPI.Instance.DeselectActiveCustomAction(); // For back button
 			ExamineActionsAPI.VeryVerboseLog($"+PRE RefreshMainWindow {__instance.m_GearItem?.name}");
 			ExamineActionsAPI.Instance.State.Subject = __instance.m_GearItem;
 			ExamineActionsAPI.Instance.AvailableCustomActions.Clear();

@@ -276,6 +276,7 @@ namespace ExamineActionsAPI
 		}
 		internal void DeselectActiveCustomAction ()
 		{
+			if (State.Action == null) return;
 			VeryVerboseLog($"+DeselectActiveCustomAction {SelectedCustomMenuItemIndex}");
 			State.SubActionId = 0;
 			RefreshCustomActionMenuItemState(SelectedCustomMenuItemIndex);
