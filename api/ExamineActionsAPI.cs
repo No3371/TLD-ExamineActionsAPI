@@ -276,7 +276,6 @@ namespace ExamineActionsAPI
 		}
 		internal void DeselectActiveCustomAction ()
 		{
-			if (State.Action == null) return;
 			VeryVerboseLog($"+DeselectActiveCustomAction {SelectedCustomMenuItemIndex}");
 			State.SubActionId = 0;
 			RefreshCustomActionMenuItemState(SelectedCustomMenuItemIndex);
@@ -326,7 +325,7 @@ namespace ExamineActionsAPI
 		{
 			VeryVerboseLog($"+OnPerformSelectedAction");
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
-			
+
 			PerformingBlockedReason? reason = null;
 			if (!State.Action.CanPerform(State))
 			{
@@ -596,7 +595,7 @@ namespace ExamineActionsAPI
 			PostActionFinished();
 			if (destroyed)
 			{
-				State.Subject = null;
+				State.Reset();
 				pie.CloseSelf();
 			}
 			else pie.SelectWindow(pie.m_MainWindow);
@@ -633,7 +632,7 @@ namespace ExamineActionsAPI
 				VeryVerboseLog("The gear is consumed because the action consumes on failure too.");
 			if (destroyed)
 			{
-				State.Subject = null;
+				State.Reset();
 				pie.CloseSelf();
 			}
 			else pie.SelectWindow(pie.m_MainWindow);
@@ -684,11 +683,11 @@ namespace ExamineActionsAPI
 				VeryVerboseLog("The gear is consumed because the action consumes on interruption too.");
 			if (destroyed)
 			{
-				State.Subject = null;
+				State.Reset();
 				// pie.OnBack(); // In favor of CloseSelf down there
 			}
 			else pie.SelectWindow(pie.m_MainWindow);
-			pie.CloseSelf();
+			pie.CloseSelf(); // Interruption should always close the panel
 			// AkSoundEngine.StopPlayingID(this.m_ProgressBarAudio, GameManager.GetGameAudioManagerComponent().m_StopAudioFadeOutMicroseconds);
 			VeryVerboseLog($"-OnActionInterrupted");
 		}
@@ -720,7 +719,7 @@ namespace ExamineActionsAPI
 				VeryVerboseLog("The gear is consumed because the action consumes on cancellation too.");
 			if (destroyed)
 			{
-				State.Subject = null;
+				State.Reset();
 				pie.CloseSelf();
 			}
 			else pie.SelectWindow(pie.m_MainWindow);

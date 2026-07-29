@@ -136,6 +136,7 @@ namespace ExamineActionsAPI
 			ActiveActionMaterialRequirementsMet = null;
             ActiveActionToolRequirementsMet = null;
 			SelectingTool = false;
+			Panel?.OnActionDeselected(this);
 			Panel?.Toggle(false);
 			Panel = null;
             PanelExtension = null;
