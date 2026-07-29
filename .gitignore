@@ -4,3 +4,7 @@ obj
 *.csproj.user
 .idea
 repo_mem.sqlite
+
+# Local release tooling, kept out of the repo.
+# tools/.env holds GITHUB_TOKEN and must never be committed.
+tools/
