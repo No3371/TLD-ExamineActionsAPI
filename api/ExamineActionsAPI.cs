@@ -326,6 +326,14 @@ namespace ExamineActionsAPI
 			VeryVerboseLog($"+OnPerformSelectedAction");
 			var pie = InterfaceManager.GetPanel<Panel_Inventory_Examine>();
 
+			// As weird as it sounds, Interact input can call to this without a custom action selected (Reproduced with QoL)
+			// So a guard is needed here
+			if (State.Action == null)
+			{
+				VeryVerboseLog($"No action selected");
+				return;
+			}
+
 			PerformingBlockedReason? reason = null;
 			if (!State.Action.CanPerform(State))
 			{
