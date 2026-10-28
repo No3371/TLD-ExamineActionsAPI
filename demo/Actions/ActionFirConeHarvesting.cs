@@ -81,8 +81,8 @@ namespace ExamineActionsAPIDemo
         void IExamineActionInterruptable.OnInterruption(ExamineActionState state)
         {
             int completed = (int) (state.NormalizedProgress!.Value * state.SubActionId);
-            GameManager.m_PlayerManager.InstantiateItemInPlayerInventory(GearItem.LoadGearItemPrefab("GEAR_1FirConeFuel"), completed);
-            GameManager.m_PlayerManager.InstantiateItemInPlayerInventory(GearItem.LoadGearItemPrefab("GEAR_3FirConeSeeds"), completed * 2);
+            GameManager.m_PlayerManager.InstantiateItemInPlayerInventory(GearItem.InstantiateGearItem("GEAR_1FirConeFuel"), completed);
+            GameManager.m_PlayerManager.InstantiateItemInPlayerInventory(GearItem.InstantiateGearItem("GEAR_3FirConeSeeds"), completed * 2);
             state.Subject!.m_StackableItem.m_Units -= completed;
         }
 

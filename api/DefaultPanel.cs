@@ -17,8 +17,8 @@ namespace ExamineActionsAPI
 		internal InfoBlock info1, info2, info3, infoChance, infoDuration;
 		internal UISprite bg1, bg2;
 		Vector2 info1Pos, info2Pos, info3Pos;
-		internal UIButton buttonContinue, buttonSubLeft, buttonSubRight;
-		internal UILabel buttonLabel, materiaslLabel, bottomWarningLabel, consumableLabel, cancellableLabel;
+		internal UIButton? buttonContinue, buttonSubLeft, buttonSubRight;
+		internal UILabel? buttonLabel, materiaslLabel, bottomWarningLabel, consumableLabel, cancellableLabel;
 		public Panel_Inventory_Examine PIE { get; }
 		public Panel_Repair PR { get; set; }
 		public bool IsExtension => false;
@@ -439,7 +439,7 @@ namespace ExamineActionsAPI
                     for (int j = 0; j < configured; j++)
                         if (conf.GearName == materials[j].GearName) checkingStackNum += materials[j].Units;
                     var invItem = GameManager.GetInventoryComponent().GearInInventory(conf.GearName, checkingStackNum);
-                    GearItem prefab = GearItem.LoadGearItemPrefab(conf.GearName);
+                    GearItem prefab = GearItem.InstantiateGearItem(conf.GearName);
                     if (prefab == null)
                         MelonLogger.Error($"Invalid material: {conf.GearName}. There will be exception following this line of log. Check do you have the item mod installed or contact the mod providing this action or this action recipe.");
 
@@ -529,7 +529,7 @@ namespace ExamineActionsAPI
                     var conf = items![configured];
                     var act = state.Action as IExamineActionProduceItems;                    
                     GearItem prefab = act!.OverrideProductPrefab(state, configured);
-                    if (prefab == null) prefab = GearItem.LoadGearItemPrefab(conf.GearName);
+                    if (prefab == null) prefab = GearItem.InstantiateGearItem(conf.GearName);
                     if (prefab == null) ExamineActionsAPI.Instance.LoggerInstance.Error($"Failed to load prefab for {conf.GearName}, is the gear name valid?\nThings will break. Contact mod providing this action or this action recipe.");
 
                     act!.PostProcessProductPreview(state, configured, prefab);

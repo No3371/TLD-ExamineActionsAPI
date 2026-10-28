@@ -1,0 +1,101 @@
+<Project>
+    <!-- Compile-only sanitize of live Il2Cpp dummies. Game files are never modified.
+         The sanitized UnityEngine.CoreModule stays on disk. Design-time builds do not regenerate it
+         or disable the shared compiler; deleting it made the language server report CS0012 for MonoBehaviour. -->
+    <PropertyGroup>
+        <_PatchedIl2CppDir>$(MSBuildProjectDirectory)\obj\il2cpp-sanitized</_PatchedIl2CppDir>
+        <_PatchedCoreModule>$(_PatchedIl2CppDir)\UnityEngine.CoreModule.dll</_PatchedCoreModule>
+        <_LiveCoreModule>$(Il2CppPath)\UnityEngine.CoreModule.dll</_LiveCoreModule>
+        <_CecilPath>$(MelonLoaderPath)\Mono.Cecil.dll</_CecilPath>
+        <_SkipIl2CppSanitize Condition="'$(DesignTimeBuild)' == 'true' OR '$(DesignTimeSilentBuild)' == 'true' OR '$(BuildingForLiveAnalysis)' == 'true'">true</_SkipIl2CppSanitize>
+    </PropertyGroup>
+
+    <UsingTask TaskName="SanitizeIl2CppDummy" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+        <ParameterGroup>
+            <CecilPath ParameterType="System.String" Required="true" />
+            <Source ParameterType="System.String" Required="true" />
+            <Destination ParameterType="System.String" Required="true" />
+        </ParameterGroup>
+        <Task>
+            <Using Namespace="System" />
+            <Using Namespace="System.Collections" />
+            <Using Namespace="System.Collections.Generic" />
+            <Using Namespace="System.IO" />
+            <Using Namespace="System.Linq" />
+            <Using Namespace="System.Reflection" />
+            <Code Type="Fragment" Language="cs"><![CDATA[
+var cecil = Assembly.LoadFrom(CecilPath);
+var assemblyDefinitionType = cecil.GetType("Mono.Cecil.AssemblyDefinition");
+var readerParametersType = cecil.GetType("Mono.Cecil.ReaderParameters");
+var resolverType = cecil.GetType("Mono.Cecil.DefaultAssemblyResolver");
+var resolver = Activator.CreateInstance(resolverType);
+resolverType.GetMethod("AddSearchDirectory").Invoke(resolver, new object[] { Path.GetDirectoryName(Source) });
+var readerParameters = Activator.CreateInstance(readerParametersType);
+readerParametersType.GetProperty("AssemblyResolver").SetValue(readerParameters, resolver);
+var read = assemblyDefinitionType.GetMethods().First(m =>
+    m.Name == "ReadAssembly" &&
+    m.GetParameters().Length == 2 &&
+    m.GetParameters()[0].ParameterType == typeof(string));
+var assembly = read.Invoke(null, new object[] { Source, readerParameters });
+var module = assemblyDefinitionType.GetProperty("MainModule").GetValue(assembly);
+var types = module.GetType().GetProperty("Types").GetValue(module);
+var removeNames = new HashSet<string>(StringComparer.Ordinal)
+{
+    "NullableAttribute",
+    "NullableContextAttribute",
+    "NullablePublicOnlyAttribute",
+    "NativeIntegerAttribute",
+    "RefSafetyRulesAttribute",
+    "EmbeddedAttribute",
+    "CompilerFeatureRequiredAttribute"
+};
+var toRemove = new List<object>();
+foreach (var type in ((IEnumerable)types))
+{
+    var ns = (string)type.GetType().GetProperty("Namespace").GetValue(type);
+    var name = (string)type.GetType().GetProperty("Name").GetValue(type);
+    if (ns == "System.Runtime.CompilerServices" && removeNames.Contains(name))
+        toRemove.Add(type);
+}
+if (toRemove.Count > 0)
+{
+    var remove = types.GetType().GetMethod("Remove", new[] { toRemove[0].GetType() });
+    foreach (var type in toRemove)
+        remove.Invoke(types, new[] { type });
+}
+Directory.CreateDirectory(Path.GetDirectoryName(Destination));
+assemblyDefinitionType.GetMethod("Write", new[] { typeof(string) }).Invoke(assembly, new object[] { Destination });
+assemblyDefinitionType.GetMethod("Dispose")?.Invoke(assembly, null);
+            ]]></Code>
+        </Task>
+    </UsingTask>
+
+    <!-- Language server reads this at evaluation. The file is not rewritten or deleted during design-time builds. -->
+    <ItemGroup Condition="Exists('$(_PatchedCoreModule)')">
+        <Reference Remove="UnityEngine.CoreModule" />
+        <Reference Include="UnityEngine.CoreModule">
+            <HintPath>$(_PatchedCoreModule)</HintPath>
+            <Private>False</Private>
+        </Reference>
+    </ItemGroup>
+
+    <Target Name="SanitizeIl2CppDummyFile"
+            Inputs="$(_LiveCoreModule)"
+            Outputs="$(_PatchedCoreModule)"
+            Condition="'$(_SkipIl2CppSanitize)' != 'true' AND '$(Il2CppPath)' != '' AND Exists('$(_LiveCoreModule)') AND Exists('$(_CecilPath)')">
+        <SanitizeIl2CppDummy CecilPath="$(_CecilPath)" Source="$(_LiveCoreModule)" Destination="$(_PatchedCoreModule)" />
+    </Target>
+
+    <Target Name="RetargetSanitizedCoreModule"
+            BeforeTargets="ResolveAssemblyReferences"
+            DependsOnTargets="SanitizeIl2CppDummyFile"
+            Condition="'$(_SkipIl2CppSanitize)' != 'true' AND '$(Il2CppPath)' != '' AND Exists('$(_LiveCoreModule)') AND Exists('$(_CecilPath)')">
+        <ItemGroup Condition="Exists('$(_PatchedCoreModule)')">
+            <Reference Remove="UnityEngine.CoreModule" />
+            <Reference Include="UnityEngine.CoreModule">
+                <HintPath>$(_PatchedCoreModule)</HintPath>
+                <Private>False</Private>
+            </Reference>
+        </ItemGroup>
+    </Target>
+</Project>
