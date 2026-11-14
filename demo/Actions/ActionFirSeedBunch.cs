@@ -34,7 +34,13 @@ namespace ExamineActionsAPIDemo
             return (item.name == "GEAR_3FirConeSeeds" || item.name == "GEAR_2FirConeSeedsRoasted") && (item?.m_StackableItem?.m_Units ?? 1) >= 5;
         }
 
-        public void OnSuccess(ExamineActionState state) {}
+        public void OnSuccess(ExamineActionState state) {
+            if (state.Products != null)
+            foreach (GearItem p in state.Products)
+            {
+                GearMessage.AddMessage(p, "Piled", p.DisplayName, false, true);
+            }
+        }
 
         void IExamineActionProduceItems.GetProducts(ExamineActionState state, List<MaterialOrProductItemConf> products)
         {

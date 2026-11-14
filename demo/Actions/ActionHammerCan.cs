@@ -37,7 +37,14 @@ namespace ExamineActionsAPIDemo
         {
             return 3;
         }
-        void IExamineAction.OnSuccess(ExamineActionState state) {}
+        void IExamineAction.OnSuccess(ExamineActionState state)
+        {
+            if (state.Products != null)
+                foreach (GearItem p in state.Products)
+                {
+                    GearMessage.AddMessage(p, Localization.Get("GAMEPLAY_Harvested"), p.DisplayName, false, true);
+                }
+        }
 
         void IExamineAction.OnActionSelected(ExamineActionState state) {}
 

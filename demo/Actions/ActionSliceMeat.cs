@@ -53,6 +53,12 @@ namespace ExamineActionsAPIDemo
             float ratio = 1 - (float) state.Temp[0];
             state.Subject.WeightKG *= ratio;
             state.Subject.m_FoodItem.m_CaloriesRemaining *= ratio;
+
+            if (state.Products != null)
+            foreach (GearItem p in state.Products)
+            {
+                GearMessage.AddMessage(p, Localization.Get("GAMEPLAY_Harvested"), $"{p.m_FoodItem.m_CaloriesRemaining}col", false, true);
+            }
         }
 
         void IExamineAction.OnActionSelected(ExamineActionState state) {}

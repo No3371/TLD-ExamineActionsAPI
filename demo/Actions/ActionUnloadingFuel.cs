@@ -52,7 +52,20 @@ namespace ExamineActionsAPIDemo
         public float GetProgressSeconds(ExamineActionState state) => 2;
         public void OnSuccess(ExamineActionState state)
         {
+            float liters = state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters.ToQuantity(1f);
             state.Subject.m_KeroseneLampItem.m_CurrentFuelLiters = ItemLiquidVolume.FromLiters(0);
+
+            if (state.Products != null)
+            {
+                foreach (GearItem p in state.Products)
+                {
+                    liters -= p.m_LiquidItem.GetVolumeLitres().ToQuantity(1);
+                    GearMessage.AddMessage(p, Localization.Get("Unloaded"), p.DisplayName, false, true);
+                }
+                if (liters > 0.0001f) {
+                    GearMessage.AddMessage(state.Subject, Localization.Get("Spilled"), $"{liters:F3}L", false, true);
+                }
+            }
         }
 
         bool IExamineAction.ShouldConsumeOnSuccess(ExamineActionState state) => false;
