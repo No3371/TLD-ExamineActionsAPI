@@ -39,6 +39,7 @@ namespace ExamineActionsAPI
 				pie.m_ButtonDelegates.Add(new System.Action(ExamineActionsAPI.Instance.OnPerformSelectedAction)); // Enter pressed when the menu item selected (perform)
 			}
 
+			GearPrefabs.ReleaseAll();
 			ExamineActionsAPI.Instance.DefaultPanel = new DefaultPanel(pie, __instance);
 			ExamineActionsAPI.VeryVerboseLog($"-Initialize");
 		}

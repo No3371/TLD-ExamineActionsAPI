@@ -147,7 +147,7 @@ namespace ExamineActionsAPI
 			foreach (var dep in action.GearNameDependency)
 			{
 				try {
-					if (GearItem.InstantiateGearItem(dep) == null)
+					if (GearPrefabs.Get(dep) == null)
 					{
 						Instance.LoggerInstance.Warning($"Action {id} not registered because its dependency gear {dep} can not be loaded.");
 						return false;
@@ -970,7 +970,7 @@ namespace ExamineActionsAPI
             for (int pi = 0; pi < products.Count; pi++)
 			{
 				GearItem prefab = act.OverrideProductPrefab(State, pi);
-				if (prefab == null) prefab = GearItem.InstantiateGearItem(products[pi].GearName);
+				if (prefab == null) prefab = GearPrefabs.Get(products[pi].GearName);
 				if (prefab == null) LoggerInstance.Error($"Failed to load prefab for {products[pi].GearName}, is the gear name valid?");
                 if (products[pi].Chance < 100f)
 				{
