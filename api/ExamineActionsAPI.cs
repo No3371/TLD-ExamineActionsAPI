@@ -532,7 +532,8 @@ namespace ExamineActionsAPI
 			// InterfaceManager.GetPanel<Panel_HUD>().m_ClickHoldCancelButton.transform.parent.parent.gameObject.SetActive(true); // Force my way to hide that damn button
 			if (!pie.m_GearItem || !pie.m_GearItem.gameObject)
 			{
-				MelonLogger.Error($"Action could not complete. Object was destroyed during action.");
+                MelonLogger.Error($"Action could not complete. Object was destroyed during action.");
+                State.Reset();
 				pie.OnBack();
 				return;
 			}
@@ -664,15 +665,16 @@ namespace ExamineActionsAPI
 			if (system) State.Action.OnActionInterruptedBySystem(State);
 
 			State.ActiveResult = ActionResult.Interruption;
-            
-			IExamineActionInterruptable? interruptable = State.Action as IExamineActionInterruptable;
-			if (interruptable == null) // Not a regular interruption, likely due to emmergencies like wolf attacks
-			{
-				PostActionFinished();
-				return;
-			}
 
-			if (State.Action is IExamineActionRequireItems arm) ConsumeItems(arm, ActionResult.Interruption);
+            if (State.Action is not IExamineActionInterruptable interruptable) // Not a regular interruption, likely due to emmergencies like wolf attacks
+            {
+                PostActionFinished();
+                State.Reset();
+                pie.CloseSelf();
+                return;
+            }
+
+            if (State.Action is IExamineActionRequireItems arm) ConsumeItems(arm, ActionResult.Interruption);
 			if (State.Action is IExamineActionRequireLiquid arl) ConsumeLiquid(arl, ActionResult.Interruption);
 			if (State.Action is IExamineActionRequirePowder arp) ConsumePowder(arp, ActionResult.Interruption);
 	

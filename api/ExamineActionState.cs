@@ -135,6 +135,7 @@ namespace ExamineActionsAPI
 			InterruptionSystemFlag = false;
 			ActiveActionMaterialRequirementsMet = null;
             ActiveActionToolRequirementsMet = null;
+            AllMaterialsReady = false;
 			SelectingTool = false;
 			Panel?.OnActionDeselected(this);
 			Panel?.Toggle(false);
@@ -145,7 +146,8 @@ namespace ExamineActionsAPI
 			StartedAtRealtime = null;
 			StartedAtGameTime = null;
 			NormalizedProgress = null;
-			CustomWarningMessageOnBlocked = null;
+            CustomWarningMessageOnBlocked = null;
+            Products?.Clear();
 		}
 
 		public void OnToolChanged ()
