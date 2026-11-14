@@ -37,8 +37,7 @@ namespace ExamineActionsAPIDemo
 
         bool IExamineAction.IsActionAvailable(GearItem item)
         {
-            return item.name == "GEAR_4FirCone";
-            
+            return item.name == "GEAR_4FirCone" && item.m_StackableItem.m_Units > 1;
         }
 
         bool IExamineAction.CanPerform(ExamineActionState state) => true;
