@@ -154,6 +154,7 @@ namespace ExamineActionsAPI
 			StartedAtGameTime = null;
 			NormalizedProgress = null;
             CustomWarningMessageOnBlocked = null;
+            CustomFailureMessage = null;
             Products?.Clear();
 		}
 
@@ -395,5 +396,6 @@ namespace ExamineActionsAPI
         }
 
         public string? CustomWarningMessageOnBlocked { get; set; }
+        public string? CustomFailureMessage { get; set; }
 	}
 }

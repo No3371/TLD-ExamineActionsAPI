@@ -621,9 +621,6 @@ namespace ExamineActionsAPI
 			if (State.Action is IExamineActionRequireLiquid arl) ConsumeLiquid(arl, ActionResult.Failure);
 			if (State.Action is IExamineActionRequirePowder arp) ConsumePowder(arp, ActionResult.Failure);
 
-			HUDMessage.AddMessage(Localization.Get("GAMEPLAY_Failed"), false, false);
-			GameAudioManager.PlayGUIError();
-
 			// Technically if it fails it gotta be a failable action, so we assert it here
             IExamineActionFailable failable = (State.Action as IExamineActionFailable)!;
 			var consumed = false;
@@ -637,6 +634,10 @@ namespace ExamineActionsAPI
 			State.Panel.OnActionFailed(State);
 			State.PanelExtension?.OnActionFailed(State);
 			PostActionFinished();
+			
+			HUDMessage.AddMessage(State.CustomFailureMessage ?? Localization.Get("GAMEPLAY_Failed"), false, false);
+			GameAudioManager.PlayGUIError();
+
 			if (consumed)
 				VeryVerboseLog("The gear is consumed because the action consumes on failure too.");
 			if (destroyed)
