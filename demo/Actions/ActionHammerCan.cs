@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ExamineActionsAPIDemo
 {
-    class ActionHammerCan : IExamineAction, IExamineActionProduceItems, IExamineActionRequireTool, IExamineActionCancellable
+    class ActionHammerCan : IExamineAction, IExamineActionProduceItems, IExamineActionRequireTool, IExamineActionCancellable, IExamineActionFailable
     {
         public ActionHammerCan() {}
         IExamineActionPanel? IExamineAction.CustomPanel => null;
@@ -54,7 +54,7 @@ namespace ExamineActionsAPIDemo
 
         void IExamineActionProduceItems.GetProducts(ExamineActionsAPI.ExamineActionState state, System.Collections.Generic.List<MaterialOrProductItemConf> products)
         {
-            products.Add(new ("GEAR_ScrapMetal", 1, 75));
+            products.Add(new ("GEAR_ScrapMetal", 1, 100));
         }
 
         // We are using the subject as the prefab so we can have an new meat item that every part of it is identical to the subject
@@ -85,6 +85,21 @@ namespace ExamineActionsAPIDemo
         public bool ShouldConsumeOnCancellation(ExamineActionState state)
         {
             return false;
+        }
+
+        float IExamineActionFailable.GetFailureChance(ExamineActionState state)
+        {
+            return 25f;
+        }
+
+        void IExamineActionFailable.OnActionFailure(ExamineActionState state)
+        {
+            state.CustomFailureMessage = Localization.Get("The can is hammered into a unusable shape.");
+        }
+
+        bool IExamineActionFailable.ShouldConsumeOnFailure(ExamineActionState state)
+        {
+            return true;
         }
     }
 }
