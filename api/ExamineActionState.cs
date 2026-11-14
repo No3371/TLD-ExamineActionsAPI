@@ -10,6 +10,7 @@ namespace ExamineActionsAPI
     public class ExamineActionState
 	{
         private GearItem? subject;
+        private List<GearItem>? products;
         private BaseInteraction? subjectInteraction;
         private IExamineAction? action;
         private GearItem? selectedTool;
@@ -18,15 +19,21 @@ namespace ExamineActionsAPI
         public GearItem? Subject
         {
             get => subject;
-			internal set
+            internal set
             {
-				var cache = subject;
+                var cache = subject;
                 subject = value;
                 subjectInteraction = null;
-				Reset();
-				if (cache != value) ExamineActionsAPI.VeryVerboseLog($"Subject changed: {value?.name}");
+                Reset();
+                if (cache != value) ExamineActionsAPI.VeryVerboseLog($"Subject changed: {value?.name}");
             }
         }
+
+        public List<GearItem>? Products
+        {
+            get => products ?? (products = new List<GearItem>());
+        }
+
         public BaseInteraction? SubjectInteraction
         {
             get => subjectInteraction;

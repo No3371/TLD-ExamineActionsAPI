@@ -978,8 +978,9 @@ namespace ExamineActionsAPI
 				{
 					if (UnityEngine.Random.Range(0, 100f) <= (byte)products[pi].Chance)
 					{
-						var p = pm.InstantiateItemInPlayerInventory(prefab, products[pi].Units, 1, PlayerManager.InventoryInstantiateFlags.EnableNotificationFlag);
+                        var p = pm.InstantiateItemInPlayerInventory(prefab, products[pi].Units, 1, PlayerManager.InventoryInstantiateFlags.EnableNotificationFlag);
 						act.PostProcessProduct(State, pi, p);
+                        State.Products.Add(p);
 						VeryVerboseLog($"{products[pi].GearName} x{products[pi].Units} is yielded because the {products[pi].Chance} roll passed.");
 					}
 				}
@@ -987,6 +988,7 @@ namespace ExamineActionsAPI
 				{
 					var p = pm.InstantiateItemInPlayerInventory(prefab, products[pi].Units, 1, PlayerManager.InventoryInstantiateFlags.EnableNotificationFlag);
 					act.PostProcessProduct(State, pi, p);
+					State.Products.Add(p);
 					VeryVerboseLog($"{products[pi].GearName} x{products[pi].Units} is yielded.");
 				}
 			}
@@ -1040,7 +1042,8 @@ namespace ExamineActionsAPI
 					var newLiquid = pm.InstantiateItemInPlayerInventory(type.DefaultContainer.m_PrefabReference.GetOrLoadTypedAsset(), 1, 1, PlayerManager.InventoryInstantiateFlags.EnableNotificationFlag);
                     float adding = Mathf.Min(liters, newLiquid.m_LiquidItem.GetCapacityLitres().ToQuantity(1));
 					newLiquid.m_LiquidItem.m_Liquid = ItemLiquidVolume.FromLiters(adding);
-					liters -= adding;
+                    liters -= adding;
+                    State.Products.Add(newLiquid);
 				}
 			}
 		}
@@ -1061,12 +1064,14 @@ namespace ExamineActionsAPI
 					if (UnityEngine.Random.Range(0, 100f) <= chance)
 					{
 						var p = pm.AddPowderToInventory(ItemWeight.FromKilograms(conf.Kgs), conf.Type);
+						State.Products.Add(p);
                         VeryVerboseLog($"{conf.Type.name} {conf.Kgs}kg is yielded because the {conf.Chance} roll passed.");
 					}
 				}
 				else
 				{
 					var p = pm.AddPowderToInventory(ItemWeight.FromKilograms(conf.Kgs), conf.Type);
+					State.Products.Add(p);
 					VeryVerboseLog($"{conf.Type.name} x{conf.Kgs}kg is yielded.");
 				}
 			}
